@@ -1,0 +1,2 @@
+class Bye < Result
+end

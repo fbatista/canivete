@@ -1,0 +1,2 @@
+class Win < Result
+end

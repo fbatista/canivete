@@ -1,0 +1,2 @@
+class Draw < Result
+end
