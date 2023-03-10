@@ -5,6 +5,8 @@ class TournamentParticipant < ApplicationRecord
   has_many :results
   has_many :opponents, through: :results
 
+  has_many :seatings
+
   validates :decklist, presence: true
 
   def points

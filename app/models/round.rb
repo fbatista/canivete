@@ -1,6 +1,6 @@
 class Round < ApplicationRecord
   belongs_to :tournament
-  has_many :pods
+  has_many :pods, dependent: :destroy
 
   validates(
     :number,
