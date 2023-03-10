@@ -22,7 +22,7 @@ class CreateModels < ActiveRecord::Migration[7.0]
 
     create_table :rounds, id: :uuid do |t|
       t.belongs_to :tournament, foreign_key: true, type: :uuid, index: true
-      t.integer :number, null: false, default: :1
+      t.integer :number, null: false, default: 1
       t.timestamps
     end
 
