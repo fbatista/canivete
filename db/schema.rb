@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_113846) do
 
   create_table "rounds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "tournament_id"
-    t.integer "number", null: false
+    t.integer "number", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_rounds_on_tournament_id"

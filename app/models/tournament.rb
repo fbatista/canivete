@@ -10,4 +10,12 @@ class Tournament < ApplicationRecord
   enum :state, [:registration, :swiss, :single_elimination, :finished], default: :registration
 
   validates :name, presence: true
+  validates :slug, presence: true
+
+  before_validation :populate_slug
+  
+  def populate_slug
+    self.slug = self.name.downcase.gsub(/[^a-z0-9]/, "-")
+  end
+
 end

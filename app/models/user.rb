@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   def compute_key
-    Digest::MD5.hexdigest(user.email + user.name) 
+    Digest::MD5.hexdigest(email + name) 
   end
 
   def initialize_player
