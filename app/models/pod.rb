@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pod < ApplicationRecord
   belongs_to :round
   has_one :tournament, through: :round
@@ -5,7 +7,7 @@ class Pod < ApplicationRecord
   has_many :seatings, dependent: :destroy
   has_many :tournament_participants, through: :seatings
   has_many :players, through: :tournament_participants
-  has_many :results, ->(pod) { where(results: { round_id: pod.round_id }) } through: :tournament_participants
+  has_many :results, ->(pod) { where(results: { round_id: pod.round_id }) }, through: :tournament_participants
 
   validates(
     :number,

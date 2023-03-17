@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TournamentParticipant < ApplicationRecord
   belongs_to :tournament
   belongs_to :player
@@ -8,8 +10,7 @@ class TournamentParticipant < ApplicationRecord
   has_many :seatings
 
   validates :decklist, presence: true
+  delegate :name, to: :player
 
-  def points
-    
-  end
+  def points; end
 end

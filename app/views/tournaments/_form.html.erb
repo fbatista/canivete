@@ -1,0 +1,7 @@
+<%= form_for @tournament do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :state %>
+  <%= f.select :state, Tournament.states.keys.map { |k| [k.humanize, k] }, selected: @tournament.state %>
+  <%= f.submit %>
+<% end %>

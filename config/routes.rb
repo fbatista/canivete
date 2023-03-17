@@ -1,8 +1,17 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :users
-  resources :tournaments
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :tournaments do
+    resources :rounds do
+      resources :pods do
+        resources :seatings
+      end
 
-  # Defines the root path route ("/")
-  root "tournaments#index"
+      resources :results
+    end
+
+    resources :tournament_participants
+  end
+  root 'tournaments#index'
 end
