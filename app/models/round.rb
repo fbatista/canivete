@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Round < ApplicationRecord
-  belongs_to :tournament
+  belongs_to :tournament, counter_cache: true
   has_many :pods, dependent: :destroy
 
   validates(
@@ -13,4 +13,10 @@ class Round < ApplicationRecord
       inclusion: { in: 1.. }
     }
   )
+
+  after_create :create_pods
+
+  def create_pods
+    Tournaments::CreatePodsJob.perform_now(self)
+  end
 end

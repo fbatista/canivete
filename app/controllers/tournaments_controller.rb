@@ -16,7 +16,7 @@ class TournamentsController < ApplicationController
   def update
     @tournament = Tournament.find params[:id]
     @tournament.attributes = tournament_params
-    binding.irb
+
     if @tournament.save
       redirect_to @tournament, notice: 'Tournament updated successfully'
     else

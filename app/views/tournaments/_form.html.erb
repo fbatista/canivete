@@ -1,7 +1,16 @@
 <%= form_for @tournament do |f| %>
+  <% if @tournament.errors.present? %>
+    <%= safe_join(@tournament.errors.full_messages, raw("<br>")) %>
+  <% end %>
   <%= f.label :name %>
   <%= f.text_field :name %>
+
   <%= f.label :state %>
   <%= f.select :state, Tournament.states.keys.map { |k| [k.humanize, k] }, selected: @tournament.state %>
+
+  <% if @tournament.state.to_sym == :registration_closed %>
+
+  <% end %>
+
   <%= f.submit %>
 <% end %>
