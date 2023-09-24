@@ -1,16 +1,36 @@
 # frozen_string_literal: true
 
+# The tournament representation of a player
 class TournamentParticipant < ApplicationRecord
   belongs_to :tournament, counter_cache: true
   belongs_to :player
 
-  has_many :results
-  has_many :opponents, through: :results
+  has_many :results, dependent: :destroy
 
-  has_many :seatings
+  has_many :seatings, dependent: :destroy
+  has_many :pods, through: :seatings
+  has_many(
+    :opponents,
+    lambda { |tournament_participant|
+      where.not(tournament_participants: { id: tournament_participant.id })
+    }, class_name: 'TournamentParticipant', through: :pods, source: :tournament_participants
+  )
 
   validates :decklist, presence: true
   delegate :name, to: :player
+
+  MP_COEFF = 100_000_000_000_000
+  MW_COEFF = 10_000_000_000_000
+  OAMP_COEFF = 10_000_000
+  OAMW_COEFF = 10_000
+
+  def times_going_at(position)
+    seatings.count { |seat| seat.order == position }
+  end
+
+  def played_against?(another)
+    opponents.include?(another)
+  end
 
   def number_of_draws
     results.count { |result| result.is_a?(Draw) }
@@ -55,9 +75,9 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def rank_score
-    @rank_score ||= match_points * 100_000_000_000_000 +
-                    (match_win_percentage * 10_000_000_000_000).to_i +
-                    (opponents_average_match_points * 10_000_000).to_i +
-                    (opponents_average_match_win_percentage * 10_000).to_i
+    @rank_score ||= match_points * MP_COEFF +
+                    (match_win_percentage * MW_COEFF).to_i +
+                    (opponents_average_match_points * OAMP_COEFF).to_i +
+                    (opponents_average_match_win_percentage * OAMW_COEFF).to_i
   end
 end

@@ -9,11 +9,12 @@ class Tournament < ApplicationRecord
   POINTS_PER_BYE = 5
   POINTS_PER_LOSS = 0
   POINTS_PER_DRAW = 1
+  PAIR_DOWN_DEVIATION_PERCENT = 0.1
 
   PLAYERS_ROUNDS_THRESHOLDS = {
     4..4 => { rounds: 1, top: nil },
     5..15 => { rounds: 2, top: 4 },
-    16..32 => { rounds: 3, top: 4 },
+    16..32 => { rounds: 3, top: 10 },
     33..64 => { rounds: 4, top: 16 },
     65..128 => { rounds: 5, top: 16 },
     129..256 => { rounds: 6, top: 40 },

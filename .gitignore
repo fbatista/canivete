@@ -31,9 +31,12 @@
 
 /public/assets
 
+# Ignore development stuff
+.env
+.vscode
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-.env
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
