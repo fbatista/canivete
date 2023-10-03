@@ -2,7 +2,7 @@
 
 module Tournaments
   class FinishRoundJob < ApplicationJob
-    def perform(tournament)
+    def perform(round)
       # do something
     end
   end

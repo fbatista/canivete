@@ -1,30 +1,54 @@
 <%= content_for :sub_navigation do %>
   <nav>
     <ol class="flex justify-start">
-      <li><%= link_to 'Tournaments', tournaments_url %></li>
-      <li class="list-['>'] list-inside"><%= @round.tournament.name %></li>
+      <li><%= link_to 'Tournaments', tournaments_url, class: "underline" %></li>
+      <li class="list-['>'] list-inside"><%= link_to @round.tournament.name, @round.tournament, class: "underline" %></li>
+      <li class="list-['>'] list-inside">Round <%= @round.number %></li>
     </ol>
   </nav>
 <% end %>
+
+
 <article>
-  <h1 class="text-2xl font-bold"><%= @round.tournament.name %> > Round #<%= @round.number %></h1>
+  <div class="flex">
+    <h1 class="text-2xl font-bold grow">
+      Round #<%= @round.number %>
+    </h1>
+    <div>
+      <%= form_for [@round.tournament, @round.becomes(Round)] do |f| %>
+        <% if @round.finished? && !@round.past? %>
+          <%= f.button :action, value: :finish do %>
+            Finish
+          <% end %>
+        <% elsif @round.started? %>
+          <span data-controller="round-timer" data-round-timer-round-time-value="<%= 90.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" >
+            --:--
+          <span>
+        <% else %>
+          <%= f.button :action, value: :start do %>
+            Start
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
   <div class="flex">
     <div class="w-1/2">
       <h2 class="text-xl font-bold">Pairings</h2>
-      <table class="border border-black p-1">
+      <table class="border border-black p-1 w-3/4">
         <thead class="bg-zinc-500 text-white">
           <tr>
-            <th class="p-1">Player</th>
-            <th class="p-1">Pod</th>
-            <th class="p-1">Seat</th>
+            <th class="p-2 text-left">Player</th>
+            <th class="p-2 text-center">Pod</th>
+            <th class="p-2 text-right">Seat</th>
           </tr>
         </thead>
         <tbody>
           <% @users_map.keys.sort_by { |k| @users_map[k][:name] }.each.with_index do |k, i| %>
             <tr class="<%= i % 2 == 0 ? 'bg-white' : 'bg-slate-300' %>">
-              <td class="p-1"><%= @users_map[k][:name] %></td>
-              <td class="p-1"><%= @users_map[k][:pod] %></td>
-              <td class="p-1"><%= @users_map[k][:seating] %></td>
+              <td class="p-2"><%= @users_map[k][:name] %></td>
+              <td class="p-2 text-center"><%= @users_map[k][:pod] %></td>
+              <td class="p-2 text-right"><%= @users_map[k][:seating] %></td>
             </tr>
           <% end %>
         </tbody>
@@ -32,8 +56,8 @@
     </div>
     <div class="w-1/2">
       <h2 class="text-xl font-bold">Pods</h2>
-      <div class="grid grid-cols-2">
-        <%= render partial: 'pod', collection: @pods %>
+      <div class="grid grid-cols-2 gap-4">
+        <%= render @pods %>
       </div>
     </div>
   </div>

@@ -1,0 +1,12 @@
+<div class="border border-black min-w-fit">
+  <h3 class="text-l font-bold pl-2 py-2">
+    <%= link_to [pod.tournament, pod.round.becomes(Round), pod] do %>
+      Pod <%= pod.number %>
+    <% end %>
+  </h3>
+  <ol>
+    <% pod.tournament_participants.each do |player| %>
+      <li class="list-decimal list-inside pl-2 pr-10 py-1 <%= result_indicator(pod:, player:) %>"><%= player.name %></li>
+    <% end %>
+  </ol>
+</div>

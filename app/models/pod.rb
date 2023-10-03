@@ -4,11 +4,13 @@ class Pod < ApplicationRecord
   belongs_to :round
   has_one :tournament, through: :round
 
-  has_many :seatings, dependent: :destroy
+  has_many :seatings, -> { order(order: :asc) }, dependent: :destroy, inverse_of: :pod
   has_many :tournament_participants, through: :seatings
+  has_many :results, ->(pod) { where(results: { round_id: pod.round_id }) }, through: :tournament_participants
+
+  # FIXME: maybe remove
   has_many :players, through: :tournament_participants
   has_many :users, through: :players
-  has_many :results, ->(pod) { where(results: { round_id: pod.round_id }) }, through: :tournament_participants
 
   attr_accessor :candidates
 
@@ -24,8 +26,16 @@ class Pod < ApplicationRecord
 
   after_initialize -> { @candidates = [] }
 
+  def finished?
+    results.size == tournament_participants.size
+  end
+
   def receive_candidate(candidate)
     candidates.push(candidate) if !full? && can_match?(candidate)
+  end
+
+  def force_candidate(candidate)
+    candidates.push(candidate) unless full?
   end
 
   def full?

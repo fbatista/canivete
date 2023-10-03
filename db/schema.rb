@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_22_085111) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_234549) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_085111) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["round_id"], name: "index_results_on_round_id"
+    t.index ["tournament_participant_id", "round_id"], name: "index_results_on_tournament_participant_id_and_round_id", unique: true
     t.index ["tournament_participant_id"], name: "index_results_on_tournament_participant_id"
   end
 
@@ -47,6 +48,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_085111) do
     t.integer "number", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
+    t.string "type", default: "SwissRound"
     t.index ["tournament_id"], name: "index_rounds_on_tournament_id"
   end
 

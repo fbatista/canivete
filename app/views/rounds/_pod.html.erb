@@ -1,8 +1,0 @@
-<div class="py-3 px-6 border">
-  <h3 class="text-l font-bold">Pod <%= pod.number %></h3>
-  <ol>
-    <% pod.seatings.sort_by(&:order).each do |seating| %>
-      <li class="list-decimal"><%= seating.tournament_participant.name %></li>
-    <% end %>
-  </ol>
-</div>

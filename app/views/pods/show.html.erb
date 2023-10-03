@@ -1,0 +1,21 @@
+<%= content_for :sub_navigation do %>
+  <nav>
+    <ol class="flex justify-start">
+      <li><%= link_to 'Tournaments', tournaments_url, class: "underline" %></li>
+      <li class="list-['>'] list-inside"><%= link_to @pod.tournament.name, @pod.tournament, class: "underline" %></li>
+      <li class="list-['>'] list-inside"><%= link_to "Round #{@pod.round.number}", [@pod.tournament, @pod.round.becomes(Round)], class: "underline" %></li>
+      <li class="list-['>'] list-inside">Pod <%= @pod.number %></li>
+    </ol>
+  </nav>
+<% end %>
+
+  <div class="flex">
+    <div>
+      <%= render @pod %>
+    </div>
+    <div class="w-auto pl-6">
+      <%= render partial: 'results/form' %>
+    </div>
+  </div>
+
+

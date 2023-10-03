@@ -4,12 +4,16 @@ module Tournaments
   # Service to start the next round
   class StartRoundJob < ApplicationJob
     def perform(tournament)
-      rounds_info = tournament.class::PLAYERS_ROUNDS_THRESHOLDS[tournament.tournament_participants.size]
+      return unless tournament.rounds.size < tournament.rounds_info[:rounds].size
 
-      return unless tournament.rounds.size < rounds_info[:rounds]
+      tournament.rounds.create(
+        type: load_round_type(tournament),
+        number: tournament.rounds.size + 1
+      )
+    end
 
-      round = tournament.rounds.build(number: tournament.rounds.size + 1)
-      round.save
+    def load_round_type(tournament)
+      tournament.rounds_info[:rounds][tournament.rounds.size].keys.first.to_s.classify
     end
   end
 end

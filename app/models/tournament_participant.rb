@@ -63,21 +63,24 @@ class TournamentParticipant < ApplicationRecord
   def opponents_average_match_points
     return 0.0 if opponents.empty?
 
-    @opponents_average_match_points ||= opponents.inject(0.0) { |sum, n| n.match_points + sum } / opponents.size.to_f
+    @opponents_average_match_points ||= (
+      opponents.inject(0.0) { |sum, n| n.match_points + sum } / opponents.size.to_f
+    ).round(2)
   end
 
   def opponents_average_match_win_percentage
     return 0.0 if opponents.empty?
 
-    @opponents_average_match_win_percentage ||= opponents.inject(0.0) do |sum, n|
-      [n.match_win_percentage, 1.0 / Trounanment::POINTS_PER_WIN].max + sum
-    end / opponents.size.to_f
+    @opponents_average_match_win_percentage ||=
+      opponents.inject(0.0) do |sum, n|
+        [n.match_win_percentage, 1.0 / Tournament::POINTS_PER_WIN].max + sum
+      end / opponents.size.to_f
   end
 
   def rank_score
     @rank_score ||= match_points * MP_COEFF +
-                    (match_win_percentage * MW_COEFF).to_i +
+                    (match_win_percentage.round(4) * MW_COEFF).to_i +
                     (opponents_average_match_points * OAMP_COEFF).to_i +
-                    (opponents_average_match_win_percentage * OAMW_COEFF).to_i
+                    (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i
   end
 end

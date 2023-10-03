@@ -5,10 +5,8 @@ Rails.application.routes.draw do
   resources :tournaments do
     resources :rounds do
       resources :pods do
-        resources :seatings
+        resources :results
       end
-
-      resources :results
     end
 
     resources :tournament_participants

@@ -1,0 +1,16 @@
+<%= form_for [@result.tournament, @result.round.becomes(Round), @pod, @result] do |f| %>
+  <% if @result.errors.present? %>
+    <%= safe_join(@result.errors.full_messages, raw("<br>")) %>
+  <% end %>
+  <div>
+    <%= f.label :type %>
+    <%= f.select :type, Result::SELECTABLE_SUBTYPES %>
+  </div>
+
+  <div>
+    <%= f.label :tournament_participant_id %>
+    <%= f.select :tournament_participant_id, @pod.tournament_participants.map { |p| [p.name, p.id] }, include_blank: true %>
+  </div>
+
+  <%= f.submit class: "px-2 py-1 bg-blue-500 text-white" %>
+<% end %>

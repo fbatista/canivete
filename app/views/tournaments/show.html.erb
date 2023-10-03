@@ -1,7 +1,7 @@
 <%= content_for :sub_navigation do %>
   <nav>
     <ol class="flex justify-start">
-      <li><%= link_to 'Tournaments', tournaments_url %></li>
+      <li><%= link_to 'Tournaments', tournaments_url, class: 'underline' %></li>
       <li class="list-['>'] list-inside"><%= @tournament.name %></li>
     </ol>
   </nav>
@@ -11,20 +11,50 @@
   <h1 class="text-2xl font-bold"><%= @tournament.name %></h1>
 
   <aside>
-    <%= link_to 'Edit', [:edit, @tournament] %>
+    <%= link_to 'Edit', [:edit, @tournament], class: 'underline' %>
   </aside>
 
   <section>
     <h2 class="text-xl font-bold">Registered players: <%= @tournament.tournament_participants.size %></h2>
-    <% @tournament.tournament_participants.each do |tournament_participant| %>
-      <%= tournament_participant.name %><br>
-    <% end %>
+    <table class="border border-black p-1 w-3/4">
+      <thead class="bg-zinc-500 text-white">
+        <tr>
+          <th class="p-2 text-left">Rank</th>
+          <th class="p-2 text-left">Player</th>
+          <th class="p-2 text-center">Match Points</th>
+          <th class="p-2 text-center">Match Win %</th>
+          <th class="p-2 text-center">Opponent's Average Match Points</th>
+          <th class="p-2 text-center">Opponent's Average Match Win %</th>
+          <th class="p-2 text-right">Record (W-L-D)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tournament.tournament_participants.sort_by { |p| [-p.rank_score, p.name] }.each.with_index do |tournament_participant, i| %>
+          <tr class="<%= i % 2 == 0 ? 'bg-white' : 'bg-slate-300' %>">
+            <td class="p-2"><%= i+1 %></td>
+            <td class="p-2"><%= tournament_participant.name %></td>
+            <td class="p-2 text-center"><%= tournament_participant.match_points %></td>
+            <td class="p-2 text-center"><%= (tournament_participant.match_win_percentage * 100).round(2) %>%</td>
+            <td class="p-2 text-center"><%= tournament_participant.opponents_average_match_points %></td>
+            <td class="p-2 text-center"><%= (tournament_participant.opponents_average_match_win_percentage * 100).round(2) %>%</td>
+            <td class="p-2 text-right">
+              <%= tournament_participant.number_of_wins + tournament_participant.number_of_byes -%>
+              <% tournament_participant.number_of_byes.times do -%>*<% end -%> -
+              <%= tournament_participant.number_of_wins -%> -
+              <%= tournament_participant.number_of_wins -%>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </section>
+
+
 
   <section>
     <h2 class="text-xl font-bold">Rounds:</h2>
     <% @tournament.rounds.each do |round| %>
-      <%= link_to "Round #{round.number}", [@tournament, round] %><br>
+      <%= link_to "Round #{round.number}", [@tournament, round.becomes(Round)], class: 'underline' %><br>
     <% end %>
   </section>
 </article>
