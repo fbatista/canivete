@@ -16,13 +16,22 @@ class TournamentParticipant < ApplicationRecord
     }, class_name: 'TournamentParticipant', through: :pods, source: :tournament_participants
   )
 
-  validates :decklist, presence: true
+  validates :decklist, presence: true, unless: proc { |tp| tp.tournament.registration_open? }
   delegate :name, to: :player
 
   MP_COEFF = 100_000_000_000_000
   MW_COEFF = 10_000_000_000_000
   OAMP_COEFF = 10_000_000
   OAMW_COEFF = 10_000
+
+  def initialize(attributes = nil)
+    @match_points = nil
+    @match_win_percentage = nil
+    @opponents_average_match_points = nil
+    @opponents_average_match_win_percentage = nil
+    @rank_score = nil
+    super
+  end
 
   def times_going_at(position)
     seatings.count { |seat| seat.order == position }

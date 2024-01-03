@@ -1,0 +1,5 @@
+<%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)) do %>
+  <%= form_for [@tournament, @tournament_participant] do |f| %>
+    <%= f.submit 'Register' %>
+  <% end %>
+<% end %>

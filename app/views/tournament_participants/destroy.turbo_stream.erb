@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@tournament, dom_id(current_user.player)), template: 'tournament_participants/new' %>
+<%= turbo_stream.update dom_id(@tournament, :participants_count), plain: @tournament.tournament_participants_count %>
+<%= turbo_stream.remove @destroyed_participant %>

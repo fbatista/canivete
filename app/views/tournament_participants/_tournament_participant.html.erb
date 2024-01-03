@@ -1,0 +1,19 @@
+<tr id="<%= dom_id(tournament_participant) %>" class="odd:bg-white even:bg-slate-300">
+  <% case @tournament.state %>
+  <% when 'registration_open', 'registration_closed' %>
+    <td class="p-2"><%= tournament_participant.name %></td>
+  <% else %>
+    <td class="p-2"><%= tournament_participant_iteration.index+1 %></td>
+    <td class="p-2"><%= tournament_participant.name %></td>
+    <td class="p-2 text-center"><%= tournament_participant.match_points %></td>
+    <td class="p-2 text-center"><%= (tournament_participant.match_win_percentage * 100).round(2) %>%</td>
+    <td class="p-2 text-center"><%= tournament_participant.opponents_average_match_points %></td>
+    <td class="p-2 text-center"><%= (tournament_participant.opponents_average_match_win_percentage * 100).round(2) %>%</td>
+    <td class="p-2 text-right">
+      <%= tournament_participant.number_of_wins + tournament_participant.number_of_byes -%>
+      <% tournament_participant.number_of_byes.times do -%>*<% end -%> -
+      <%= tournament_participant.number_of_wins -%> -
+      <%= tournament_participant.number_of_wins -%>
+    </td>
+  <% end %>
+</tr>

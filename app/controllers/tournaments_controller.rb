@@ -5,8 +5,18 @@ class TournamentsController < ApplicationController
     @tournaments = Tournament.all
   end
 
+  def new
+    @tournament = Tournament.new
+  end
+
+  def create
+    @tournament = Tournament.create(tournament_params)
+
+    redirect_to @tournament, notice: 'Tournament create successfully'
+  end
+
   def show
-    @tournament = Tournament.preload(rounds: :pods, tournament_participants: { player: :user }).find params[:id]
+    @tournament = Tournament.preload(rounds: :pods, tournament_participants: { player: :user }).find(params[:id])
   end
 
   def edit

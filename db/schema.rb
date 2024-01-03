@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_234549) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_28_114148) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -63,10 +63,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_234549) do
     t.index ["tournament_participant_id"], name: "index_seatings_on_tournament_participant_id"
   end
 
+  create_table "tournament_organizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tournament_organizers_on_user_id"
+  end
+
   create_table "tournament_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "tournament_id"
     t.uuid "player_id"
-    t.string "decklist", null: false
+    t.string "decklist"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["player_id"], name: "index_tournament_participants_on_player_id"
@@ -82,6 +89,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_234549) do
     t.integer "state", default: 0, null: false
     t.integer "rounds_count", default: 0, null: false
     t.integer "tournament_participants_count", default: 0, null: false
+    t.bigint "tournament_organizer_id"
+    t.index ["tournament_organizer_id"], name: "index_tournaments_on_tournament_organizer_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -104,6 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_234549) do
   add_foreign_key "rounds", "tournaments"
   add_foreign_key "seatings", "pods"
   add_foreign_key "seatings", "tournament_participants"
+  add_foreign_key "tournament_organizers", "users"
   add_foreign_key "tournament_participants", "players"
   add_foreign_key "tournament_participants", "tournaments"
 end

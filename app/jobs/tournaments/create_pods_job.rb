@@ -12,7 +12,7 @@ module Tournaments
       pair_using_strategy(round:)
 
       round.transaction do
-        award_byes!(unmatched_players:, round:)
+        award_byes!(round:)
         round.pods.each(&:sit_participants!)
       end
     end
@@ -47,7 +47,7 @@ module Tournaments
     end
 
     def serpent_pod(pods, index)
-      pods[(index / pods.size).even? ? (index % 4) : -1 * ((index + 1) % 4)]
+      pods[(index / pods.size).even? ? (index % pods.size) : -1 * ((index + 1) % pods.size)]
     end
 
     def initial_match!(round)
@@ -103,14 +103,14 @@ module Tournaments
       end
     end
 
-    def award_byes!(unmatched_players:, round:)
-      force_rematch!(unmatched_players:, round:)
+    def award_byes!(round:)
+      force_rematch!(round:)
       unmatched_players.each do |unmatched_player|
         round.results.create!(type: Bye.name, tournament_participant: unmatched_player)
       end
     end
 
-    def force_rematch!(unmatched_players:, round:)
+    def force_rematch!(round:)
       number_of_players_to_rematch = unmatched_players.size - number_of_byes(round)
       return unless number_of_players_to_rematch.positive?
 

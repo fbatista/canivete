@@ -45,7 +45,7 @@
         </thead>
         <tbody>
           <% @users_map.keys.sort_by { |k| @users_map[k][:name] }.each.with_index do |k, i| %>
-            <tr class="<%= i % 2 == 0 ? 'bg-white' : 'bg-slate-300' %>">
+            <tr class="odd:bg-white even:bg-slate-300">
               <td class="p-2"><%= @users_map[k][:name] %></td>
               <td class="p-2 text-center"><%= @users_map[k][:pod] %></td>
               <td class="p-2 text-right"><%= @users_map[k][:seating] %></td>

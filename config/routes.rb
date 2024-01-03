@@ -9,7 +9,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :tournament_participants
+    resources :tournament_participants do
+      collection do
+        get 'me'
+      end
+    end
   end
   root 'tournaments#index'
 end

@@ -1,0 +1,31 @@
+<%= turbo_frame_tag 'tournament_participants' do %>
+  <h2 class="text-xl font-bold">Registered players: <span id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span></h2>
+  <% if @tournament.tournament_participants.present? %>
+    <table class="border border-black p-1 w-3/4">
+      <thead class="bg-zinc-500 text-white">
+        <tr>
+          <% case @tournament.state %>
+          <% when 'registration_open', 'registration_closed' %>
+            <th class="p-2 text-left">Name</th>
+          <% else %>
+            <th class="p-2 text-left">Rank</th>
+            <th class="p-2 text-left">Player</th>
+            <th class="p-2 text-center">Match Points</th>
+            <th class="p-2 text-center">Match Win %</th>
+            <th class="p-2 text-center">Opponent's Average Match Points</th>
+            <th class="p-2 text-center">Opponent's Average Match Win %</th>
+            <th class="p-2 text-right">Record (W-L-D)</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody id="<%= dom_id(@tournament, :tournament_participants) %>">
+        <% case @tournament.state %>
+        <% when 'registration_open', 'registration_closed' %>
+          <%= render @tournament.tournament_participants.sort_by(&:name) %>
+        <% else %>
+          <%= render @tournament.tournament_participants.sort_by { |p| [-p.rank_score, p.name] } %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
