@@ -30,5 +30,14 @@
         <%= yield %>
       </div>
     </main>
+
+    <footer class="p-6">
+      <div class="container mx-auto text-center text-zinc-400 text-xs">
+        Canivete is open-source software.
+        Contribute here:
+        <%= image_tag "github.svg", class: "w-4 inline" %>
+        <%= link_to 'Github', 'https://github.com/fbatista/canivete', class: 'underline', target: '_blank' %>
+      </div>
+    </footer>
   </body>
 </html>
