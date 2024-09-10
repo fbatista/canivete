@@ -138,13 +138,6 @@ module Tournaments
       end
     end
 
-    def award_byes!(round:)
-      force_rematch!(round:)
-      unmatched_players.each do |unmatched_player|
-        round.results.create!(type: Bye.name, tournament_participant: unmatched_player)
-      end
-    end
-
     def force_rematch!(round:)
       number_of_players_to_rematch = unmatched_players.size - number_of_byes(round)
       return unless number_of_players_to_rematch.positive?
@@ -158,10 +151,6 @@ module Tournaments
           break if pod.full?
         end
       end
-    end
-
-    def number_of_byes(round)
-      @players_by_rank.size % round.tournament.class::POD_SIZE
     end
 
     def match!(player:, pod:)
