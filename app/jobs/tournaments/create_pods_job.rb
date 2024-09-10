@@ -4,54 +4,89 @@ module Tournaments
   # Job to create pods for a round
   # rubocop:disable Metrics/ClassLength
   class CreatePodsJob < ApplicationJob
-    def perform(round)
-      @players_by_rank = round.tournament_participants.shuffle
+    def perform(round) # rubocop:disable Metrics/MethodLength
+      @round = round
+      calculate_number_of_pods!
+      build_pods!
+      @players_by_rank = @round.tournament_participants.shuffle
       @players_by_rank = @players_by_rank.sort_by.with_index { |p, i| [-p.rank_score, i] }
       @player_pods = {}
 
-      pair_using_strategy(round:)
+      pair_using_strategy
 
-      round.transaction do
-        award_byes!(round:)
-        round.pods.each(&:sit_participants!)
+      @round.transaction do
+        award_byes!
+        @round.pods.each(&:sit_participants!)
       end
     end
 
     private
 
-    def pair_using_strategy(round:)
-      case load_strategy(round)
+    def build_pods! # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      i = 1
+      @large.times do |n|
+        @round.pods.build(number: i + n, size: @round.tournament.class::LARGER_POD_SIZE)
+        i += 1
+      end
+      @preferred.times do |n|
+        @round.pods.build(number: i + n, size: @round.tournament.class::PREFERRED_POD_SIZE)
+        i += 1
+      end
+      @small.times do |n|
+        @round.pods.build(number: i + n, size: @round.tournament.class::SMALLER_POD_SIZE)
+        i += 1
+      end
+    end
+
+    def pair_using_strategy
+      case load_strategy
       when :spread
-        spread_match!(round)
+        spread_match!
       when :bubble
-        initial_match!(round) { |player, pod| force!(player:, pod:) }
+        initial_match! { |player, pod| force!(player:, pod:) }
       when :standard
-        initial_match!(round) { |player, pod| match!(player:, pod:) }
+        initial_match! { |player, pod| match!(player:, pod:) }
       end
-      handle_unmatched_players!(round)
+      handle_unmatched_players!
     end
 
-    def load_strategy(round)
-      round.tournament.rounds_info[:rounds][round.number - 1].values.first
+    def load_strategy
+      @round.tournament.rounds_info[:rounds][@round.number - 1].values.first
     end
 
-    def spread_match!(round)
-      number_of_pods = @players_by_rank.size / round.tournament.class::POD_SIZE
-      number_of_pods.times do |i|
-        round.pods.build(number: i + 1)
+    def calculate_number_of_pods! # rubocop:disable Metrics/AbcSize
+      @large = 1, @preferred = @small = 0
+      return if @players_by_rank.size == @round.tournament.class::LARGER_POD_SIZE
+
+      @preferred = n / @round.tournament.class::PREFERRED_POD_SIZE
+      remaining_items = n % @round.tournament.class::PREFERRED_POD_SIZE
+
+      if remaining_items.positive?
+        @preferred -= @round.tournament.class::SMALLER_POD_SIZE - remaining_items
+        remaining_items += (@round.tournament.class::SMALLER_POD_SIZE - remaining_items) *
+                           @round.tournament.class::PREFERRED_POD_SIZE
       end
 
+      @large = 0, @small = remaining_items / @round.tournament.class::SMALLER_POD_SIZE
+    end
+
+    def spread_match!
       @players_by_rank.each.with_index do |player, i|
-        force!(player:, pod: serpent_pod(round.pods, i))
+        force!(player:, pod: serpent_pod(@round.pods, i))
       end
     end
 
     def serpent_pod(pods, index)
-      pods[(index / pods.size).even? ? (index % pods.size) : -1 * ((index + 1) % pods.size)]
+      i = (index / pods.size).even? ? (index % pods.size) : -1 * ((index + 1) % pods.size)
+      if pods[i].full?
+        serpent_pod(pods, index + 1)
+      else
+        pods[i]
+      end
     end
 
     def initial_match!(round)
-      number_of_pods = @players_by_rank.size / round.tournament.class::POD_SIZE
+      number_of_pods = number_of_complete_pods
       number_of_pods.times do |i|
         pod = round.pods.build(number: i + 1)
         @players_by_rank.each do |player|
@@ -129,7 +164,7 @@ module Tournaments
       @players_by_rank.size % round.tournament.class::POD_SIZE
     end
 
-    def match!(player:, pod:, force: false)
+    def match!(player:, pod:)
       @player_pods[player] = pod if pod&.receive_candidate(player)
     end
 

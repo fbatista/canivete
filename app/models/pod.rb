@@ -8,7 +8,6 @@ class Pod < ApplicationRecord
   has_many :tournament_participants, through: :seatings
   has_many :results, ->(pod) { where(results: { round_id: pod.round_id }) }, through: :tournament_participants
 
-  # FIXME: maybe remove
   has_many :players, through: :tournament_participants
   has_many :users, through: :players
 
@@ -39,7 +38,7 @@ class Pod < ApplicationRecord
   end
 
   def full?
-    candidates.size == tournament.class::POD_SIZE
+    candidates.size == size
   end
 
   def can_match?(candidate)
@@ -76,7 +75,7 @@ class Pod < ApplicationRecord
 
   def sit_participants!
     candidates.shuffle.sort_by.with_index do |participant, i|
-      (1..tournament.class::POD_SIZE).to_a.map do |position|
+      (1..size).to_a.map do |position|
         participant.times_going_at(position)
       end + [-participant.rank_score, i]
     end.each.with_index do |participant, i|

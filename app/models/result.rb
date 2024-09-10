@@ -7,7 +7,7 @@ class Result < ApplicationRecord
   has_one :tournament, through: :round
 
   SELECTABLE_SUBTYPES = %w[Draw Win Penalty].freeze
-  SUBTYPES = SELECTABLE_SUBTYPES + %w[Loss Bye].freeze
+  SUBTYPES = SELECTABLE_SUBTYPES + %w[Loss].freeze
 
   validates(
     :tournament_participant_id,

@@ -49,23 +49,18 @@ class TournamentParticipant < ApplicationRecord
     results.count { |result| result.is_a?(Win) }
   end
 
-  def number_of_byes
-    results.count { |result| result.is_a?(Bye) }
-  end
-
   def match_points
     @match_points ||= number_of_draws * Tournament::POINTS_PER_DRAW +
-                      number_of_wins * Tournament::POINTS_PER_WIN +
-                      number_of_byes * Tournament::POINTS_PER_BYE
+                      number_of_wins * Tournament::POINTS_PER_WIN
   end
 
   def match_win_percentage
-    return 0.0 if (results.size - number_of_byes).zero?
+    return 0.0 if results.size.zero?
 
     @match_win_percentage ||= (
-        match_points - (number_of_byes * Tournament::POINTS_PER_BYE)
+        match_points
       ) / (
-        (results.size - number_of_byes) * Tournament::POINTS_PER_WIN
+        results.size * Tournament::POINTS_PER_WIN
       ).to_f
   end
 

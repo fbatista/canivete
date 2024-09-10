@@ -5,32 +5,38 @@ class Tournament < ApplicationRecord
   has_many :rounds, dependent: :destroy
   has_many :tournament_participants, dependent: :destroy
 
-  POD_SIZE = 4
-  POINTS_PER_WIN = 5
-  POINTS_PER_BYE = 4
+  PREFERRED_POD_SIZE = 4
+  SMALLER_POD_SIZE = 3
+  LARGER_POD_SIZE = 5
+  POINTS_PER_WIN = 7
   POINTS_PER_LOSS = 0
   POINTS_PER_DRAW = 1
   PAIR_DOWN_DEVIATION_PERCENT = 0.1
 
   PLAYERS_ROUNDS_THRESHOLDS = {
-    4..4 => {
+    4..5 => {
       rounds: [{ swiss_round: :standard }],
       top: nil
     },
-    5..15 => {
+    6..16 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :standard }],
       top: 4
     },
-    16..24 => {
+    17..24 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard }],
-      top: 10
+      top: 7
     },
     25..32 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard },
                { swiss_round: :bubble }],
       top: 10
     },
-    33..64 => {
+    33..40 => {
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :bubble }],
+      top: 13
+    },
+    41..64 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :bubble }],
       top: 16
@@ -44,22 +50,24 @@ class Tournament < ApplicationRecord
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 4) + [{ swiss_round: :bubble }],
       top: 40
+    },
+    257..512 => {
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 5) + [{ swiss_round: :bubble }],
+      top: 40
+    },
+    513.. => {
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 6) + [{ swiss_round: :bubble }],
+      top: 64
     }
   }.tap do |thresholds|
     thresholds.default_proc = proc do |hash, key|
       return nil unless key.is_a?(Integer)
 
       range_key = hash.keys.find { |r| r.include?(key) }
-      if hash.include?(range_key)
-        hash[range_key]
-      else
-        {
-          rounds: [{ swiss_round: :standard }, { swiss_round: :spread }] +
-            ([{ swiss_round: :standard }] * Math.log(key, 4).ceil - 1) +
-            [{ swiss_round: :bubble }],
-          top: 40
-        }
-      end
+
+      hash[range_key]
     end
   end.freeze
 
