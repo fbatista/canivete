@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Create an initial list of users
 users = User.create(
   [
     { name: 'Fábio', email: 'Fábio@canivete.com', password: '123qwe' },
@@ -37,17 +38,22 @@ users = User.create(
   ]
 )
 
-players = users.map(&:player)
+# Create an initial tournament organizer
+to = TournamentOrganizer.create!(
+  user: User.first
+)
 
-tournaments = Tournament.create(
+# Create a couple of example tournaments
+tournaments = Tournament.create!(
   [
-    { name: 'cEDH Coimbra XIX', state: :registration_open },
-    { name: 'cEDH Lisboa XXI', state: :registration_open }
+    { name: 'cEDH Coimbra XIX', state: :registration_open, tournament_organizer: to },
+    { name: 'cEDH Lisboa XXI', state: :registration_open, tournament_organizer: to }
   ]
 )
 
+# Add players to the tournaments
 tournaments.each do |t|
-  players.each do |p|
+  users.map(&:player).each do |p|
     TournamentParticipant.create(
       {
         tournament: t,
