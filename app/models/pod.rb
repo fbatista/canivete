@@ -42,7 +42,8 @@ class Pod < ApplicationRecord
   end
 
   def can_match?(candidate)
-    candidates.none? { |participant| participant.played_against?(candidate) }
+    candidates.none? { |participant| participant.played_against?(candidate) } ||
+      candidate.played_in_smaller_pod?(except_in: round)
   end
 
   def candidates_average_rank

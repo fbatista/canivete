@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_07_224848) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_11_103632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_07_224848) do
     t.integer "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "size", default: 4
     t.index ["number", "round_id"], name: "index_pods_on_number_and_round_id", unique: true
     t.index ["round_id"], name: "index_pods_on_round_id"
   end

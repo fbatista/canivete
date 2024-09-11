@@ -33,6 +33,10 @@ class TournamentParticipant < ApplicationRecord
     super
   end
 
+  def played_in_smaller_pod?(except_in:)
+    pods.where.not(round_id: except_in).any? { |pod| pod.size == tournament.class::SMALLER_POD_SIZE }
+  end
+
   def times_going_at(position)
     seatings.count { |seat| seat.order == position }
   end
@@ -49,19 +53,19 @@ class TournamentParticipant < ApplicationRecord
     results.count { |result| result.is_a?(Win) }
   end
 
+  def number_of_losses
+    results.count { |result| result.is_a?(Loss) || result.is_a?(Penalty) }
+  end
+
   def match_points
     @match_points ||= number_of_draws * Tournament::POINTS_PER_DRAW +
                       number_of_wins * Tournament::POINTS_PER_WIN
   end
 
   def match_win_percentage
-    return 0.0 if results.size.zero?
+    return 0.0 if results.empty?
 
-    @match_win_percentage ||= (
-        match_points
-      ) / (
-        results.size * Tournament::POINTS_PER_WIN
-      ).to_f
+    @match_win_percentage ||= match_points / (results.size * Tournament::POINTS_PER_WIN).to_f
   end
 
   def opponents_average_match_points

@@ -28,37 +28,37 @@ class Tournament < ApplicationRecord
     },
     25..32 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard },
-               { swiss_round: :bubble }],
+               { swiss_round: :forced }],
       top: 10
     },
     33..40 => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
       top: 13
     },
     41..64 => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
       top: 16
     },
     65..128 => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 3) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 3) + [{ swiss_round: :forced }],
       top: 16
     },
     129..256 => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 4) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 4) + [{ swiss_round: :forced }],
       top: 40
     },
     257..512 => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 5) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 5) + [{ swiss_round: :forced }],
       top: 40
     },
     513.. => {
       rounds: [{ swiss_round: :standard },
-               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 6) + [{ swiss_round: :bubble }],
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 6) + [{ swiss_round: :forced }],
       top: 64
     }
   }.tap do |thresholds|
