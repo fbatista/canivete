@@ -15,11 +15,13 @@ class SwissRound < Round
     Tournaments::CreatePodsJob.perform_now(self)
   end
 
-  def past?
-    tournament.rounds_count > number
+  def last_swiss_round?
+    number == tournament.number_of_swiss_rounds
   end
 
-  def last_swiss_round?
-    number == tournament.rounds_info[:rounds].size
+  def advance_tournament!
+    return if last_swiss_round?
+
+    Tournaments::StartSwissRoundJob.perform_now(tournament)
   end
 end

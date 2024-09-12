@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The tournament representation of a player
-class TournamentParticipant < ApplicationRecord
+class TournamentParticipant < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :tournament, counter_cache: true
   belongs_to :player
 
@@ -13,16 +13,41 @@ class TournamentParticipant < ApplicationRecord
     :opponents,
     lambda { |tournament_participant|
       where.not(tournament_participants: { id: tournament_participant.id })
+      .where(
+        <<~SQL
+          pods.id not in (
+            select pods.id
+            from pods
+            inner join rounds on pods.round_id = rounds.id
+            where rounds.type = 'SingleEliminationRound'
+          )
+        SQL
+      )
     }, class_name: 'TournamentParticipant', through: :pods, source: :tournament_participants
   )
+
+  scope :playing, -> { where(dropped: false) }
+  scope :not_eliminated, lambda {
+    where(
+      <<~SQL
+        not exists (
+          select 1
+          from results
+          where results.tournament_participant_id = id
+            and results.type = 'Eliminated'
+        )
+      SQL
+    )
+  }
 
   validates :decklist, presence: true, unless: proc { |tp| tp.tournament.registration_open? }
   delegate :name, to: :player
 
+  SINGLE_ELIM_COEFF = 100_000_000_000_000_000
   MP_COEFF = 100_000_000_000_000
   MW_COEFF = 10_000_000_000_000
-  OAMP_COEFF = 10_000_000
-  OAMW_COEFF = 10_000
+  OAMW_COEFF = 10_000_000
+  OAMP_COEFF = 10_000
 
   def initialize(attributes = nil)
     @match_points = nil
@@ -31,6 +56,10 @@ class TournamentParticipant < ApplicationRecord
     @opponents_average_match_win_percentage = nil
     @rank_score = nil
     super
+  end
+
+  def playing?
+    !dropped
   end
 
   def played_in_smaller_pod?(except_in:)
@@ -43,6 +72,20 @@ class TournamentParticipant < ApplicationRecord
 
   def played_against?(another)
     opponents.include?(another)
+  end
+
+  def corrected_opponents
+    opponents.to_a + Array.new(number_of_ghost_opponents) { Ghost.new }
+  end
+
+  def number_of_ghost_opponents
+    pods.count { |pod|
+      pod.size == tournament.class::SMALLER_POD_SIZE
+    } * (tournament.class::PREFERRED_POD_SIZE - tournament.class::SMALLER_POD_SIZE)
+  end
+
+  def number_of_advancements
+    results.count { |result| result.is_a?(Advance) }
   end
 
   def number_of_draws
@@ -69,24 +112,25 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def opponents_average_match_points
-    return 0.0 if opponents.empty?
+    return 0.0 if corrected_opponents.empty?
 
     @opponents_average_match_points ||= (
-      opponents.inject(0.0) { |sum, n| n.match_points + sum } / opponents.size.to_f
+      corrected_opponents.inject(0.0) { |sum, n| n.match_points + sum } / corrected_opponents.size.to_f
     ).round(2)
   end
 
   def opponents_average_match_win_percentage
-    return 0.0 if opponents.empty?
+    return 0.0 if corrected_opponents.empty?
 
     @opponents_average_match_win_percentage ||=
-      opponents.inject(0.0) do |sum, n|
+      corrected_opponents.inject(0.0) do |sum, n|
         [n.match_win_percentage, 1.0 / Tournament::POINTS_PER_WIN].max + sum
-      end / opponents.size.to_f
+      end / corrected_opponents.size.to_f
   end
 
-  def rank_score
-    @rank_score ||= match_points * MP_COEFF +
+  def rank_score # rubocop:disable Metrics/AbcSize
+    @rank_score ||= number_of_advancements * SINGLE_ELIM_COEFF +
+                    match_points * MP_COEFF +
                     (match_win_percentage.round(4) * MW_COEFF).to_i +
                     (opponents_average_match_points * OAMP_COEFF).to_i +
                     (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i

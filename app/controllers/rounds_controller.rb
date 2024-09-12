@@ -21,7 +21,7 @@ class RoundsController < ApplicationController
       @round.update(started_at: Time.zone.now)
       redirect_to [@round.tournament, @round.becomes(Round)], notice: 'Round Started!'
     when 'finish'
-      Tournaments::StartRoundJob.perform_now(tournament)
+      @round.update(finished_at: Time.zone.now)
       redirect_to tournament, notice: 'Round Finished!'
     end
   end
