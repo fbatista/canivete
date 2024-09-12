@@ -35,6 +35,7 @@
       <div>
         <%= yield %>
       </div>
+      <%= turbo_frame_tag "modal", target: "_top" %>
     </main>
 
     <footer class="p-6">

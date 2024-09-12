@@ -46,20 +46,29 @@ to = TournamentOrganizer.create!(
 # Create a couple of example tournaments
 tournaments = Tournament.create!(
   [
-    { name: 'cEDH Coimbra XIX', state: :registration_open, tournament_organizer: to },
-    { name: 'cEDH Lisboa XXI', state: :registration_open, tournament_organizer: to }
+    { name: 'Uneven Pods Tournament', state: :registration_open, tournament_organizer: to },
+    { name: 'Even Pods Tournament', state: :registration_open, tournament_organizer: to }
   ]
 )
 
 # Add players to the tournaments
-tournaments.each do |t|
-  users.map(&:player).each do |p|
-    TournamentParticipant.create(
-      {
-        tournament: t,
-        player: p,
-        decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}"
-      }
-    )
-  end
+
+users.map(&:player)[0...21].each do |p|
+  TournamentParticipant.create(
+    {
+      tournament: tournaments.first,
+      player: p,
+      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}"
+    }
+  )
+end
+
+users.map(&:player).each do |p|
+  TournamentParticipant.create(
+    {
+      tournament: tournaments.last,
+      player: p,
+      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}"
+    }
+  )
 end

@@ -20,46 +20,46 @@ class Tournament < ApplicationRecord
     },
     6..16 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :standard }],
-      top: 4
+      top: { players: 4, pods: [1] }
     },
     17..24 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard }],
-      top: 7
+      top: { players: 7, pods: [1, 1] }
     },
     25..32 => {
       rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard },
                { swiss_round: :forced }],
-      top: 10
+      top: { players: 10, pods: [2, 1] }
     },
     33..40 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
-      top: 13
+      top: { players: 13, pods: [2, 1] }
     },
     41..64 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
-      top: 16
+      top: { players: 16, pods: [4, 1] }
     },
     65..128 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 3) + [{ swiss_round: :forced }],
-      top: 16
+      top: { players: 16, pods: [4, 1] }
     },
     129..256 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 4) + [{ swiss_round: :forced }],
-      top: 40
+      top: { players: 40, pods: [8, 4, 1] }
     },
     257..512 => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 5) + [{ swiss_round: :forced }],
-      top: 40
+      top: { players: 40, pods: [8, 4, 1] }
     },
     513.. => {
       rounds: [{ swiss_round: :standard },
                { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 6) + [{ swiss_round: :forced }],
-      top: 64
+      top: { players: 64, pods: [16, 4, 1] }
     }
   }.tap do |thresholds|
     thresholds.default_proc = proc do |hash, key|
@@ -88,6 +88,14 @@ class Tournament < ApplicationRecord
     PLAYERS_ROUNDS_THRESHOLDS[tournament_participants.size]
   end
 
+  def number_of_swiss_rounds
+    rounds_info[:rounds].size
+  end
+
+  def number_of_single_elimination_rounds
+    rounds_info.dig(:top, :pods)&.size
+  end
+
   def live?
     state_for_database > Tournament.states[:registration_closed]
   end
@@ -107,9 +115,9 @@ class Tournament < ApplicationRecord
   def perform_state_based_actions
     case state.to_sym
     when :swiss
-      Tournaments::StartRoundJob.perform_now(self)
+      Tournaments::StartSwissRoundJob.perform_now(self)
     when :single_elimination
-      Tournaments::TopCutJob.perform_now(self)
+      Tournaments::StartSingleEliminationRoundJob.perform_now(self)
     when :finished
       Tournaments::FinishTournamentJob.perform_now(self)
     end

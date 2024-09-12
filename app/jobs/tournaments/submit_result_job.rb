@@ -19,6 +19,8 @@ module Tournaments
     def handle_result
       Result.transaction do
         case @type
+        when 'Advance'
+          handle_advance
         when 'Win'
           handle_win
         when 'Draw'
@@ -26,6 +28,17 @@ module Tournaments
         when 'Penalty'
           handle_penalty
         end
+      end
+    end
+
+    def handle_advance
+      @pod.tournament_participants.reject { |tp| tp == @tournament_participant }.each do |tp|
+        Result.create_or_update_by(round: @round, tournament_participant: tp) do |result|
+          result.type = 'Eliminated'
+        end
+      end
+      Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
+        result.type = 'Advance'
       end
     end
 

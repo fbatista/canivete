@@ -13,7 +13,7 @@
   <% if current_user.organizer?(@tournament)%>
     <div class="text-sm">
       Manage tournament:
-      <%= link_to 'Edit', [:edit, @tournament], class: 'underline' %>
+      <%= link_to 'Edit', [:edit, @tournament], class: 'underline', data: {turbo_frame: "modal"}  %>
     </div>
   <% end %>
 </div>

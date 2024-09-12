@@ -7,8 +7,8 @@
     <td class="p-2"><%= tournament_participant.name %></td>
     <td class="p-2 text-center"><%= tournament_participant.match_points %></td>
     <td class="p-2 text-center"><%= (tournament_participant.match_win_percentage * 100).round(2) %>%</td>
-    <td class="p-2 text-center"><%= tournament_participant.opponents_average_match_points %></td>
     <td class="p-2 text-center"><%= (tournament_participant.opponents_average_match_win_percentage * 100).round(2) %>%</td>
+    <td class="p-2 text-center"><%= tournament_participant.opponents_average_match_points %></td>
     <td class="p-2 text-right">
       <%= tournament_participant.number_of_wins -%> -
       <%= tournament_participant.number_of_losses -%> -
