@@ -1,7 +1,8 @@
 <%= turbo_frame_tag 'tournament_participants' do %>
-  <h2 class="text-xl font-bold">Registered players: <span id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span></h2>
   <% if @tournament.tournament_participants.present? %>
-    <table class="border border-black p-1 w-3/4">
+    <div class="text-xs font-mono">Registered players: <span id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span></div>
+
+    <table class="border rounded p-1 w-full text-sm">
       <thead class="bg-zinc-500 text-white">
         <tr>
           <% case @tournament.state %>
@@ -28,4 +29,5 @@
       </tbody>
     </table>
   <% end %>
+
 <% end %>
