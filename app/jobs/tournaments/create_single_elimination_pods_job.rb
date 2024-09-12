@@ -5,7 +5,7 @@ module Tournaments
   class CreateSingleEliminationPodsJob < ApplicationJob
     def perform(round)
       @round = round
-      @players_to_advance, @players_by_rank, @players_to_drop = initialize_players
+      @players_to_advance, @players_by_rank, @players_to_eliminate = initialize_players
 
       generate_pods!
 
@@ -23,21 +23,21 @@ module Tournaments
     def initialize_players
       sorted_players = Tournaments::PlayerSorter.new(@round).sorted_players
       players_continuing = sorted_players[0...players_making_the_cut]
-      players_dropping = sorted_players[players_making_the_cut..]
+      players_to_eliminate = sorted_players[players_making_the_cut..]
       players_being_paired = players_continuing.last(players_playing)
-      players_advancing = players_continuing - players_being_paired
+      players_to_advance = players_continuing - players_being_paired
 
-      [players_advancing, players_being_paired, players_dropping]
+      [players_to_advance, players_being_paired, players_to_eliminate]
     end
 
     def eliminate_players!
-      @players_to_drop&.each do |player|
+      @players_to_eliminate&.each do |player|
         Eliminated.create(round: @round, tournament_participant: player)
       end
     end
 
     def advance_players!
-      @players_advancing&.each do |player|
+      @players_to_advance&.each do |player|
         Advance.create(round: @round, tournament_participant: player)
       end
     end

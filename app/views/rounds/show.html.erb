@@ -8,7 +8,6 @@
   </nav>
 <% end %>
 
-
 <article>
   <div class="flex">
     <h1 class="text-2xl font-bold grow">
@@ -21,7 +20,7 @@
             Finish
           <% end %>
         <% elsif @round.started? %>
-          <span data-controller="round-timer" data-round-timer-round-time-value="<%= 90.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<% @round.finished_at&.iso8601 %>" >
+          <span data-controller="round-timer" data-round-timer-round-time-value="<%= 90.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
             --:--
           <span>
         <% else %>

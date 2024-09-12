@@ -23,6 +23,7 @@
       <div>
         <%= yield %>
       </div>
+      <%= turbo_frame_tag "modal", target: "_top" %>
     </main>
   </body>
 </html>

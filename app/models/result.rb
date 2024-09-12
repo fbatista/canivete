@@ -11,6 +11,8 @@ class Result < ApplicationRecord
   ELIMINATION_SELECTABLE_SUBYTPES = %w[Advance Penalty].freeze
   ELIMINATION_SUBYTPES = ELIMINATION_SELECTABLE_SUBYTPES + %w[Eliminated].freeze
 
+  scope :publishable, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
+
   validates(
     :tournament_participant_id,
     {

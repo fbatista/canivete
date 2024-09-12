@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # The tournament representation of a player
-class TournamentParticipant < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class TournamentParticipant < ApplicationRecord
   belongs_to :tournament, counter_cache: true
   belongs_to :player
 
-  has_many :results, dependent: :destroy
+  has_many :results, -> { publishable }, dependent: :destroy, inverse_of: :tournament_participant
 
   has_many :seatings, dependent: :destroy
-  has_many :pods, through: :seatings
+  has_many :pods, -> { publishable }, through: :seatings
   has_many(
     :opponents,
     lambda { |tournament_participant|
@@ -33,7 +33,7 @@ class TournamentParticipant < ApplicationRecord # rubocop:disable Metrics/ClassL
         not exists (
           select 1
           from results
-          where results.tournament_participant_id = id
+          where results.tournament_participant_id = tournament_participants.id
             and results.type = 'Eliminated'
         )
       SQL

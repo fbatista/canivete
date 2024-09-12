@@ -15,7 +15,8 @@ export default class extends Controller {
       const minutes = ~~(ellapsed / 60);
       const seconds = Math.abs(ellapsed % 60);
 
-      this.element.textContent = `${minutes}:${seconds < 10 ? '0'+seconds : seconds}`
+      this.element.classList.add('italic')
+      this.element.textContent = `Finished in ${minutes}:${seconds < 10 ? '0'+seconds : seconds}`
     }
   }
 

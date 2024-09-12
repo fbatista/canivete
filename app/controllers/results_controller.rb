@@ -3,7 +3,9 @@
 class ResultsController < ApplicationController
   def new
     @tournament = load_tournament
-    @round = load_round
+    @round = load_round(@tournament)
+    @pod = load_pod(@round)
+    @result = Result.new(round: @round)
   end
 
   def create
