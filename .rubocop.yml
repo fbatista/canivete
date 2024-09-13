@@ -1,3 +1,8 @@
+AllCops:
+  SuggestExtensions: false
+  TargetRubyVersion: 3.3
+  NewCops: enable
+
 require:
   - rubocop-rails
   - rubocop-performance
