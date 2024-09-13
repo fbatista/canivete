@@ -24,4 +24,8 @@ module ApplicationHelper
       "dark:bg-#{color}-900", "dark:text-#{color}-300"
     ], &block)
   end
+
+  def icon(name)
+    tag.i(class: "ph-bold ph-#{name}")
+  end
 end
