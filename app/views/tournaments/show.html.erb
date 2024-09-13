@@ -9,11 +9,18 @@
 <% end %>
 
 <div class="flex justify-between items-start">
-  <h1 class="text-2xl font-bold mb-6"><%= @tournament.name %></h1>
+  <h1 class="text-2xl font-bold mb-6">
+    <%= @tournament.name %>
+    <% if @tournament.finished? %>
+      <%= badge(color: "blue") do %>
+        Finished
+      <% end %>
+    <% end %>
+  </h1>
   <% if current_user.organizer?(@tournament)%>
     <div class="text-sm">
       Manage tournament:
-      <%= link_to 'Edit', [:edit, @tournament], class: 'underline', data: {turbo_frame: "modal"}  %>
+      <%= link_to 'Edit', [:edit, @tournament], class: 'underline', data: {turbo_frame: "modal"} %>
     </div>
   <% end %>
 </div>

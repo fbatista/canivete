@@ -15,4 +15,13 @@ module ApplicationHelper
       'bg-yellow-500'
     end
   end
+
+  def badge(color:, &block)
+    tag.span(class: %w[
+      text-xs font-medium me-2 px-2.5 py-0.5 rounded
+    ] + [
+      "bg-#{color}-100", "text-#{color}-800",
+      "dark:bg-#{color}-900", "dark:text-#{color}-300"
+    ], &block)
+  end
 end
