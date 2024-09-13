@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-class Tournament < ApplicationRecord
+class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :tournament_organizer
   has_many :rounds, dependent: :destroy
   has_many :tournament_participants, dependent: :destroy
+
+  scope :for_organizer, ->(organizer) { where(tournament_organizer: organizer) }
 
   PREFERRED_POD_SIZE = 4
   SMALLER_POD_SIZE = 3

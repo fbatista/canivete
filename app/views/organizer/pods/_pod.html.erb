@@ -1,6 +1,8 @@
 <div class="border border-black min-w-fit">
   <h3 class="text-l font-bold pl-2 py-2">
-    Pod <%= pod.number %>
+    <%= link_to [:new, :organizer, pod.tournament, pod.round.becomes(Round), pod, :result], data: {turbo_frame: "modal"} do %>
+      Pod <%= pod.number %>
+    <% end %>
   </h3>
   <ol>
     <% pod.tournament_participants.each do |player| %>

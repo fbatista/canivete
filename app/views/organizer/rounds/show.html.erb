@@ -1,8 +1,8 @@
 <%= content_for :sub_navigation do %>
   <nav>
     <ol class="flex justify-start">
-      <li><%= link_to 'Tournaments', tournaments_url, class: "underline" %></li>
-      <li class="list-['>'] list-inside"><%= link_to @round.tournament.name, @round.tournament, class: "underline" %></li>
+      <li><%= link_to 'Tournaments', [:organizer, :tournaments], class: "underline" %></li>
+      <li class="list-['>'] list-inside"><%= link_to @round.tournament.name, [:organizer, @round.tournament], class: "underline" %></li>
       <li class="list-['>'] list-inside">Round <%= @round.number %></li>
     </ol>
   </nav>
@@ -12,12 +12,23 @@
   <div class="flex">
     <h1 class="text-2xl font-bold grow">
       Round #<%= @round.number %>
-      <!-- Add round status updated by turbo stream -->
     </h1>
-    <div><!-- make this updated by turbo stream -->
-      <span data-controller="round-timer" data-round-timer-round-time-value="<%= 90.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
-        --:--
-      <span>
+    <div>
+      <%= form_for [:organizer, @round.tournament, @round.becomes(Round)] do |f| %>
+        <% if @round.finished? && !@round.past? %>
+          <%= f.button :action, value: :finish do %>
+            Finish
+          <% end %>
+        <% elsif @round.started? %>
+          <span data-controller="round-timer" data-round-timer-round-time-value="<%= 90.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
+            --:--
+          <span>
+        <% else %>
+          <%= f.button :action, value: :start do %>
+            Start
+          <% end %>
+        <% end %>
+      <% end %>
     </div>
   </div>
   <div class="flex">
@@ -44,7 +55,6 @@
     </div>
     <div class="w-1/2">
       <h2 class="text-xl font-bold">Pods</h2>
-      <!-- Add number of pods playing updated by turbo stream -->
       <div class="grid grid-cols-2 gap-4">
         <%= render @pods %>
       </div>
