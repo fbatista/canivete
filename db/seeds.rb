@@ -40,7 +40,7 @@ users = User.create(
 
 # Create an initial tournament organizer
 to = TournamentOrganizer.create!(
-  user: User.first
+  user: User.create({ name: 'Kakah', email: 'kakah@canivete.com', password: '123qwe' })
 )
 
 # Create a couple of example tournaments

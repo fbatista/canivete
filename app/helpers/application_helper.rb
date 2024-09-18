@@ -16,16 +16,32 @@ module ApplicationHelper
     end
   end
 
-  def badge(color:, &block)
+  def badge(color:, &)
     tag.span(class: %w[
       text-xs font-medium me-2 px-2.5 py-0.5 rounded
     ] + [
       "bg-#{color}-100", "text-#{color}-800",
       "dark:bg-#{color}-900", "dark:text-#{color}-300"
-    ], &block)
+    ], &)
   end
 
   def icon(name)
     tag.i(class: "ph-bold ph-#{name}")
+  end
+
+  def organizer_mode?
+    url_for(controller: params[:controller], action: params[:action]).starts_with?('/organizer')
+  end
+
+  def organizer_path_builder # rubocop:disable Metrics/AbcSize
+    if organizer_mode?
+      url_for(params.dup.tap { |p| p[:controller] = p[:controller].gsub('organizer', '') }.permit!)
+    else
+      begin
+        url_for(params.dup.tap { |p| p[:controller] = "organizer/#{p[:controller]}" }.permit!)
+      rescue StandardError
+        url_for(%i[organizer tournaments])
+      end
+    end
   end
 end
