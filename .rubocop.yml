@@ -9,3 +9,6 @@ require:
 
 Style/Documentation:
   Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false

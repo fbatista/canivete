@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .cvt-form {
-  @apply flex flex-col gap-3 w-96 p-6 bg-white rounded-md border shadow-sm;
+  @apply flex flex-col gap-3 w-96 p-6 bg-white dark:bg-zinc-800 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm;
 
   & h2 {
     @apply text-lg font-semibold text-zinc-900;
@@ -19,11 +19,11 @@
     & input[type="email"],
     & input[type="password"],
     & input[type="text"] {
-      @apply w-full p-3 border text-sm border-zinc-300 rounded-md;
+      @apply w-full p-3 border text-sm border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800;
     }
 
     & input[type="checkbox"] {
-      @apply inline-block rounded-sm;
+      @apply inline-block rounded-sm bg-white dark:bg-zinc-800;
     }
   }
 
