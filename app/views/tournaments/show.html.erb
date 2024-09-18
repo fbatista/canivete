@@ -7,7 +7,6 @@
     </ol>
   </nav>
 <% end %>
-
 <div class="flex justify-between items-start">
   <h1 class="text-2xl font-bold mb-6">
     <%= @tournament.name %>
@@ -18,17 +17,13 @@
     <% end %>
   </h1>
 </div>
-
-<article class="flex-col space-y-4 bg-white p-6 rounded-lg border">
+<article class="flex-col space-y-4 bg-white dark:bg-zinc-800 p-6 rounded-lg border border-zinc-200 dark:border-zinc-800">
   <section>
     <%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)), src: [:me, @tournament, :tournament_participants] if current_user.player? && @tournament.registration_open? %>
-
     <% if @tournament.live? %>
       <%= turbo_frame_tag 'tournament_participants', src: [@tournament, :tournament_participants], loading: :lazy %>
     <% end %>
   </section>
-
-
   <% if @tournament.rounds.present? %>
     <section>
       <h2 class="text-xl font-bold">Rounds:</h2>

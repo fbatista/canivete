@@ -1,8 +1,7 @@
-<div class="bg-white rounded-lg hover:shadow border p-4 flex flex-col space-y-4">
+<div class="bg-white dark:bg-zinc-800 rounded-lg hover:shadow border border-zinc-200 dark:border-zinc-800 p-4 flex flex-col space-y-4">
   <h1 class="text-lg font-bold"><%= link_to tournament.name, tournament, class: "hover:underline" %></h1>
-  <p class="text-sm text-zinc-600 leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium excepturi sint iure repellat, voluptates dignissimos a non, odit consectetur officia quaerat! Tempore facere fugit provident, totam harum debitis iste! Sit!</p>
-
-  <div class="meta text-xs text-zinc-400 font-mono flex-col space-y-1">
+  <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium excepturi sint iure repellat, voluptates dignissimos a non, odit consectetur officia quaerat! Tempore facere fugit provident, totam harum debitis iste! Sit!</p>
+  <div class="meta text-xs text-zinc-400 dark:text-zinc-600 font-mono flex-col space-y-1">
     <div><%= tournament.tournament_participants.count %> players</div>
     <div>Organizer: <%= tournament.tournament_organizer.name %></div>
     <div>Added <%= time_ago_in_words(tournament.created_at) %> ago</div>
