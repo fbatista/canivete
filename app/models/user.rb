@@ -10,7 +10,11 @@ class User < ApplicationRecord
     :rememberable,
     :validatable
   )
+
+  attr_accessor :organizer
+
   after_create :initialize_player
+  after_create :initialize_organizer, if: -> { @organizer == '1' }
   after_update :update_key, if: -> { email_previously_changed? || name_previously_changed? }
 
   has_one :player, dependent: :nullify
@@ -27,6 +31,10 @@ class User < ApplicationRecord
     player = Player.find_or_initialize_by(key: compute_key)
     player.user = self
     player.save
+  end
+
+  def initialize_organizer
+    TournamentOrganizer.create!(user: self)
   end
 
   def update_key
