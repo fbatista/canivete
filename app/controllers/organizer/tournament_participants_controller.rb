@@ -6,6 +6,10 @@ module Organizer
       @tournament = load_tournament
     end
 
+    def new
+
+    end
+
     def create
     end
 

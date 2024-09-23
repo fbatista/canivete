@@ -35,11 +35,15 @@ module ApplicationHelper
 
   def organizer_path_builder # rubocop:disable Metrics/AbcSize
     if organizer_mode?
-      url_for(params.dup.tap { |p| p[:controller] = p[:controller].gsub('organizer', '') }.permit!)
+      begin
+        url_for(params.dup.tap { |p| p[:controller] = p[:controller].gsub('organizer', '') }.permit!)
+      rescue ActionController::UrlGenerationError
+        url_for(:tournaments)
+      end
     else
       begin
         url_for(params.dup.tap { |p| p[:controller] = "organizer/#{p[:controller]}" }.permit!)
-      rescue StandardError
+      rescue ActionController::UrlGenerationError
         url_for(%i[organizer tournaments])
       end
     end

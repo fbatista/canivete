@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/rgeo/activerecord-postgis-adapter.git
+  revision: 9ed6cb56c536401812c9e461ca065aff06214fbf
+  specs:
+    activerecord-postgis-adapter (9.0.2)
+      activerecord (~> 7.2.0.beta2)
+      rgeo-activerecord (~> 7.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -158,6 +166,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.16.7-x64-mingw-ucrt)
+      racc (~> 1.4)
     nokogiri (1.16.7-x86-linux)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-darwin)
@@ -170,6 +180,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.8)
+    pg (1.5.8-x64-mingw-ucrt)
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
@@ -228,6 +239,10 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.3.7)
+    rgeo (3.0.1)
+    rgeo-activerecord (7.0.1)
+      activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
     rubocop (1.66.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -283,6 +298,8 @@ GEM
       railties (>= 7.0.0)
     tailwindcss-rails (2.7.3-arm64-darwin)
       railties (>= 7.0.0)
+    tailwindcss-rails (2.7.3-x64-mingw-ucrt)
+      railties (>= 7.0.0)
     tailwindcss-rails (2.7.3-x86_64-darwin)
       railties (>= 7.0.0)
     tailwindcss-rails (2.7.3-x86_64-linux)
@@ -295,6 +312,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2024.2)
+      tzinfo (>= 1.0.0)
     unicode-display_width (2.5.0)
     useragent (0.16.10)
     warden (1.2.9)
@@ -323,6 +342,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord-postgis-adapter!
   bcrypt
   bootsnap
   brakeman

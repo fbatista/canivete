@@ -73,8 +73,22 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end.freeze
 
-  enum :state, { registration_open: 0, registration_closed: 1, swiss: 2, single_elimination: 3, finished: 4 },
-       default: :registration_open
+  enum :state, {
+    registration_open: 0,
+    registration_closed: 1,
+    swiss: 2,
+    single_elimination: 3,
+    finished: 4,
+    canceled: 5
+  }, default: :registration_open
+
+  TRANSITIONS = {
+    registration_open: %i[registration_closed canceled],
+    registration_closed: %i[swiss canceled],
+    swiss: %i[single_elimination finished canceled]
+  }.with_indifferent_access.freeze
+
+  has_one_attached :cover
 
   validates :state, presence: true
   validates :name, presence: true
@@ -85,6 +99,48 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :valid_state_transitions, if: -> { state_changed? }
 
   after_update :perform_state_based_actions, if: -> { state_previously_changed? }
+
+  def latitude=(latitude)
+    self.location = RGeo::Geographic
+      .spherical_factory(srid: 4326)
+      .point(longitude, latitude)
+  end
+
+  def longitude=(longitude)
+    self.location = RGeo::Geographic
+      .spherical_factory(srid: 4326)
+      .point(longitude, latitude)
+  end
+
+  def latitude
+    location&.y || 0
+  end
+
+  def longitude
+    location&.x || 0
+  end
+
+  def minimum_participants=(num_players)
+    self.participants_range = (num_players || 0)..maximum_participants
+  end
+
+  def maximum_participants=(num_players)
+    self.participants_range = minimum_participants..num_players
+  end
+
+  def minimum_participants
+    participants_range&.first || 0
+  end
+
+  def maximum_participants
+    participants_range&.last.nil? ? Float::INFINITY : participants_range&.last
+  end
+
+  def available_states
+    return Tournament.states.slice(:registration_open) if new_record?
+
+    Tournament.states.slice(*TRANSITIONS[state])
+  end
 
   def rounds_info
     PLAYERS_ROUNDS_THRESHOLDS[tournament_participants.size]

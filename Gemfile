@@ -17,13 +17,14 @@ gem 'tailwindcss-rails'
 
 gem 'bcrypt'
 gem 'pg'
+gem 'activerecord-postgis-adapter', git: 'https://github.com/rgeo/activerecord-postgis-adapter.git'
 gem 'puma', '>= 5.0'
 gem 'redis', '>= 4.0.1'
 
 gem 'devise'
 
 group :development, :test do
-  gem 'debug', platforms: %i[ mri windows ], require: 'debug/prelude'
+  gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'brakeman', require: false
   gem 'rubocop-rails-omakase', require: false
 end

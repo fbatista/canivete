@@ -1,4 +1,13 @@
-<h1 class="text-3xl font-bold mb-8">My tournaments</h1>
-<div class="grid grid-cols-3 gap-4">
-  <%= render @tournaments %>
-</div>
+<h1 class="text-3xl font-bold mb-8">
+  My tournaments
+  <%= link_to [:new, :organizer, :tournament], class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+    Organize Tournament
+  <% end %>
+</h1>
+<% if @tournaments.present? %>
+  <div class="grid grid-cols-3 gap-4">
+    <%= render @tournaments %>
+  </div>
+<% else %>
+  <p>You haven't organized any tournaments yet.</p>
+<% end %>
