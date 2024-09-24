@@ -11,6 +11,13 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
   </head>
   <body class="bg-zinc-50 dark:bg-zinc-900">
+    <% if flash.present? %>
+      <% flash.keys.each do |key| %>
+        <div class="<%= key %>">
+          <%= flash[key] %>
+        </div>
+      <% end %>
+    <% end %>
     <header class="border-b border-zinc-200 dark:border-zinc-800 p-4 px-6 text-sm bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-50">
       <nav class="mx-auto flex justify-between">
         <div class="flex items-center gap-2">

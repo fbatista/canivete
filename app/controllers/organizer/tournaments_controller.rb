@@ -14,6 +14,8 @@ module Organizer
           rounds: :pods,
           tournament_participants: { player: :user }
         ).find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to url_for(action: :index), alert: 'Not authorized to manage the selected tournament'
     end
 
     def new

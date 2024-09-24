@@ -26,10 +26,11 @@
 </div>
 
 <article class="flex-col space-y-4 bg-white p-6 rounded-lg border">
+  <%= render partial: "tournaments/tournament_details" %>
+
   <section>
     <%= turbo_frame_tag 'tournament_participants', src: [:organizer, @tournament, :tournament_participants], loading: :lazy %>
   </section>
-
 
   <% if @tournament.rounds.present? %>
     <section>
