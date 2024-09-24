@@ -12,8 +12,11 @@ class AddFieldsToTournament < ActiveRecord::Migration[7.2]
       t.text :schedule
       t.text :rules
       t.numeric :price
+      t.integer :currency
       t.st_point :location, geographic: true
     end
+
+    add_column :tournament_organizers, :default_currency, :integer, default: 0
 
     add_index :tournaments, :location, using: :gist
   end

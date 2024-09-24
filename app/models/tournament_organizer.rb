@@ -6,4 +6,11 @@ class TournamentOrganizer < ApplicationRecord
   has_many :tournaments, dependent: :destroy
 
   delegate :name, to: :user
+
+  CURRENCIES = {
+    euro: 0,
+    dollar: 1
+  }.freeze
+
+  enum :default_currency, CURRENCIES
 end

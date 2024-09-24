@@ -10,11 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_21_132711) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_24_152737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "players", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
@@ -71,6 +99,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_132711) do
     t.uuid "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "default_currency", default: 0
     t.index ["user_id"], name: "index_tournament_organizers_on_user_id"
   end
 
@@ -103,6 +132,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_132711) do
     t.text "schedule"
     t.text "rules"
     t.decimal "price"
+    t.integer "currency"
     t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
     t.index ["location"], name: "index_tournaments_on_location", using: :gist
     t.index ["tournament_organizer_id"], name: "index_tournaments_on_tournament_organizer_id"
@@ -121,6 +151,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_21_132711) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "players", "users"
   add_foreign_key "pods", "rounds"
   add_foreign_key "results", "rounds"

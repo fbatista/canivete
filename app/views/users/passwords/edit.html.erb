@@ -1,6 +1,6 @@
 <div class="max-w-96 mx-auto flex flex-col gap-3">
   <h2 class="text-lg font-bold text-zinc-900">Change your password</h2>
-  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "cvt-form" }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "cvt-form card" }) do |f| %>
     <%= render "users/shared/error_messages", resource: resource %>
     <%= f.hidden_field :reset_password_token %>
     <div class="field">

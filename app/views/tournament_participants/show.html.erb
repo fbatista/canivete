@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)) do %>
-  <%= link_to [@tournament, @tournament_participant], class: "bg-red-500 text-white px-4 py-2 rounded-md text-sm", data: { turbo_method: :delete } do %>
+  <%= link_to [@tournament, @tournament_participant], class: "block bg-red-500 text-white p-2 rounded-md text-sm", data: { turbo_method: :delete } do %>
     <%= icon("receipt-x") %>
     Cancel my registration
   <% end %>

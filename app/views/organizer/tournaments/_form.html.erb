@@ -1,5 +1,5 @@
 
-  <%= form_for [:organizer, @tournament], html: { id: @tournament.id, class: "cvt-form" } do |f| %>
+  <%= form_for [:organizer, @tournament], html: { id: @tournament.id, class: "cvt-form card" } do |f| %>
     <h2>
       <% if @tournament.persisted? %>
         Edit <%= @tournament.name %>
@@ -51,19 +51,26 @@
       <%= f.text_area :rules, placeholder: "Competive REL + MAMTR:\nhttps://juizes-mtg-portugal.github.io/" %>
     </div>
 
-    <div class="field">
-      <%= f.label :minimum_participants %>
-      <%= f.number_field :minimum_participants, placeholder: "3" %>
+    <div class="flex">
+      <div class="field">
+        <%= f.label :minimum_participants %>
+        <%= f.number_field :minimum_participants, placeholder: "3" %>
+      </div>
+      <div class="field">
+        <%= f.label :maximum_participants %>
+        <%= f.number_field :maximum_participants, placeholder: "No limit" %>
+      </div>
     </div>
 
-    <div class="field">
-      <%= f.label :maximum_participants %>
-      <%= f.number_field :maximum_participants, placeholder: "No limit" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :price %>
-      <%= f.number_field :price, placeholder: "Sign up price per player" %>
+    <div class="flex">
+      <div class="field">
+        <%= f.label :price %>
+        <%= f.number_field :price, placeholder: "Sign up price per player" %>
+      </div>
+      <div class="field">
+        <%= f.label :curency %>
+        <%= f.select :currency, currency_options, selected: @tournament.currency %>
+      </div>
     </div>
 
     <div class="field">

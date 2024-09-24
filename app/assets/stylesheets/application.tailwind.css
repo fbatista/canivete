@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.cvt-form {
+.card {
   @apply flex flex-col gap-3 w-96 p-6 bg-white dark:bg-zinc-800 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm;
+}
 
+.cvt-form {
   & h2 {
     @apply text-lg font-semibold text-zinc-900;
   }

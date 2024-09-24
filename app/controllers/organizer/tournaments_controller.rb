@@ -6,18 +6,6 @@ module Organizer
       @tournaments = Tournament.all.for_organizer(current_organizer)
     end
 
-    def new
-      @tournament = Tournament.new
-    end
-
-    def create
-      @tournament = Tournament.create(
-        tournament_params.merge(tournament_organizer: current_organizer)
-      )
-
-      redirect_to @tournament, notice: 'Tournament created successfully'
-    end
-
     def show
       @tournament =
         Tournament
@@ -28,8 +16,20 @@ module Organizer
         ).find(params[:id])
     end
 
+    def new
+      @tournament = Tournament.new
+    end
+
     def edit
       @tournament = Tournament.for_organizer(current_organizer).find params[:id]
+    end
+
+    def create
+      @tournament = Tournament.create(
+        tournament_params.merge(tournament_organizer: current_organizer)
+      )
+
+      redirect_to @tournament, notice: 'Tournament created successfully'
     end
 
     def update
@@ -48,7 +48,19 @@ module Organizer
     def tournament_params
       params.require(:tournament).permit(
         :name,
-        :state
+        :state,
+        :description,
+        :start_time,
+        :end_time,
+        :minimum_participants,
+        :maximum_participants,
+        :prizes,
+        :address,
+        :schedule,
+        :rules,
+        :price,
+        :currency,
+        :cover
       )
     end
   end

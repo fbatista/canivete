@@ -16,10 +16,34 @@
       <% end %>
     <% end %>
   </h1>
+  <%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)), src: [:me, @tournament, :tournament_participants] if current_user.player? && @tournament.registration_open? %>
 </div>
 <article class="flex-col space-y-4 bg-white dark:bg-zinc-800 p-6 rounded-lg border border-zinc-200 dark:border-zinc-800">
   <section>
-    <%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)), src: [:me, @tournament, :tournament_participants] if current_user.player? && @tournament.registration_open? %>
+    <%= image_tag @tournament.cover if @tournament.cover.attached? %>
+
+    <h2>Prizes</h2>
+    <p><%= @tournament.prizes %></p>
+
+    <h2>Location</h2>
+    <p><%= @tournament.address %></p>
+
+    <h2>Schedule</h2>
+    <p><%= @tournament.schedule %></p>
+
+    <h2>Rules</h2>
+    <p><%= @tournament.rules %></p>
+
+    <h2>Participants</h2>
+    <p><span class="font-bold">Minimum:</span><%= @tournament.participants_range&.min %></p>
+    <p><span class="font-bold">Maximum:</span><%= @tournament.participants_range&.max %></p>
+    <p><span class="font-bold">Currently registered</span><%= @tournament.tournament_participants_count %></p>
+
+    <h2>Prizes</h2>
+    <p><%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %></p>
+
+  </section>
+  <section>
     <% if @tournament.live? %>
       <%= turbo_frame_tag 'tournament_participants', src: [@tournament, :tournament_participants], loading: :lazy %>
     <% end %>

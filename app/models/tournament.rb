@@ -74,19 +74,26 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end.freeze
 
   enum :state, {
-    registration_open: 0,
-    registration_closed: 1,
-    swiss: 2,
-    single_elimination: 3,
-    finished: 4,
-    canceled: 5
+    draft: 0,
+    registration_open: 1,
+    registration_closed: 2,
+    swiss: 3,
+    single_elimination: 4,
+    finished: 5,
+    canceled: 6
   }, default: :registration_open
 
   TRANSITIONS = {
-    registration_open: %i[registration_closed canceled],
-    registration_closed: %i[swiss canceled],
-    swiss: %i[single_elimination finished canceled]
+    draft: %i[draft registration_open registration_closed],
+    registration_open: %i[registration_open registration_closed canceled],
+    registration_closed: %i[registration_closed swiss canceled],
+    swiss: %i[single_elimination finished canceled],
+    single_elimination: %i[finished canceled],
+    finished: [:finished],
+    canceled: [:canceled]
   }.with_indifferent_access.freeze
+
+  enum :currency, TournamentOrganizer::CURRENCIES
 
   has_one_attached :cover
 
@@ -102,14 +109,14 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def latitude=(latitude)
     self.location = RGeo::Geographic
-      .spherical_factory(srid: 4326)
-      .point(longitude, latitude)
+                    .spherical_factory(srid: 4326)
+                    .point(longitude, latitude)
   end
 
   def longitude=(longitude)
     self.location = RGeo::Geographic
-      .spherical_factory(srid: 4326)
-      .point(longitude, latitude)
+                    .spherical_factory(srid: 4326)
+                    .point(longitude, latitude)
   end
 
   def latitude
@@ -121,19 +128,19 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def minimum_participants=(num_players)
-    self.participants_range = (num_players || 0)..maximum_participants
+    self.participants_range = (num_players.presence || 0).to_i..maximum_participants
   end
 
   def maximum_participants=(num_players)
-    self.participants_range = minimum_participants..num_players
+    self.participants_range = minimum_participants..(num_players.presence&.to_i)
   end
 
   def minimum_participants
-    participants_range&.first || 0
+    participants_range&.min || 0
   end
 
   def maximum_participants
-    participants_range&.last.nil? ? Float::INFINITY : participants_range&.last
+    participants_range&.max.nil? ? Float::INFINITY : participants_range&.max
   end
 
   def available_states

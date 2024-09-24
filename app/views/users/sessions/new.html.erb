@@ -1,6 +1,6 @@
 <div class="max-w-96 mx-auto flex flex-col gap-3">
   <h2 class="text-lg font-bold text-zinc-900">Log in</h2>
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "cvt-form" }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "cvt-form card" }) do |f| %>
     <div class="field">
       <%= f.label :email %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
