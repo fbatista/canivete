@@ -2,44 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.notice {
-  @apply p-4 bg-green-400 text-white;
-}
+.markdown {
+  @apply py-3;
 
-.alert {
-  @apply p-4 bg-red-400 text-white;
-}
-
-.card {
-  @apply flex flex-col gap-3 w-96 p-6 bg-white dark:bg-zinc-800 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm;
-}
-
-.cvt-form {
-  & h2 {
-    @apply text-lg font-semibold text-zinc-900;
+  & p {
+    @apply mb-4;
   }
-
-  & .field {
-    @apply flex flex-col gap-1;
-
-    & label {
-      @apply block text-sm text-zinc-500;
-    }
-
-    & input[type="email"],
-    & input[type="password"],
-    & input[type="text"] {
-      @apply w-full p-3 border text-sm border-zinc-300 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800;
-    }
-
-    & input[type="checkbox"] {
-      @apply inline-block rounded-sm bg-white dark:bg-zinc-800;
-    }
-  }
-
-  & .actions {
-    & input[type="submit"] {
-      @apply w-full p-2 bg-blue-600 text-white text-sm rounded-md;
-    }
+  & li {
+    @apply ml-2 mb-2;
   }
 }

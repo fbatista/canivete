@@ -10,56 +10,83 @@
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
   </head>
-  <body class="bg-zinc-50 dark:bg-zinc-900">
-    <% if flash.present? %>
-      <% flash.keys.each do |key| %>
-        <div class="<%= key %>">
-          <%= flash[key] %>
-        </div>
+  <body class="bg-gray-50 dark:bg-gray-900">
+    <header class="fixed z-30 w-full bg-white dark:bg-gray-800">
+      <% if flash.present? %>
+        <% flash.keys.each do |key| %>
+          <%= render partial: key, object: flash[key] %>
+        <% end %>
       <% end %>
-    <% end %>
-    <header class="border-b border-zinc-200 dark:border-zinc-800 p-4 px-6 text-sm bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-50">
-      <nav class="mx-auto flex justify-between">
-        <div class="flex items-center gap-2">
-          <%= link_to root_url, class: "flex items-center gap-1" do %>
-            <%= icon("knife") %>
-            <strong class="mr-2">Canivete</strong>
-          <% end %>
-          <%= link_to 'Home', root_url %>
-        </div>
-        <div class="flex items-center gap-3">
-          <div data-controller="dark-mode">
-            <%= tag.i(class: 'ph-bold ph-sun w-6 h-6 hover:cursor-pointer', data: { action: 'click->dark-mode#toggle'}) %>
+      <nav class="border-b border-gray-200 dark:border-gray-700 py-3 px-4">
+        <div class="flex justify-between items-center max-w-screen-2xl mx-auto">
+          <div class="flex justify-start items-center">
+            <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar" class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+              <svg id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+              <svg id="toggleSidebarMobileClose" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+            <%= link_to root_url, class: "flex ml-2 md:mr-24" do %>
+              <%= icon("knife", class: "text-2xl mr-3 dark:text-white self-center") %>
+              <strong class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Canivete</strong>
+            <% end %>
+            <form action="#" method="GET" class="hidden lg:block lg:pl-3.5">
+              <label for="topbar-search" class="sr-only">Search</label>
+              <div class="relative mt-1 lg:w-96">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                </div>
+                <input type="text" name="email" id="topbar-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search">
+              </div>
+            </form>
           </div>
-          <%# <div class="rounded-full bg-zinc-200 w-6 h-6 border border-zinc-300"></div> %>
-          <% if current_user&.organizer? %>
-            <%= link_to organizer_path_builder, class: "flex items-center" do %>
-              <%= label_tag "to_mode", class: "inline-flex items-center cursor-pointer" do %>
-                <%= check_box_tag "to_mode", "", organizer_mode?, class: "sr-only peer" %>
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Organizer mode</span>
+          <div class="flex justify-between items-center lg:order-2">
+            <button id="toggleSidebarMobileSearch" type="button" class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ">
+              <span class="sr-only">Search</span>
+
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            </button>
+
+            <button data-controller="dark-mode" data-action="click->dark-mode#toggle" type="button" class="text-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg p-2.5 flex items-center">
+              <%= icon('moon', class: 'dark:hidden') %>
+              <%= icon('sun', class: 'hidden dark:inline') %>
+            </button>
+
+            <% if current_user&.organizer? %>
+              <%= link_to organizer_path_builder, class: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 flex items-center" do %>
+                <%= label_tag "to_mode", class: "inline-flex items-center cursor-pointer" do %>
+                  <%= check_box_tag "to_mode", "", organizer_mode?, class: "sr-only peer" %>
+                  <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                  <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Organizer mode</span>
+                <% end %>
               <% end %>
             <% end %>
-          <% end %>
 
-          <%= link_to 'Logout', destroy_user_session_path, data: { "turbo-method": :delete } if user_signed_in? %>
+            <%= link_to 'Logout', destroy_user_session_path, data: { "turbo-method": :delete }, class: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5" if user_signed_in? %>
+          </div>
         </div>
       </nav>
     </header>
-    <main class="container mx-auto flex flex-col py-12 text-zinc-900 dark:text-zinc-50">
-      <%= yield :sub_navigation %>
-      <div>
-        <%= yield %>
+    <div class="flex pt-20 overflow-hidden bg-gray-50 dark:bg-gray-900">
+      <div class="relative w-full max-w-screen-2xl mx-auto h-full overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <main>
+          <div class="grid grid-cols-1 gap-4 px-4 mb-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div class="my-4 col-span-full xl:my-2">
+              <%= yield :sub_navigation %>
+            </div>
+
+            <%= yield %>
+          </div>
+
+          <%= turbo_frame_tag "modal", target: "_top" %>
+        </main>
+        <footer class="md:flex md:items-center md:justify-between px-4 2xl:px-0 py-6 md:py-10">
+          <div class="container mx-auto text-center text-zinc-400 text-xs">
+            Canivete is open-source software.
+            Contribute here:
+            <%= icon("github-logo") %>
+            <%= link_to 'Github', 'https://github.com/fbatista/canivete', class: 'underline', target: '_blank' %>
+          </div>
+        </footer>
       </div>
-      <%= turbo_frame_tag "modal", target: "_top" %>
-    </main>
-    <footer class="p-6">
-      <div class="container mx-auto text-center text-zinc-400 text-xs">
-        Canivete is open-source software.
-        Contribute here:
-        <%= icon("github-logo") %>
-        <%= link_to 'Github', 'https://github.com/fbatista/canivete', class: 'underline', target: '_blank' %>
-      </div>
-    </footer>
+    </div>
   </body>
 </html>

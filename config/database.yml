@@ -17,5 +17,10 @@ test:
   database: canivete_test
 
 production:
-  <<: *default
-  database: canivete_production
+  primary:
+    <<: *default
+    database: canivete_production
+  queue:
+    <<: *default
+    database: canivete_production_queue
+    migrations_paths: db/queue_migrate

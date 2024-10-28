@@ -1,12 +1,13 @@
-<div class="border border-black min-w-fit">
-  <h3 class="text-l font-bold pl-2 py-2">
-    <%= link_to [:new, :organizer, pod.tournament, pod.round.becomes(Round), pod, :result], data: {turbo_frame: "modal"} do %>
-      Pod <%= pod.number %>
+<div class="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <div class="flex justify-between items-center">
+    <h5 class="px-6 pt-6 pb-3 mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pod <%= pod.number %></h5>
+    <%= link_to [:new, :organizer, pod.tournament, pod.round.becomes(Round), pod, :result], data: {turbo_frame: "modal"}, class: "me-6 px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+      <%= icon("hand-deposit", class: "me-1") %> Add result
     <% end %>
-  </h3>
-  <ol>
+  </div>
+  <ol class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch">
     <% pod.tournament_participants.each do |player| %>
-      <li class="list-decimal list-inside pl-2 pr-10 py-1 <%= result_indicator(pod:, player:) %>"><%= player.name %></li>
+      <li class="list-decimal grow list-inside last:rounded-b-lg pl-6 pr-10 py-3 <%= result_indicator(pod:, player:) %>"><%= player.name %></li>
     <% end %>
   </ol>
 </div>

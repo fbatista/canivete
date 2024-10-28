@@ -1,19 +1,11 @@
-<div class="max-w-96 mx-auto flex flex-col gap-3">
+<div class="max-w-128 mx-auto flex flex-col gap-3">
   <h2 class="text-lg font-bold text-zinc-900">Log in</h2>
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "cvt-form card" }) do |f| %>
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-    </div>
-    <div class="field">
-      <%= f.label :password %>
-      <%= f.password_field :password, autocomplete: "current-password" %>
-    </div>
+  <%= modal_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <%= f.email_field_with_label :email, autofocus: true, autocomplete: "email" %>
+    <%= f.password_field_with_label :password, autocomplete: "current-password" %>
+
     <% if devise_mapping.rememberable? %>
-      <div class="flex items-center gap-2 text-sm text-zinc-500">
-        <%= f.check_box :remember_me %>
-        <%= f.label :remember_me %>
-      </div>
+      <%= f.check_box_with_label :remember_me %>
     <% end %>
     <div class="actions">
       <%= f.submit "Log in" %>

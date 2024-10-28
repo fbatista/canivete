@@ -8,4 +8,12 @@ class Player < ApplicationRecord
 
   validates :key, presence: true
   delegate :name, to: :user
+
+  def participant?(tournament)
+    tournament_participations.any? { |tp| tp.tournament_id == tournament.id }
+  end
+
+  def participant(tournament)
+    tournament_participations.find { |tp| tp.tournament_id == tournament.id }
+  end
 end

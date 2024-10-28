@@ -97,15 +97,20 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_one_attached :cover
 
-  validates :state, presence: true
-  validates :name, presence: true
-  validates :slug, presence: true
+  with_options presence: true do
+    validates :state, :name, :slug, :start_time, :end_time
+  end
 
   before_validation :populate_slug
 
   validate :valid_state_transitions, if: -> { state_changed? }
 
   after_update :perform_state_based_actions, if: -> { state_previously_changed? }
+  after_save :geocode_address, if: -> { address_changed? }
+
+  def geocode_address
+    Tournaments::GeocodeJob.perform_later(self)
+  end
 
   def latitude=(latitude)
     self.location = RGeo::Geographic
@@ -136,11 +141,15 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def minimum_participants
-    participants_range&.min || 0
+    participants_range&.begin || 0
   end
 
   def maximum_participants
-    participants_range&.max.nil? ? Float::INFINITY : participants_range&.max
+    if participants_range&.end == Float::INFINITY || participants_range&.end.nil?
+      Float::INFINITY
+    else
+      participants_range&.end
+    end
   end
 
   def available_states
@@ -159,6 +168,10 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def number_of_single_elimination_rounds
     rounds_info.dig(:top, :pods)&.size
+  end
+
+  def single_elimination_round_name(round_number)
+    %w[Finals Semi-Finals Quarter-Finals][number_of_swiss_rounds + number_of_single_elimination_rounds - round_number]
   end
 
   def live?

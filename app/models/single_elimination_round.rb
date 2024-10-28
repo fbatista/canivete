@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class SingleEliminationRound < Round
+  def display_name
+    tournament.single_elimination_round_name(number)
+  end
+
   def create_pods
     Tournaments::CreateSingleEliminationPodsJob.perform_now(self)
   end

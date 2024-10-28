@@ -32,6 +32,7 @@
 !/tmp/storage/.keep
 
 /public/assets
+/node_modules
 
 # Ignore development stuff
 .env

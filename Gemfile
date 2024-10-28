@@ -2,26 +2,29 @@
 
 source 'https://rubygems.org'
 
+# Backend
 gem 'rails', '~> 7.2.1'
-
 gem 'bootsnap', require: false
 gem 'jbuilder'
 gem 'tzinfo-data', platforms: %i[windows jruby]
+gem 'devise'
 
+# Frontend
 gem 'hotwire-rails'
 gem 'importmap-rails'
 gem 'sprockets-rails'
 gem 'turbo-rails'
 gem 'stimulus-rails'
 gem 'tailwindcss-rails'
+gem 'commonmarker'
 
+# Databases
+gem 'activerecord-postgis-adapter', git: 'https://github.com/rgeo/activerecord-postgis-adapter.git'
 gem 'bcrypt'
 gem 'pg'
-gem 'activerecord-postgis-adapter', git: 'https://github.com/rgeo/activerecord-postgis-adapter.git'
 gem 'puma', '>= 5.0'
 gem 'redis', '>= 4.0.1'
-
-gem 'devise'
+gem 'solid_queue', '~> 1.0'
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'

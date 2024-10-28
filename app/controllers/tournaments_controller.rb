@@ -3,6 +3,7 @@
 class TournamentsController < ApplicationController
   def index
     @tournaments = Tournament.all
+    current_user.player.tournaments.where(tournaments: { id: @tournaments })
   end
 
   def show

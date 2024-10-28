@@ -1,92 +1,46 @@
-
-  <%= form_for [:organizer, @tournament], html: { id: @tournament.id, class: "cvt-form card" } do |f| %>
-    <h2>
-      <% if @tournament.persisted? %>
-        Edit <%= @tournament.name %>
-      <% else %>
-        New Tournament
-      <% end %>
-    </h2>
-    <% if @tournament.errors.present? %>
-      <%= safe_join(@tournament.errors.full_messages, raw("<br>")) %>
+<%= modal_form_for [:organizer, @tournament] do |f| %>
+  <% content_for :title do %>
+    <% if @tournament.persisted? %>
+      Edit <%= @tournament.name %>
+    <% else %>
+      New Tournament
     <% end %>
-    <div class="field">
-      <%= f.label :name %>
-      <%= f.text_field :name, placeholder: "A short, appealing name" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :cover %>
-      <%= f.file_field :cover %>
-    </div>
-
-    <div class="field">
-      <%= f.label :prizes %>
-      <%= f.text_area :prizes, placeholder: "1st: Black Lotus,\n2nd~4th: Timetwister" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :address %>
-      <%= f.text_field :address, placeholder: "1600 Lind Ave SW, Renton, WA 98057, US" %>
-    </div>
-
-    <div class="flex">
-      <div class="field">
-        <%= f.label :start_time %>
-        <%= f.datetime_local_field :start_time %>
-      </div>
-      <div class="field">
-        <%= f.label :end_time %>
-        <%= f.datetime_local_field :end_time %>
-      </div>
-    </div>
-
-    <div class="field">
-      <%= f.label :schedule %>
-      <%= f.text_area :schedule, rows: 4, placeholder: "9:00 Checkin\n10:00 First round\n13:00 Lunch Break\n19:00 Top 16" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :rules %>
-      <%= f.text_area :rules, placeholder: "Competive REL + MAMTR:\nhttps://juizes-mtg-portugal.github.io/" %>
-    </div>
-
-    <div class="flex">
-      <div class="field">
-        <%= f.label :minimum_participants %>
-        <%= f.number_field :minimum_participants, placeholder: "3" %>
-      </div>
-      <div class="field">
-        <%= f.label :maximum_participants %>
-        <%= f.number_field :maximum_participants, placeholder: "No limit" %>
-      </div>
-    </div>
-
-    <div class="flex">
-      <div class="field">
-        <%= f.label :price %>
-        <%= f.number_field :price, placeholder: "Sign up price per player" %>
-      </div>
-      <div class="field">
-        <%= f.label :curency %>
-        <%= f.select :currency, currency_options, selected: @tournament.currency %>
-      </div>
-    </div>
-
-    <div class="field">
-      <%= f.label :description %>
-      <%= f.text_area :description, placeholder: "Additional info, like how to get to the venue, where to eat, etc." %>
-    </div>
-
-    <div class="field">
-      <%= f.label :state %>
-      <%= f.select :state, @tournament.available_states.keys.map { |k| [k.humanize, k] }, selected: @tournament.state %>
-    </div>
-
-    <div class="actions flex">
-      <%= link_to [:organizer, @tournament], class:"text-center mt-2 w-full block text-sm" do %>
-        Cancel
-      <% end %>
-      <%= f.submit %>
-    </div>
   <% end %>
+
+  <% if @tournament.errors.present? %>
+    <%= safe_join(@tournament.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <%= f.text_field_with_label :name, placeholder: "A short, appealing name" %>
+  <%= f.file_field_with_label :cover %>
+  <%= f.text_area_with_label :prizes, rows: 4, placeholder: "- 1st: Black Lotus,\n- 2nd~4th: Timetwister" %>
+  <%= f.text_field_with_label :address, placeholder: "1600 Lind Ave SW, Renton, WA 98057, US" %>
+
+  <div class="flex justify-between">
+    <%= f.datetime_local_field_with_label :start_time %>
+    <%= f.datetime_local_field_with_label :end_time %>
+  </div>
+
+  <%= f.text_area_with_label :schedule, rows: 4, placeholder: "- 9:00 Checkin\n- 10:00 First round\n- 13:00 Lunch Break\n- 19:00 Top 16" %>
+  <%= f.text_area_with_label :rules, rows: 4, placeholder: "Commander Format\nCompetive REL + MAMTR:\nhttps://juizes-mtg-portugal.github.io/\nPlaytest cards allowed as long as they aren't marked and respect the rules for artistic modifications." %>
+
+  <div class="flex justify-between">
+    <%= f.number_field_with_label :minimum_participants, placeholder: "3" %>
+    <%= f.number_field_with_label :maximum_participants, placeholder: "No limit" %>
+  </div>
+
+  <div class="flex gap-1">
+    <%= f.number_field_with_label :price, placeholder: "Fee per player", min: 0, step: 0.01 %>
+    <%= f.select_with_label :currency, currency_options, selected: @tournament.currency %>
+  </div>
+
+  <%= f.text_area_with_label :description, rows: 4, placeholder: "Additional info, like how to get to the venue, where to eat, etc." %>
+  <%= f.select_with_label :state, @tournament.available_states.keys.map { |k| [k.humanize, k] }, selected: @tournament.state %>
+
+  <% content_for :footer do %>
+    <%= f.submit %>
+    <%= link_to [:organizer, @tournament], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,5 +1,5 @@
-<h1 class="text-3xl font-bold mb-8">Active tournaments</h1>
-<div class="grid grid-cols-3 gap-4">
-  <%= render @tournaments %>
-</div>
+<%= content_for :sub_navigation do %>
+  <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Active tournaments</h1>
+<% end %>
 
+<%= render @tournaments %>

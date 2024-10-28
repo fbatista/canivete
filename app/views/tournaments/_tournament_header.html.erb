@@ -1,0 +1,21 @@
+<div class="col-span-full py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+  <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+    <%= @tournament.name %>
+    <% if @tournament.finished? %>
+      <%= badge(color: "blue") do %>
+        Finished
+      <% end %>
+    <% end %>
+  </h1>
+  <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+    <% if @tournament.start_time.past? %>
+      Occurred <%= time_ago_in_words @tournament.end_time %> ago in <%= icon('map-pin') %> <%= @tournament.address.titleize %>
+    <% else %>
+      Coming up in <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @tournament.start_time %></span> at <%= icon('map-pin') %> <%= @tournament.address.titleize %>
+    <% end %>
+  </p>
+  <div class="flex items-center flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+    <%= render "tournament_actions", tournament: @tournament %>
+    <span class="ml-3 text-sm font-normal text-gray-500 lg:text-sm dark:text-gray-400">or learn more below:</span>
+  </div>
+</div>

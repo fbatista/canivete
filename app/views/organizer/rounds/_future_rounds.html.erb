@@ -1,0 +1,14 @@
+<% ((@round.tournament.rounds.size + 1)..@round.tournament.number_of_swiss_rounds).each do |future_round| %>
+  <li class="me-2">
+    <span class="inline-block px-4 py-3 text-gray-400 cursor-not-allowed dark:text-gray-500">
+      Round #<%= future_round %>
+    </span>
+  </li>
+<% end %>
+<% (([@round.tournament.number_of_swiss_rounds + 1, @round.tournament.rounds.size + 1].max)..(@round.tournament.number_of_swiss_rounds + @round.tournament.number_of_single_elimination_rounds)).each do |future_elim_round| %>
+  <li class="me-2">
+    <span class="inline-block px-4 py-3 text-gray-400 cursor-not-allowed dark:text-gray-500">
+      <%= @round.tournament.single_elimination_round_name(future_elim_round) %>
+    </span>
+  </li>
+<% end %>

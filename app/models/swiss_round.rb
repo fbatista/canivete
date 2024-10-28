@@ -11,6 +11,10 @@ class SwissRound < Round
     }
   )
 
+  def display_name
+    "Round ##{number}"
+  end
+
   def create_pods
     Tournaments::CreatePodsJob.perform_now(self)
   end

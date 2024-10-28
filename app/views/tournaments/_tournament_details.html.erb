@@ -1,23 +1,41 @@
-<section>
-  <%= image_tag @tournament.cover if @tournament.cover.attached? %>
+<div class="col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <%= image_tag @tournament.cover, class: "object-cover aspect-[16/9]" if @tournament.cover.attached? %>
+</div>
 
-  <h2>Prizes</h2>
-  <p><%= @tournament.prizes %></p>
+<div class="col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Location</h2>
+  <h3 class="mb-2 text-md font-medium text-gray-900 dark:text-white"><%= @tournament.address %></h3>
+  <iframe
+    width="100%" height="400"
+    frameborder="0" scrolling="no"
+    marginheight="0" marginwidth="0"
+    src="<%= map_embed_url(@tournament) %>">
+  </iframe>
+</div>
 
-  <h2>Location</h2>
-  <p><%= @tournament.address %></p>
+<div class="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Prizes</h2>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= @tournament.prizes %></p>
+</div>
 
-  <h2>Schedule</h2>
-  <p><%= @tournament.schedule %></p>
+<div class="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Price</h2>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %></p>
+</div>
 
-  <h2>Rules</h2>
-  <p><%= @tournament.rules %></p>
+<div class="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Schedule</h2>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= @tournament.schedule %></p>
+</div>
 
-  <h2>Participants</h2>
-  <p><span class="font-bold">Minimum:</span><%= @tournament.participants_range&.min %></p>
-  <p><span class="font-bold">Maximum:</span><%= @tournament.participants_range&.max %></p>
-  <p><span class="font-bold">Currently registered</span><%= @tournament.tournament_participants_count %></p>
+<div class="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Rules</h2>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= @tournament.rules %></p>
+</div>
 
-  <h2>Prizes</h2>
-  <p><%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %></p>
-</section>
+<div class="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Participants</h2>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Minimum:</span><%= @tournament.participants_range&.min %></p>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Maximum:</span><%= (@tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : @tournament.participants_range&.max %></p>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Currently registered</span><%= @tournament.tournament_participants_count %></p>
+</div>

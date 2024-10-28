@@ -19,7 +19,8 @@ module Organizer
         redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: 'Round Started!'
       when 'finish'
         @round.update(finished_at: Time.zone.now)
-        redirect_to [:organizer, tournament], notice: 'Round Finished!'
+        redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
+                    notice: 'Round Finished!'
       end
     end
 

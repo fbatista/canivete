@@ -46,8 +46,10 @@ to = TournamentOrganizer.create!(
 # Create a couple of example tournaments
 tournaments = Tournament.create!(
   [
-    { name: 'Uneven Pods Tournament', state: :registration_open, tournament_organizer: to },
-    { name: 'Even Pods Tournament', state: :registration_open, tournament_organizer: to }
+    { name: 'Uneven Pods Tournament', state: :registration_open, tournament_organizer: to,
+      start_time: 2.weeks.from_now, end_time: 2.weeks.from_now + 8.hours },
+    { name: 'Even Pods Tournament', state: :registration_open, tournament_organizer: to,
+      start_time: 1.week.from_now, end_time: 1.week.from_now + 1.day }
   ]
 )
 
