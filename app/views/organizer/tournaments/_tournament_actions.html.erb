@@ -1,6 +1,12 @@
 <% if current_user.organizer?(tournament)%>
   <%= link_to [:edit, :organizer, tournament], class: 'inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 dark:focus:ring-orange-900', data: {turbo_frame: "modal"} do %>
-    <%= icon("pencil", class: "mr-2") %> Manage
+    <%= icon("pencil", class: "mr-2") %> Edit
+  <% end %>
+<% end %>
+
+<% if tournament.rounds.present? %>
+  <%= link_to [:organizer, tournament, :tournament_participants, {layout: 'application'}], class: "inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 dark:focus:ring-orange-900" do %>
+    <%= icon("user-list", class: "mr-2") %> Players
   <% end %>
 <% end %>
 

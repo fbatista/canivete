@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { startedAt: String, finishedAt: String, roundTime: Number };
   connect() {
+    this.fullscreen = false;
     const started_at = new Date(this.startedAtValue);
     if (this.finishedAtValue == "") {
       this.updateTimer(started_at);
@@ -31,8 +32,48 @@ export default class extends Controller {
     const minutes = ~~(remaining / 60);
     const seconds = Math.abs(remaining % 60);
     if (remaining < 0) {
-      this.element.classList.add("text-red-500", "font-black", "text-2xl");
+      this.element.classList.add("!text-red-400", "font-black");
     }
     this.element.textContent = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+  }
+
+  toggleFullscreen() {
+    if (this.finishedAtValue !== "") {
+      return;
+    }
+    this.fullscreen = !this.fullscreen;
+    if (this.fullscreen) {
+      this.element.classList.remove("cursor-zoom-in", "inline-flex");
+      this.element.classList.add(
+        "cursor-zoom-out",
+        "fixed",
+        "inset-0",
+        "z-50",
+        "bg-black",
+        "font-black",
+        "text-[392px]",
+        "text-lime-400",
+        "text-center",
+        "font-mono",
+        "flex",
+        "justify-center",
+      );
+    } else {
+      this.element.classList.remove(
+        "cursor-zoom-out",
+        "fixed",
+        "inset-0",
+        "z-50",
+        "bg-black",
+        "font-black",
+        "text-[392px]",
+        "text-lime-400",
+        "text-center",
+        "font-mono",
+        "flex",
+        "justify-center",
+      );
+      this.element.classList.add("cursor-zoom-in", "inline-flex");
+    }
   }
 }

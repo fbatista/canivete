@@ -1,34 +1,139 @@
-<%= turbo_frame_tag 'tournament_participants' do %>
-  <% if @tournament.tournament_participants.present? %>
-    <div class="text-xs font-mono">Registered players: <span id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span></div>
+<% content_for :title do %>
+  <%= @tournament.name %> Participants
+<% end %>
 
-    <table class="border rounded p-1 w-full text-sm">
-      <thead class="bg-zinc-500 text-white">
-        <tr>
-          <% case @tournament.state %>
-          <% when 'registration_open', 'registration_closed' %>
-            <th class="p-2 text-left">Name</th>
-          <% else %>
-            <th class="p-2 text-left">Rank</th>
-            <th class="p-2 text-left">Player</th>
-            <th class="p-2 text-center">Match Points</th>
-            <th class="p-2 text-center">Match Win %</th>
-            <th class="p-2 text-center">Opponent's Average Match Win %</th>
-            <th class="p-2 text-center">Opponent's Average Match Points</th>
-            <th class="p-2 text-right">Record (W-L-D)</th>
+<% content_for :close do %>
+  <%= link_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)], class:"text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" do %>
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+    <span class="sr-only">Close modal</span>
+  <% end %>
+<% end %>
+
+<%= content_for :sub_navigation do %>
+  <nav class="flex mb-5" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+      <li class="inline-flex items-center">
+        <%= link_to root_url, class:"inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white" do %>
+          <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+          Home
+        <% end %>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <%= link_to [:organizer, :tournaments], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
+            Tournaments
           <% end %>
-        </tr>
-      </thead>
-      <tbody id="<%= dom_id(@tournament, :tournament_participants) %>">
-        <!-- TODO updated by turbo stream -->
+        </div>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <%= link_to [:organizer, @tournament], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
+            <%= @tournament.name %>
+          <% end %>
+        </div>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Players</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+  <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+    <%= @tournament.name %> Participants (<%= @tournament.tournament_participants_count %>)
+    <%= link_to [:new, :organizer, @tournament, :tournament_participant], data: {turbo_frame: "modal"}, class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+      <%= icon("plus", class: "me-2") %> Add player
+    <% end %>
+  </h1>
+<% end %>
+
+<% if @tournament.tournament_participants.present? %>
+  <table class="col-span-full text-md -m-4 md:-m-5 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <% if @layout_mode == "modal" %>
+      <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+        Tournament Participants
+        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+          Here you can find all <span class="font-bold" id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span> tournament participants.
+          On the bottom of the table you will find a button to export this table for printing / sharing.
+        </p>
+      </caption>
+    <% end %>
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
         <% case @tournament.state %>
         <% when 'registration_open', 'registration_closed' %>
-          <%= render @tournament.tournament_participants.sort_by(&:name) %>
+          <th scope="col" class="px-5 py-3">Name</th>
         <% else %>
-          <%= render @tournament.tournament_participants.sort_by { |p| [-p.rank_score, p.name] } %>
+          <th scope="col" class="px-5 py-3 text-center" data-tooltip-target="tooltip-rank">Rank</th>
+          <th scope="col" class="px-5 py-3">Player</th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mp">MP</th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mwp">MW%</th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">OAMW%</th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">OAMP</th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">W-L-D</th>
         <% end %>
-      </tbody>
-    </table>
-  <% end %>
+        <% if @layout_mode == "application" %>
+          <th scope="col" class="px-5 py-3">
+            Penalties
+          </th>
+          <th scope="col" class="px-5 py-3 text-right">
+            <span class="sr-only">Actions</span>
+          </th>
+        <% end %>
+        <div id="tooltip-rank" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          Player rank is calculated according to the tiebreakers you can see in this table:</br>
+          MP > MW% > OAMW% > OAMP
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div id="tooltip-mp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          MP means Match Points:</br>
+          <%= @tournament.class::POINTS_PER_WIN %> per win, <%= @tournament.class::POINTS_PER_DRAW %> per draw, 0 per loss.
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div id="tooltip-mwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          MW% means Match Win %:</br>
+          Acquired Match Points divided by Attainable Match Points (with 100% Match wins)
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div id="tooltip-oamwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          OAMW% means Opponent's Average Match Win %:</br>
+          the Average of your Opponent's Match Win %, with a minimum contribution cap of <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>%
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div id="tooltip-oamp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          OAMP means Opponent's Average Match Points:</br>
+          the Average of your Opponent's Match Points.
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div id="tooltip-wld" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          W-L-D is the tournament track record expressed in:</br>
+          Wins - Losses - Draws
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+      </tr>
+    </thead>
+    <tbody id="<%= dom_id(@tournament, :tournament_participants) %>">
+      <!-- TODO updated by turbo stream -->
+      <% case @tournament.state %>
+      <% when 'registration_open', 'registration_closed' %>
+        <%= render @tournament.tournament_participants.sort_by(&:name) %>
+      <% else %>
+        <%= render @tournament.tournament_participants.sort_by { |p| [p.playing? ? 0 : 1, -p.rank_score, p.name] } %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
+<% content_for :footer do %>
+  <%= link_to [:organizer, @tournament, :tournament_participants, print: true], class: "py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+    Print
+  <% end %>
+  <%= link_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+    Close
+  <% end %>
 <% end %>

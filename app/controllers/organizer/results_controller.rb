@@ -10,17 +10,19 @@ module Organizer
     end
 
     def create
-      tournament = load_tournament
-      round = load_round(tournament)
-      pod = load_pod(round)
-      tournament_participant = load_participant(pod) if result_params[:tournament_participant_id].present?
+      @tournament = load_tournament
+      @round = load_round(tournament)
+      @pod = load_pod(round)
+      tournament_participant = load_participant(@pod) if result_params[:tournament_participant_id].present?
 
       Tournaments::SubmitResultJob.perform_now(
         type: result_params[:type],
-        tournament_participant:, round:, pod:
+        tournament_participant:, round: @round, pod: @pod
       )
-
-      redirect_to [:organizer, tournament, round.becomes(Round)], notice: 'Result submitted successfully'
+      redirect_to [:organizer, @tournament, @round.becomes(Round)], notice: 'Result submitted successfully'
+    rescue StandardError
+      @result = Result.new(round: @round)
+      render :new
     end
 
     private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_27_153503) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -42,6 +42,20 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_27_153503) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "penalties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "player_id"
+    t.uuid "tournament_id"
+    t.uuid "pod_id"
+    t.integer "kind", default: 0, null: false
+    t.integer "category", default: 0, null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_penalties_on_player_id"
+    t.index ["pod_id"], name: "index_penalties_on_pod_id"
+    t.index ["tournament_id"], name: "index_penalties_on_tournament_id"
   end
 
   create_table "players", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -153,6 +167,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_27_153503) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "penalties", "players"
+  add_foreign_key "penalties", "pods"
+  add_foreign_key "penalties", "tournaments"
   add_foreign_key "players", "users"
   add_foreign_key "pods", "rounds"
   add_foreign_key "results", "rounds"

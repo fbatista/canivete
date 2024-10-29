@@ -25,7 +25,7 @@ module Tournaments
           handle_win
         when 'Draw'
           handle_draw
-        when 'Penalty'
+        when 'MatchLossPenalty'
           handle_penalty
         end
       end
@@ -43,9 +43,11 @@ module Tournaments
     end
 
     def handle_win
+      raise 'Must select a winner' if @tournament_participant.blank?
+
       @pod.tournament_participants.reject { |tp| tp == @tournament_participant }.each do |tp|
         Result.create_or_update_by(round: @round, tournament_participant: tp) do |result|
-          result.type = 'Loss' unless result.type == 'Penalty'
+          result.type = 'Loss' unless result.type == 'MatchLossPenalty'
         end
       end
       Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
@@ -56,14 +58,14 @@ module Tournaments
     def handle_draw
       @pod.tournament_participants.each do |tournament_participant|
         Result.create_or_update_by(round: @round, tournament_participant:) do |result|
-          result.type = 'Draw' unless result.type == 'Penalty'
+          result.type = 'Draw' unless result.type == 'MatchLossPenalty'
         end
       end
     end
 
     def handle_penalty
       Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
-        result.type = 'Penalty'
+        result.type = 'MatchLossPenalty'
       end
     end
   end

@@ -14,7 +14,7 @@ class TournamentParticipant < ApplicationRecord
     lambda { |tournament_participant|
       where.not(tournament_participants: { id: tournament_participant.id })
       .where(
-        <<~SQL
+        <<~SQL.squish
           pods.id not in (
             select pods.id
             from pods
@@ -29,7 +29,7 @@ class TournamentParticipant < ApplicationRecord
   scope :playing, -> { where(dropped: false) }
   scope :not_eliminated, lambda {
     where(
-      <<~SQL
+      <<~SQL.squish
         not exists (
           select 1
           from results
@@ -58,8 +58,16 @@ class TournamentParticipant < ApplicationRecord
     super
   end
 
+  def number_of_penalties
+    player.penalties.count { |p| p.tournament_id == tournament_id }
+  end
+
   def playing?
     !dropped
+  end
+
+  def obfuscated_key
+    "##{player.key.first(5)}"
   end
 
   def played_in_smaller_pod?(except_in:)
@@ -97,18 +105,20 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def number_of_losses
-    results.count { |result| result.is_a?(Loss) || result.is_a?(Penalty) }
+    results.count { |result| result.is_a?(Loss) || result.is_a?(MatchLossPenalty) }
   end
 
   def match_points
-    @match_points ||= number_of_draws * Tournament::POINTS_PER_DRAW +
-                      number_of_wins * Tournament::POINTS_PER_WIN
+    @match_points ||= (number_of_draws * Tournament::POINTS_PER_DRAW) +
+                      (number_of_wins * Tournament::POINTS_PER_WIN)
   end
 
   def match_win_percentage
     return 0.0 if results.empty?
 
-    @match_win_percentage ||= match_points / (results.size * Tournament::POINTS_PER_WIN).to_f
+    @match_win_percentage ||= match_points / (results.count { |result|
+      !result.is_a?(Advance) && !result.is_a?(Eliminated)
+    } * Tournament::POINTS_PER_WIN).to_f
   end
 
   def opponents_average_match_points
@@ -129,8 +139,8 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def rank_score # rubocop:disable Metrics/AbcSize
-    @rank_score ||= number_of_advancements * SINGLE_ELIM_COEFF +
-                    match_points * MP_COEFF +
+    @rank_score ||= (number_of_advancements * SINGLE_ELIM_COEFF) +
+                    (match_points * MP_COEFF) +
                     (match_win_percentage.round(4) * MW_COEFF).to_i +
                     (opponents_average_match_points * OAMP_COEFF).to_i +
                     (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i

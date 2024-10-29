@@ -4,7 +4,7 @@ module ApplicationHelper
   RESULT_CLASSES = {
     Advance => 'bg-blue-500 text-white dark:text-white',
     Win => 'bg-green-600 text-white dark:text-white',
-    Penalty => 'bg-red-500 text-gray-800 dark:text-gray-800',
+    MatchLossPenalty => 'bg-red-500 text-gray-800 dark:text-gray-800',
     Loss => 'bg-gray-400 text-gray-800 dark:text-gray-800',
     Eliminated => 'bg-gray-400 text-gray-800 dark:text-gray-800',
     Draw => 'bg-yellow-400 text-black dark:text-black'

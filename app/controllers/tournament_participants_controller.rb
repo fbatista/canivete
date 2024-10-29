@@ -30,8 +30,11 @@ class TournamentParticipantsController < ApplicationController
   def destroy
     @tournament = load_tournament
     @destroyed_participant = load_participant(@tournament)
-    @destroyed_participant.destroy
 
+    # TODO: message for this
+    return if !@tournament.registration_open? && !@tournament.registration_closed?
+
+    @destroyed_participant.destroy
     @tournament_participant = TournamentParticipant.new
 
     respond_to do |format|

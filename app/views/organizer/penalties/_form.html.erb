@@ -1,0 +1,30 @@
+<%= modal_form_for [:organizer, @penalty.tournament, @penalty] do |f| %>
+  <% content_for :title do %>
+    Create Penalty for <%= @penalty.player.name %>
+  <% end %>
+
+  <% if @penalty.errors.present? %>
+    <%= safe_join(@penalty.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <%= f.hidden_field :pod_id %>
+  <%= f.hidden_field :player_id %>
+
+  <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+    <% if @penalty.pod.present? %>
+      This penalty is associated with an issue that occurred in Pod #<%= @penalty.pod.number %> during <%= @penalty.pod.round.display_name %> of <%= @penalty.tournament.name %>.
+    <% else %>
+      This penalty is associated with an issue that occurred in <%= @penalty.tournament.name %>, but is not associated with a specific Round or Pod.
+    <% end %>
+  </p>
+  <%= f.select_with_label :kind, Penalty.kinds.keys.map { |k| [k.titleize, k] } %>
+  <%= f.select_with_label :category, grouped_options_for_select(penalty_categories_grouped_by_kind, @penalty.category) %>
+  <%= f.text_area_with_label :description %>
+
+  <% content_for :footer do %>
+    <%= f.submit %>
+    <%= link_to [:organizer, @penalty.tournament, :tournament_participants, { layout: 'application' }], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>
