@@ -18,14 +18,14 @@ Rails.application.routes.draw do
 
   namespace :organizer do
     resources :tournaments do
-      resources :penalties, only: %i[new create]
+      resources :infractions, only: %i[new create]
       resources :tournament_participants do
-        resources :penalties, only: %i[index]
+        resources :infractions, only: %i[index]
       end
       resources :rounds do
         resources :pods do
           resources :results
-          resources :penalties, only: %i[new create]
+          resources :infractions, only: %i[new create]
         end
       end
     end

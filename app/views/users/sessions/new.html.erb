@@ -1,15 +1,19 @@
-<div class="max-w-128 mx-auto flex flex-col gap-3">
-  <h2 class="text-lg font-bold text-zinc-900">Log in</h2>
-  <%= modal_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <%= f.email_field_with_label :email, autofocus: true, autocomplete: "email" %>
-    <%= f.password_field_with_label :password, autocomplete: "current-password" %>
-
-    <% if devise_mapping.rememberable? %>
-      <%= f.check_box_with_label :remember_me %>
-    <% end %>
-    <div class="actions">
-      <%= f.submit "Log in" %>
-    </div>
+<%= modal_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <% content_for :title do %>
+    Log in
   <% end %>
-  <%= render "users/shared/links" %>
-</div>
+
+  <%= f.email_field_with_label :email, autofocus: true, autocomplete: "email" %>
+  <%= f.password_field_with_label :password, autocomplete: "current-password" %>
+
+  <% if devise_mapping.rememberable? %>
+    <%= f.check_box_with_label :remember_me %>
+  <% end %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Log in" %>
+    <%= link_to root_url, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

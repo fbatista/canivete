@@ -13,9 +13,19 @@ module Organizer
       render layout: 'application'
     end
 
-    def new; end
+    def new
+      @tournament_participant = TournamentParticipant.new(tournament: load_tournament)
+    end
 
-    def create; end
+    def create
+      @tournament_participant = TournamentParticipant.new(tournament: load_tournament)
+      @tournament_participant.attributes = tournament_participant_params
+
+      @tournament_participant.save
+
+      redirect_to [:organizer, @tournament_participant.tournament, :tournament_participants, { layout: 'application' }],
+                  notice: "#{@tournament_participant.name} added!"
+    end
 
     def update
       @tournament = load_tournament
@@ -40,7 +50,12 @@ module Organizer
     end
 
     def tournament_participant_params
-      params.require(:tournament_participant).permit(:dropped)
+      params.require(:tournament_participant).permit(
+        :dropped,
+        :player_email,
+        :player_name,
+        :decklist
+      )
     end
   end
 end

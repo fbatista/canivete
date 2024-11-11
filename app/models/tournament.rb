@@ -4,11 +4,12 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :tournament_organizer
   has_many :rounds, dependent: :destroy
   has_many :tournament_participants, dependent: :destroy
-  has_many :global_penalties, class_name: 'Penalty', dependent: :destroy
+  has_many :infractions, dependent: :destroy
   has_many :pods, through: :rounds
-  has_many :penalties, through: :pods
 
   scope :for_organizer, ->(organizer) { where(tournament_organizer: organizer) }
+  scope :past, -> { where(end_time: ...Time.current) }
+  scope :upcoming, -> { where(start_time: Time.current..) }
 
   PREFERRED_POD_SIZE = 4
   SMALLER_POD_SIZE = 3

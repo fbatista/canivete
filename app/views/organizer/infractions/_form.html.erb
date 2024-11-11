@@ -1,0 +1,31 @@
+<%= modal_form_for [:organizer, @infraction.tournament, @infraction] do |f| %>
+  <% content_for :title do %>
+    Record Infraction for <%= @infraction.player.name %>
+  <% end %>
+
+  <% if @infraction.errors.present? %>
+    <%= safe_join(@infraction.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <%= f.hidden_field :pod_id %>
+  <%= f.hidden_field :player_id %>
+
+  <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+    <% if @infraction.pod.present? %>
+      This infraction is associated with an issue that occurred in Pod #<%= @infraction.pod.number %> during <%= @infraction.pod.round.display_name %> of <%= @infraction.tournament.name %>.
+    <% else %>
+      This infraction is associated with an issue that occurred in <%= @infraction.tournament.name %>, but is not associated with a specific Round or Pod.
+    <% end %>
+  </p>
+  <%= f.select_with_label :kind, Infraction.kinds.keys.map { |k| [k.titleize, k] } %>
+  <%= f.select_with_label :category, grouped_options_for_select(infraction_categories_grouped_by_kind, @infraction.category) %>
+  <%= f.select_with_label :penalty, Infraction.penalties.keys.map { |p| [p.titleize, p] } %>
+  <%= f.text_area_with_label :description %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Record Infraction" %>
+    <%= link_to [:organizer, @infraction.tournament, :tournament_participants, { layout: 'application' }], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

@@ -44,18 +44,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "penalties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "infractions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "player_id"
     t.uuid "tournament_id"
     t.uuid "pod_id"
-    t.integer "kind", default: 0, null: false
-    t.integer "category", default: 0, null: false
+    t.integer "kind", default: 200, null: false
+    t.integer "category", default: 205, null: false
+    t.integer "penalty", default: 0, null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["player_id"], name: "index_penalties_on_player_id"
-    t.index ["pod_id"], name: "index_penalties_on_pod_id"
-    t.index ["tournament_id"], name: "index_penalties_on_tournament_id"
+    t.index ["player_id"], name: "index_infractions_on_player_id"
+    t.index ["pod_id"], name: "index_infractions_on_pod_id"
+    t.index ["tournament_id"], name: "index_infractions_on_tournament_id"
   end
 
   create_table "players", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -73,6 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "size", default: 4
+    t.integer "extra_time", default: 0, null: false
     t.index ["number", "round_id"], name: "index_pods_on_number_and_round_id", unique: true
     t.index ["round_id"], name: "index_pods_on_round_id"
   end
@@ -167,9 +169,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "penalties", "players"
-  add_foreign_key "penalties", "pods"
-  add_foreign_key "penalties", "tournaments"
+  add_foreign_key "infractions", "players"
+  add_foreign_key "infractions", "pods"
+  add_foreign_key "infractions", "tournaments"
   add_foreign_key "players", "users"
   add_foreign_key "pods", "rounds"
   add_foreign_key "results", "rounds"

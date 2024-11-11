@@ -1,0 +1,11 @@
+    <tr>
+      <td class="px-5 py-4"><%= infraction.kind.titleize %></td>
+      <td class="px-5 py-4"><%= infraction.category.titleize %></td>
+      <td class="px-5 py-4"><%= infraction.penalty.titleize %></td>
+      <td class="px-5 py-4"><%= infraction&.pod&.round&.display_name || '-' %></td>
+      <td class="px-5 py-4"><%= infraction&.pod&.number || '-' %></td>
+      <td class="px-5 py-4"><%= infraction.description %></td>
+      <td class="px-5 py-4">
+        Delete
+      </td>
+    </tr>

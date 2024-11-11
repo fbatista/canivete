@@ -31,7 +31,7 @@ module Organizer
         tournament_params.merge(tournament_organizer: current_organizer)
       )
 
-      redirect_to @tournament, notice: 'Tournament created successfully'
+      redirect_to [:organizer, @tournament], notice: 'Tournament created successfully'
     end
 
     def update
@@ -39,7 +39,7 @@ module Organizer
       @tournament.attributes = tournament_params
 
       if @tournament.save
-        redirect_to @tournament, notice: 'Tournament updated successfully'
+        redirect_to [:organizer, @tournament], notice: 'Tournament updated successfully'
       else
         render :edit, status: :unprocessable_entity
       end

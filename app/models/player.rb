@@ -5,7 +5,7 @@ class Player < ApplicationRecord
 
   has_many :tournament_participations, class_name: 'TournamentParticipant', dependent: :destroy
   has_many :tournaments, through: :tournament_participations
-  has_many :penalties, dependent: :destroy
+  has_many :infractions, dependent: :destroy
 
   validates :key, presence: true
   delegate :name, to: :user

@@ -5,25 +5,20 @@ class TournamentParticipantsController < ApplicationController
     @tournament = load_tournament
   end
 
-  def me
-    @tournament = load_tournament
-    @tournament_participant = load_participant(@tournament)
-
-    if @tournament_participant.present?
-      render :show
-    else
-      @tournament_participant = TournamentParticipant.new
-      render :new
-    end
+  def new
+    tournament = load_tournament
+    @tournament_participant = TournamentParticipant.new(tournament:, player: current_user.player)
   end
 
   def create
-    @tournament = load_tournament
-    @tournament_participant = @tournament.tournament_participants.create(player: current_user.player)
+    tournament = load_tournament
+    @tournament_participant = TournamentParticipant.new(tournament:, player: current_user.player)
+    @tournament_participant.attributes = tournament_participant_params
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to [:me, @tournament, :tournament_participant], notice: 'Registration successful!' }
+    if @tournament_participant.save
+      redirect_to @tournament_participant.tournament, notice: 'Registration successful!'
+    else
+      render :new, status: :unprocessable_entity, layout: 'modal'
     end
   end
 
@@ -37,13 +32,17 @@ class TournamentParticipantsController < ApplicationController
     @destroyed_participant.destroy
     @tournament_participant = TournamentParticipant.new
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to [:me, @tournament, :tournament_participant], notice: 'Registration canceled!' }
-    end
+    redirect_to @tournament, notice: 'Registration canceled!'
   end
 
   private
+
+  def tournament_participant_params
+    params.require(:tournament_participant).permit(
+      :accepted_terms,
+      :decklist
+    )
+  end
 
   def load_tournament
     Tournament.find params[:tournament_id]

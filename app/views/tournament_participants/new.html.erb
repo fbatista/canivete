@@ -1,7 +1,19 @@
-<%= turbo_frame_tag dom_id(@tournament, dom_id(current_user.player)) do %>
-  <%= form_for [@tournament, @tournament_participant], html: { class: 'cvt-form' } do |f| %>
-    <div class="actions">
-      <%= f.submit 'Register' %>
-    </div>
+<%= modal_form_for [@tournament_participant.tournament, @tournament_participant] do |f| %>
+  <% content_for :title do %>
+    Are you sure you want to Sign up for <%= @tournament_participant.tournament.name %>
+  <% end %>
+
+  <% if @tournament_participant.errors.present? %>
+    <%= safe_join(@tournament_participant.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <%= f.text_field_with_label :decklist, placeholder: "https://moxfield.com/xyz" %>
+  <%= f.check_box_with_label :accepted_terms %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Confirm Sign up" %>
+    <%= link_to @tournament, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
   <% end %>
 <% end %>

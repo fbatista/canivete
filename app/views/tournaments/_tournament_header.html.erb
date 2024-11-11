@@ -9,13 +9,15 @@
   </h1>
   <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
     <% if @tournament.start_time.past? %>
-      Occurred <%= time_ago_in_words @tournament.end_time %> ago in <%= icon('map-pin') %> <%= @tournament.address.titleize %>
+      Occurred <%= time_ago_in_words @tournament.end_time %> ago
     <% else %>
-      Coming up in <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @tournament.start_time %></span> at <%= icon('map-pin') %> <%= @tournament.address.titleize %>
+      Coming up in <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @tournament.start_time %></span>
+    <% end %>
+    <% if @tournament.address.present? %>
+      at <%= icon('map-pin') %> <%= @tournament.address.titleize %>
     <% end %>
   </p>
   <div class="flex items-center flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
     <%= render "tournament_actions", tournament: @tournament %>
-    <span class="ml-3 text-sm font-normal text-gray-500 lg:text-sm dark:text-gray-400">or learn more below:</span>
   </div>
 </div>

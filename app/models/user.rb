@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   attr_accessor :organizer
 
-  after_create :initialize_player
+  after_create :initialize_player, if: -> { @organizer == '0' }
   after_create :initialize_organizer, if: -> { @organizer == '1' }
   after_update :update_key, if: -> { email_previously_changed? || name_previously_changed? }
 

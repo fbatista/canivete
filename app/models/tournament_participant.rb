@@ -40,7 +40,24 @@ class TournamentParticipant < ApplicationRecord
     )
   }
 
-  validates :decklist, presence: true, unless: proc { |tp| tp.tournament.registration_open? }
+  attribute :player_email, :string
+  attribute :player_name, :string
+  attribute :accepted_terms, :boolean, default: false
+  validate on: :create do
+    errors.add(:accepted_terms, 'Must accept the terms and conditions') unless accepted_terms?
+  end
+
+  before_validation on: :create do
+    if player_email.present? && player.blank?
+      user = User.find_or_initialize_by(email: player_email) do |u|
+        u.name = player_name
+        u.initialize_player
+      end
+
+      self.player = user.player
+    end
+  end
+
   delegate :name, to: :player
 
   SINGLE_ELIM_COEFF = 100_000_000_000_000_000
@@ -58,8 +75,8 @@ class TournamentParticipant < ApplicationRecord
     super
   end
 
-  def number_of_penalties
-    player.penalties.count { |p| p.tournament_id == tournament_id }
+  def number_of_infractions
+    player.infractions.count { |p| p.tournament_id == tournament_id }
   end
 
   def playing?
@@ -105,7 +122,7 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def number_of_losses
-    results.count { |result| result.is_a?(Loss) || result.is_a?(MatchLossPenalty) }
+    results.count { |result| result.is_a?(Loss) || result.is_a?(Penalty) }
   end
 
   def match_points

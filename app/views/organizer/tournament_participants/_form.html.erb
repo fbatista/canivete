@@ -1,0 +1,26 @@
+<%= modal_form_for [:organizer,  @tournament_participant.tournament, @tournament_participant] do |f| %>
+  <% content_for :title do %>
+    Add Player to <%= @tournament_participant.tournament.name %>
+  <% end %>
+
+  <% if @tournament_participant.errors.present? %>
+    <%= safe_join(@tournament_participant.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <p class="my-2 text-sm text-gray-500 dark:text-gray-400">
+    A new account will be created if the Player doesn't have one yet.
+  </p>
+
+  <%= f.email_field_with_label :player_email, placeholder: "player@canivete.com" %>
+  <%= f.text_field_with_label :player_name, placeholder: "John Smith" %>
+  <%= f.text_field_with_label :decklist, placeholder: "https://moxfield.com/xyz" %>
+  <%= f.check_box_with_label :accepted_terms, label: {text: "Player has read and accepted event rules"} %>
+
+
+  <% content_for :footer do %>
+    <%= f.submit %>
+    <%= link_to [:organizer, @tournament_participant.tournament], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>
