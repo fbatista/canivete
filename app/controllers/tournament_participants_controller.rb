@@ -3,6 +3,7 @@
 class TournamentParticipantsController < ApplicationController
   def index
     @tournament = load_tournament
+    render layout: 'modal'
   end
 
   def new

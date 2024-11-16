@@ -28,17 +28,3 @@
 <%= render "tournaments/tournament_header" %>
 
 <%= render "tournaments/tournament_detailed_info" %>
-
-<% if @tournament.live? %>
-  <div class="col-span-full">
-  <%= turbo_frame_tag 'tournament_participants', src: [:organizer, @tournament, :tournament_participants], loading: :lazy %>
-<% end %>
-
-<% if @tournament.rounds.present? %>
-  <div class="col-span-full">
-    <h2 class="text-xl font-bold">Rounds:</h2>
-    <% @tournament.rounds.sort_by(&:number).each do |round| %>
-      <%= link_to "Round #{round.number}", [:organizer, @tournament, round.becomes(Round)], class: 'underline' %><br>
-    <% end %>
-  </div>
-<% end %>

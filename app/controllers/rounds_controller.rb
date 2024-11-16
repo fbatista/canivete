@@ -49,7 +49,10 @@ class RoundsController < ApplicationController
     pods.each do |p|
       p.seatings.each do |s|
         users_map[s.tournament_participant_id] = {
-          name: s.tournament_participant.name, pod: "Pod #{p.number}", seating: s.order.ordinalize
+          tp: s.tournament_participant,
+          name: s.tournament_participant.name,
+          pod: "Pod #{p.number}",
+          seating: s.order.ordinalize
         }
       end
     end

@@ -1,10 +1,17 @@
-<div class="border border-black min-w-fit">
-  <h3 class="text-l font-bold pl-2 py-2">
-    Pod <%= pod.number %>
-  </h3>
-  <ol>
+<div class="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <div class="flex justify-between items-center">
+    <h5 class="px-6 pt-6 pb-3 mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pod <%= pod.number %></h5>
+  </div>
+  <ol class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch">
     <% pod.tournament_participants.each do |player| %>
-      <li class="list-decimal list-inside pl-2 pr-10 py-1 <%= result_indicator(pod:, player:) %>"><%= player.name %></li>
+      <li data-tooltip-placement="left" data-tooltip-target="tooltip-pods-<%= player.id %>" class="list-decimal grow list-inside last:rounded-b-lg pl-6 pr-10 py-3 <%= result_indicator(pod:, player:) %>">
+        <%= truncate(player.name) %>
+      </li>
+      <div id="tooltip-pods-<%= player.id %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+        <%= player.name %></br>
+        <%= player.obfuscated_key %>
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
     <% end %>
   </ol>
 </div>
