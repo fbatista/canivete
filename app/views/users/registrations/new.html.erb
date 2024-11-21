@@ -1,36 +1,28 @@
-<div class="max-w-96 mx-auto flex flex-col gap-3">
-  <h2 class="text-lg font-bold text-zinc-900">Sign up</h2>
-  <%= form_for(resource, as: resource_name, url: registration_path(resourcee), html: _nam{ class: "cvt-form card" }) do |f| %>
-    <%= render "users/shared/error_messages", resource: resource %>
-    <div class="field">
-      <%= f.label :name %>
-      <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
-    </div>
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email, autocomplete: "email" %>
-    </div>
-    <div class="field">
-      <%= f.label :password do %>
-        Password
-        <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em>
-        <% end %>
-      <% end %>
-      <%= f.password_field :password, autocomplete: "new-password" %>
-    </div>
-    <div class="field">
-      <%= f.label :password_confirmation %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-    </div>
-    <div class="flex items-center gap-2 text-sm text-zinc-500">
-      <%= f.check_box :organizer %>
-      <%= f.label :organizer do %>
-        Register as organizer
-      <% end %>
-    </div>
-    <div class="actions">
-      <%= f.submit "Sign up" %>
-    </div>
+<%= modal_form_for(resource, as: resource_name, url: registration_path(resource)) do |f| %>
+  <% content_for :title do %>
+    Sign up
   <% end %>
+
+  <%= render "users/shared/error_messages", resource: resource %>
+
+  <%= f.text_field_with_label :name, autofocus: true, autocomplete: "name", class: "w-96" %>
+  <%= f.email_field_with_label :email, autofocus: true, autocomplete: "email" %>
+  <%= f.password_field_with_label :password, autocomplete: "new-password" %>
+  <%= f.password_field_with_label :password_confirmation, autocomplete: "current-password" %>
+
+  <%= f.check_box_with_label :organizer %>
+
+  <div class="inline-flex items-center justify-center w-full">
+    <hr class="w-64 h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+    <span class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">or</span>
+  </div>
+
   <%= render "users/shared/links" %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Create account" %>
+    <%= link_to root_url, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

@@ -28,8 +28,7 @@ class User < ApplicationRecord
   end
 
   def initialize_player
-    player = Player.find_or_initialize_by(key: compute_key)
-    player.user = self
+    self.player = Player.find_or_initialize_by(key: compute_key)
     player.save
   end
 

@@ -38,6 +38,8 @@ users = User.create(
   ]
 )
 
+users.each(&:initialize_player)
+
 # Create an initial tournament organizer
 to = TournamentOrganizer.create!(
   user: User.create({ name: 'Kakah', email: 'kakah@canivete.com', password: '123qwe' })
@@ -46,16 +48,70 @@ to = TournamentOrganizer.create!(
 # Create a couple of example tournaments
 tournaments = Tournament.create!(
   [
-    { name: 'Uneven Pods Tournament', state: :registration_open, tournament_organizer: to,
-      start_time: 2.weeks.from_now, end_time: 2.weeks.from_now + 8.hours },
-    { name: 'Even Pods Tournament', state: :registration_open, tournament_organizer: to,
-      start_time: 1.week.from_now, end_time: 1.week.from_now + 1.day }
+    {
+      name: 'Uneven Pods Tournament',
+      state: :registration_open,
+      prizes:
+        <<~PRIZES,
+          - 1st: Timetwister
+          - 2nd: Gaea's Cradle
+          - 3rd: Mox Diamond
+          - 4th: Volcanic Island
+        PRIZES
+      tournament_organizer: to,
+      address: 'Rua Princesa Cindazunda, 61, Coimbra',
+      schedule:
+        <<~SCHEDULE,
+          **Day One**
+
+          - 8:00am Checkin
+          - 9:00am Player meeting
+          - 9:15am Round 1
+          - Round 2
+          - Lunch Break
+          - Round 3
+          - Round 4
+          - Round 5
+          - Round 6
+
+          **Day two**
+
+          - 8:45 Player meeting
+          - 9:00 Round 7
+          - Top 40
+          - Top 16
+          - Top 4
+        SCHEDULE
+      participants_range: 10..256,
+      price: 35,
+      currency: :euro,
+      rules:
+        <<~RULES,
+          Format: Commander
+          REL: Competitive
+          Multiplayer Addendum: https://juizes-mtg-portugal.github.io
+          Playtest cards: Allowed, no limit.
+        RULES
+      cover: File.open('test/fixtures/files/cover.jpg'),
+      start_time: 2.weeks.from_now,
+      end_time: 2.weeks.from_now + 8.hours
+    },
+    {
+      name: 'Even Pods Tournament',
+      state: :registration_open,
+      tournament_organizer: to,
+      cover: File.open('test/fixtures/files/banner.png'),
+      start_time: 1.week.from_now,
+      end_time: 1.week.from_now + 1.day
+    }
   ]
 )
 
 # Add players to the tournaments
 
 users.map(&:player)[0...21].each do |p|
+  next if p.blank?
+
   TournamentParticipant.create(
     {
       tournament: tournaments.first,
@@ -66,6 +122,8 @@ users.map(&:player)[0...21].each do |p|
 end
 
 users.map(&:player).each do |p|
+  next if p.blank?
+
   TournamentParticipant.create(
     {
       tournament: tournaments.last,

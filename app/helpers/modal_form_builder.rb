@@ -42,7 +42,7 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
     label_html = label(name, { class: LABEL_CLASSES }.merge(options[:label] || {}))
     field_html = public_send(
       original_method, name,
-      *(rest + [{ class: FIELD_CLASSES.fetch(original_method, FIELD_CLASSES['default']) }.merge(options)]), &
+      *(rest + [{ class: "#{FIELD_CLASSES.fetch(original_method, FIELD_CLASSES['default'])} #{options[:class]}" }.merge(options.except(:class))]), &
     )
 
     @template.content_tag(:div, class: WRAPPER_CLASSES) do

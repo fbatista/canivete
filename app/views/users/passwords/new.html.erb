@@ -1,14 +1,21 @@
-<div class="max-w-96 mx-auto flex flex-col gap-3">
-  <h2 class="text-lg font-bold text-zinc-900">Forgot your password?</h2>
-  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "cvt-form card" }) do |f| %>
-    <%= render "users/shared/error_messages", resource: resource %>
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-    </div>
-    <div class="actions">
-      <%= f.submit "Send me reset password instructions" %>
-    </div>
+<%= modal_form_for(resource, as: resource_name, url: password_path(resource_name)) do |f| %>
+  <% content_for :title do %>
+    Forgot your password?
   <% end %>
+
+  <%= f.email_field_with_label :email, autofocus: true, autocomplete: "email", class: "w-96" %>
+
+  <div class="inline-flex items-center justify-center w-full">
+    <hr class="w-64 h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+    <span class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">or</span>
+  </div>
+
   <%= render "users/shared/links" %>
-</div>
+
+  <% content_for :footer do %>
+    <%= f.submit "Send me reset password instructions" %>
+    <%= link_to root_url, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>
