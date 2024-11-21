@@ -116,7 +116,8 @@ users.map(&:player)[0...21].each do |p|
     {
       tournament: tournaments.first,
       player: p,
-      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}"
+      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
+      accepted_terms: true
     }
   )
 end
@@ -128,7 +129,8 @@ users.map(&:player).each do |p|
     {
       tournament: tournaments.last,
       player: p,
-      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}"
+      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
+      accepted_terms: true
     }
   )
 end

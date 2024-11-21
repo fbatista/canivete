@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TournamentParticipantsController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[index]
+
   def index
     @tournament = load_tournament
     render layout: 'modal'

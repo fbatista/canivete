@@ -11,10 +11,10 @@ class User < ApplicationRecord
     :validatable
   )
 
-  attr_accessor :organizer
+  attribute :organizer, :boolean, default: false
 
-  after_create :initialize_player, if: -> { @organizer == '0' }
-  after_create :initialize_organizer, if: -> { @organizer == '1' }
+  after_create :initialize_player, if: -> { !organizer? }
+  after_create :initialize_organizer, if: -> { organizer? }
   after_update :update_key, if: -> { email_previously_changed? || name_previously_changed? }
 
   has_one :player, dependent: :nullify

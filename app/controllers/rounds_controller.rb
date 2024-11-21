@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class RoundsController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[index show]
   def index
     @rounds = load_tournament.rounds
   end
