@@ -23,6 +23,9 @@ Rails.application.routes.draw do
         resources :infractions, only: %i[index]
       end
       resources :rounds do
+        resources :seatings, only: [] do
+          patch :swap, on: :collection
+        end
         resources :pods do
           resources :results
           resources :infractions, only: %i[new create]

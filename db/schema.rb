@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_27_160214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -90,6 +90,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
     t.index ["tournament_participant_id"], name: "index_results_on_tournament_participant_id"
   end
 
+  create_table "rooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tournament_id"
+    t.text "name"
+    t.int4range "pod_range"
+    t.integer "pods_per_row"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tournament_id"], name: "index_rooms_on_tournament_id"
+  end
+
   create_table "rounds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "tournament_id"
     t.integer "number", default: 1, null: false
@@ -98,6 +108,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
     t.datetime "started_at"
     t.string "type", default: "SwissRound"
     t.datetime "finished_at"
+    t.boolean "published", default: false, null: false
     t.index ["tournament_id"], name: "index_rounds_on_tournament_id"
   end
 
@@ -126,6 +137,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "dropped", default: false
+    t.boolean "paid", default: false, null: false
+    t.boolean "checked_in", default: false, null: false
+    t.integer "fixed_pod"
     t.index ["player_id"], name: "index_tournament_participants_on_player_id"
     t.index ["tournament_id"], name: "index_tournament_participants_on_tournament_id"
   end
@@ -176,6 +190,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_205713) do
   add_foreign_key "pods", "rounds"
   add_foreign_key "results", "rounds"
   add_foreign_key "results", "tournament_participants"
+  add_foreign_key "rooms", "tournaments"
   add_foreign_key "rounds", "tournaments"
   add_foreign_key "seatings", "pods"
   add_foreign_key "seatings", "tournament_participants"

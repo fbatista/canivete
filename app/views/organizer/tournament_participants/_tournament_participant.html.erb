@@ -44,6 +44,24 @@
             <%= icon("user-plus", class: "me-2") %> Undo Drop
           <% end %>
         <% end %>
+        <% if tournament_participant.checked_in? %>
+          <%= button_to [:organizer, @tournament, tournament_participant], params: { tournament_participant: { checked_in: false } }, class: "text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-900" do %>
+            <%= icon("x", class: "me-2") %> Undo Check-in
+          <% end %>
+        <% else %>
+          <%= button_to [:organizer, @tournament, tournament_participant], params: { tournament_participant: { checked_in: true } }, class: "text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900" do %>
+            <%= icon("check", class: "me-2") %> Check-in
+          <% end %>
+        <% end %>
+        <% if tournament_participant.paid? %>
+          <%= button_to [:organizer, @tournament, tournament_participant], params: { tournament_participant: { paid: false } }, class: "text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-900" do %>
+            <%= icon("x", class: "me-2") %> Undo Paid
+          <% end %>
+        <% else %>
+          <%= button_to [:organizer, @tournament, tournament_participant], params: { tournament_participant: { paid: true } }, class: "text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900" do %>
+            <%= icon("check", class: "me-2") %> Paid
+          <% end %>
+        <% end %>
       </div>
     </td>
   <% end %>

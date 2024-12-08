@@ -52,6 +52,8 @@ module Organizer
     def tournament_participant_params
       params.require(:tournament_participant).permit(
         :dropped,
+        :checked_in,
+        :paid,
         :player_email,
         :player_name,
         :decklist

@@ -7,6 +7,10 @@ module Organizer
       @round = load_round(tournament)
       @pods = load_pods(@round)
       @users_map = load_users_map(@pods)
+
+      return if params[:query].blank?
+
+      @users_map.filter! { |_, v| v[:name].downcase.include?(params[:query].downcase) }
     end
 
     def update
@@ -14,6 +18,9 @@ module Organizer
       @round = load_round(tournament)
 
       case round_params[:action]
+      when 'publish'
+        @round.update(published: true)
+        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: 'Round Published!'
       when 'start'
         @round.update(started_at: Time.zone.now)
         redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: 'Round Started!'
@@ -50,6 +57,7 @@ module Organizer
             tp: s.tournament_participant,
             name: s.tournament_participant.name,
             pod: "Pod #{p.number}",
+            pod_id: p.id,
             seating: s.order.ordinalize
           }
         end
