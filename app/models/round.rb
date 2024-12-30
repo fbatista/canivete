@@ -8,6 +8,8 @@ class Round < ApplicationRecord
   has_many :seatings, through: :pods
   has_many :results, dependent: :destroy
 
+  scope :published, -> { where(published: true) }
+
   after_create :create_pods
   after_update :round_finished
 

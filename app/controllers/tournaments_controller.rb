@@ -3,7 +3,7 @@
 class TournamentsController < ApplicationController
   skip_before_action :authenticate_user!
   def index
-    scope = Tournament.all
+    scope = Tournament.where.not(state: :draft)
 
     case params[:filter]
     when 'past'
@@ -15,6 +15,8 @@ class TournamentsController < ApplicationController
     end
 
     @tournaments = scope
+
+    @ongoing = Tournament.for_player(current_user&.player).ongoing
   end
 
   def show

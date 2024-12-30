@@ -38,6 +38,19 @@ class TournamentParticipantsController < ApplicationController
     redirect_to @tournament, notice: 'Registration canceled!'
   end
 
+  def edit
+    @tournament = load_tournament
+    @tournament_participant = load_participant(@tournament)
+  end
+  
+  def update
+    @tournament = load_tournament
+    @tournament_participant = load_participant(@tournament)
+    @tournament_participant.update(tournament_participant_params)
+
+    redirect_to @tournament_participant.tournament, notice: 'Update successful!'
+  end
+
   private
 
   def tournament_participant_params

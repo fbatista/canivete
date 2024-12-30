@@ -28,7 +28,9 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
       dark:focus:ring-blue-500 dark:focus:border-blue-500
     ].join(' ')
   }.freeze
-  LABEL_CLASSES = %w[ms-2 text-sm font-medium text-gray-900 dark:text-gray-300].join(' ')
+  LABEL_CLASSES = %w[text-sm font-medium text-gray-900 dark:text-gray-300 inline-flex items-center].join(' ')
+  REQUIRED_BADGE_CLASSES = %w[bg-red-100 text-red-800 text-xs font-medium ms-2 px-2.5 py-0.5 rounded dark:bg-red-900
+                              dark:text-red-300].join(' ')
   WRAPPER_CLASSES = %w[flex flex-col gap-1 mb-4].join(' ')
 
   def method_missing(method_name, *args, &)
@@ -39,7 +41,15 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
 
     name, *rest = args
     options = rest.extract_options!
-    label_html = label(name, { class: LABEL_CLASSES }.merge(options[:label] || {}))
+    required = !!options[:required]
+    label_html = label(name, { class: LABEL_CLASSES }.merge(options[:label] || {})) do |translation|
+      @template.safe_join(
+        [
+          @template.content_tag(:span, translation),
+          required ? @template.content_tag(:span, 'required', class: REQUIRED_BADGE_CLASSES) : nil
+        ].compact
+      )
+    end
     field_html = public_send(
       original_method, name,
       *(rest + [{ class: "#{FIELD_CLASSES.fetch(original_method, FIELD_CLASSES['default'])} #{options[:class]}" }.merge(options.except(:class))]), &
@@ -58,7 +68,11 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def check_box_with_label(method, options = {}, checked_value = '1', unchecked_value = '0')
-    label_html = label(method, options.dig(:label, :text), { class: LABEL_CLASSES }.merge(options[:label] || {}))
+    label_html = label(
+      method,
+      options.dig(:label, :text),
+      { class: "#{LABEL_CLASSES} ms-2" }.merge(options[:label] || {})
+    )
     check_box_html = check_box(
       method,
       objectify_options({ class: FIELD_CLASSES['check_box'] }.merge(options)),

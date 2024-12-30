@@ -11,20 +11,20 @@
     <%= safe_join(@tournament.errors.full_messages, raw("<br>")) %>
   <% end %>
 
-  <%= f.text_field_with_label :name, placeholder: "A short, appealing name" %>
+  <%= f.text_field_with_label :name, placeholder: "A short, appealing name", required: true %>
   <%= f.file_field_with_label :cover %>
   <%= f.text_area_with_label :prizes, rows: 4, placeholder: "- 1st: Black Lotus,\n- 2nd~4th: Timetwister" %>
   <%= f.text_field_with_label :address, placeholder: "1600 Lind Ave SW, Renton, WA 98057, US" %>
 
   <div class="flex justify-between">
-    <%= f.datetime_local_field_with_label :start_time %>
-    <%= f.datetime_local_field_with_label :end_time %>
+    <%= f.datetime_local_field_with_label :start_time, required: true %>
+    <%= f.datetime_local_field_with_label :end_time, required: true %>
   </div>
 
   <%= f.text_area_with_label :schedule, rows: 4, placeholder: "- 9:00 Checkin\n- 10:00 First round\n- 13:00 Lunch Break\n- 19:00 Top 16" %>
   <%= f.text_area_with_label :rules, rows: 4, placeholder: "Commander Format\nCompetive REL + MAMTR:\nhttps://juizes-mtg-portugal.github.io/\nPlaytest cards allowed as long as they aren't marked and respect the rules for artistic modifications." %>
 
-  <div class="flex justify-between">
+  <div class="flex justify-between gap-1">
     <%= f.number_field_with_label :minimum_participants, placeholder: "3" %>
     <%= f.number_field_with_label :maximum_participants, placeholder: "No limit" %>
   </div>

@@ -7,7 +7,7 @@ class TournamentParticipant < ApplicationRecord
 
   has_many :results, -> { publishable }, dependent: :destroy, inverse_of: :tournament_participant
 
-  has_many :seatings, dependent: :destroy
+  has_many :seatings, -> { publishable }, dependent: :destroy
   has_many :pods, -> { publishable }, through: :seatings
   has_many(
     :opponents,
@@ -40,6 +40,7 @@ class TournamentParticipant < ApplicationRecord
     )
   }
 
+  attribute :rank, :integer
   attribute :player_email, :string
   attribute :player_name, :string
   attribute :accepted_terms, :boolean, default: false

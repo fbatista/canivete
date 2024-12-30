@@ -10,6 +10,8 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :for_organizer, ->(organizer) { where(tournament_organizer: organizer) }
   scope :past, -> { where(end_time: ...Time.current) }
   scope :upcoming, -> { where(start_time: Time.current..) }
+  scope :ongoing, -> { where(state: [:swiss, :single_elimination]) }
+  scope :for_player, ->(player) { joins(:tournament_participants).where(tournament_participants: { player: player}) }
 
   PREFERRED_POD_SIZE = 4
   SMALLER_POD_SIZE = 3
@@ -157,13 +159,17 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def available_states
-    return Tournament.states.slice(:registration_open) if new_record?
+    return Tournament.states.slice(:draft) if new_record?
 
     Tournament.states.slice(*TRANSITIONS[state])
   end
 
   def rounds_info
     PLAYERS_ROUNDS_THRESHOLDS[tournament_participants.size]
+  end
+
+  def progress_percent
+    (rounds.count.to_f / (number_of_swiss_rounds + number_of_single_elimination_rounds)) * 100
   end
 
   def number_of_swiss_rounds
@@ -178,8 +184,8 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
     %w[Finals Semi-Finals Quarter-Finals][number_of_swiss_rounds + number_of_single_elimination_rounds - round_number]
   end
 
-  def live?
-    state_for_database > Tournament.states[:registration_closed]
+  def ongoing?
+    ["swiss", "single_elimination"].include?(state)
   end
 
   def populate_slug

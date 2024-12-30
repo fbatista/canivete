@@ -11,7 +11,7 @@
       <%= tournament_participant.number_of_wins -%>&nbsp;-&nbsp;<%= tournament_participant.number_of_losses -%>&nbsp;-&nbsp;<%= tournament_participant.number_of_draws -%>
     </td>
   <div id="tooltip-<%= tournament_participant.id %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-    <%= tournament_participant.name %></br>
+    <%= tournament_participant.name %><br/>
     <%= tournament_participant.obfuscated_key %>
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>

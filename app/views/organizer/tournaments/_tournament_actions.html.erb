@@ -11,7 +11,7 @@
 <% end %>
 
 <% if tournament.rounds.present? %>
-  <%= link_to [:organizer, tournament, tournament.rounds.sort_by(&:number).last.becomes(Round)], class: "inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800" do %>
+  <%= link_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)], class: "inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800" do %>
     <%= icon("tree-structure", class: "mr-2") %> Bracket
   <% end %>
 <% end %>

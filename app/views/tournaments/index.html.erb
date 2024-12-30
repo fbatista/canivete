@@ -1,5 +1,15 @@
-<%= content_for :sub_navigation do %>
-  <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"><%= @title %></h1>
+<% if @ongoing.present? %>
+  <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white col-span-full">
+    <div class="relative inline-flex items-center me-2">
+      <span class="absolute inline-flex h-3 w-3 rounded-full bg-red-500 opacity-75 animate-ping"></span>
+      <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+    </div>
+    Your Ongoing tournaments
+  </h1>
+  <%= render @ongoing %>
 <% end %>
 
+<h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white col-span-full">
+  <%= @title %>
+</h1>
 <%= render @tournaments %>

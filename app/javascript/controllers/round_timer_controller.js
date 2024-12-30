@@ -27,7 +27,7 @@ export default class extends Controller {
 
   updateTimer(started_at) {
     const ellapsed = ~~((Date.now() - started_at) / 1000);
-    const remaining = this.roundTimeValue - ellapsed;
+    const remaining = this.roundTimeValue == 0 ? ellapsed : this.roundTimeValue - ellapsed;
 
     const minutes = ~~(remaining / 60);
     const seconds = Math.abs(remaining % 60);
@@ -53,6 +53,7 @@ export default class extends Controller {
         "font-black",
         "text-[392px]",
         "text-lime-400",
+        "dark:text-lime-400",
         "text-center",
         "font-mono",
         "flex",
@@ -68,6 +69,7 @@ export default class extends Controller {
         "font-black",
         "text-[392px]",
         "text-lime-400",
+        "dark:text-lime-400",
         "text-center",
         "font-mono",
         "flex",

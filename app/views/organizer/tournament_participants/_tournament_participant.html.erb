@@ -5,7 +5,7 @@
       <%= truncate(tournament_participant.name) %>
     </th>
   <% else %>
-    <th scope="row" class="px-5 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"><%= tournament_participant_iteration.index+1 %></th>
+    <th scope="row" class="px-5 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"><%= tournament_participant.rank %></th>
     <th scope="row" data-tooltip-target="tooltip-<%= tournament_participant.id %>" class="px-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
       <%= truncate(tournament_participant.name) %>
     </th>
@@ -66,7 +66,7 @@
     </td>
   <% end %>
   <div id="tooltip-<%= tournament_participant.id %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-    <%= tournament_participant.name %></br>
+    <%= tournament_participant.name %><br />
     <%= tournament_participant.obfuscated_key %>
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>

@@ -15,6 +15,10 @@ class SwissRound < Round
     "Round ##{number}"
   end
 
+  def duration
+    80.minutes
+  end
+
   def create_pods
     Tournaments::CreatePodsJob.perform_now(self)
   end

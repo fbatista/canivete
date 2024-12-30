@@ -14,7 +14,7 @@ module Organizer
     def new
       player = load_player
       pod = load_pod
-      tournament = @pod&.tournament || load_tournament
+      tournament = pod&.tournament || load_tournament
       @infraction = Infraction.new(player:, pod:, tournament:)
     end
 

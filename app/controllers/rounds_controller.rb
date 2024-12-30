@@ -11,6 +11,10 @@ class RoundsController < ApplicationController
     @round = load_round(tournament)
     @pods = load_pods(@round)
     @users_map = load_users_map(@pods)
+
+    return if params[:query].blank?
+
+    @users_map.filter! { |_, v| v[:name].downcase.include?(params[:query].downcase) }
   end
 
   def update

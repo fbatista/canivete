@@ -2,7 +2,11 @@
   <% if current_user.player? && tournament.registration_open? %>
     <% if current_user.player.participant?(tournament) %>
       <%= button_to [tournament, current_user.player.participant(tournament)], method: :delete, class: "inline-flex items-center px-3 py-2 text-base font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-700" do %>
-        <%= icon("receipt-x", class: "mr-2") %> Cancel my registration
+        <%= icon("receipt-x", class: "mr-2") %> Drop
+      <% end %>
+
+      <%= link_to [:edit, tournament, current_user.player.participant(tournament)], data: {turbo_frame: "modal"}, class: "inline-flex items-center px-3 py-2 text-base font-medium text-center text-white rounded-lg bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" do %>
+        <%= icon("pencil", class: "mr-2") %> Decklist
       <% end %>
     <% else %>
       <%= link_to [:new, tournament, :tournament_participant], data: {turbo_frame: "modal"}, class: "inline-flex justify-center items-center px-3 py-2 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" do %>
@@ -17,7 +21,7 @@
 <% end %>
 
 <% if tournament.rounds.present? %>
-  <%= link_to [tournament, tournament.rounds.sort_by(&:number).first.becomes(Round)], class: "inline-flex justify-center items-center px-3 py-2 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800" do %>
+  <%= link_to [tournament, tournament.rounds.published.max_by(&:number).becomes(Round)], class: "inline-flex justify-center items-center px-3 py-2 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800" do %>
     <%= icon("tree-structure", class: "mr-2") %> See the bracket
   <% end %>
 <% end %>

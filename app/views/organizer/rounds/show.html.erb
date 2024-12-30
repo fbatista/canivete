@@ -46,7 +46,7 @@
             Finish Round <%= icon("arrow-right", class: "ms-2") %>
           <% end %>
         <% elsif @round.started? %>
-          <span data-action="click->round-timer#toggleFullscreen" class="cursor-zoom-in bg-gray-100 text-gray-800 font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-500" data-controller="round-timer" data-round-timer-round-time-value="<%= 75.minutes %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
+          <span data-action="click->round-timer#toggleFullscreen" class="cursor-zoom-in bg-gray-100 text-gray-800 font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-500" data-controller="round-timer" data-round-timer-round-time-value="<%= @round.duration %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
             --:--
           </span>
         <% else %>
@@ -72,7 +72,7 @@
 <div class="col-span-full">
   <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pairings</h1>
 
-  <div class="pb-4">
+  <div class="py-2">
     <label for="table-search" class="sr-only">Search</label>
     <div class="relative mt-1">
       <%= form_tag [:organizer, @round.tournament, @round.becomes(Round)], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
@@ -106,7 +106,7 @@
             <td class="px-6 py-4 text-center"><%= link_to @users_map[k][:pod], "#pod_#{@users_map[k][:pod_id]}", target: "_top", data: { controller: 'scroller'} %></td>
             <td class="px-6 py-4 text-right"><%= @users_map[k][:seating] %></td>
             <div id="tooltip-pairings-<%= k %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-              <%= @users_map[k][:name] %></br>
+              <%= @users_map[k][:name] %><br/>
               <%= @users_map[k][:tp].obfuscated_key %>
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
@@ -126,7 +126,9 @@
       </div>
       <ul class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch">
         <% @round.byes.sort_by {|r| -r.tournament_participant.rank_score }.each do |result| %>
-          <li class="grow last:rounded-b-lg pl-6 pr-10 py-3 <%= ApplicationHelper::RESULT_CLASSES[result.class] %>"><%= result.tournament_participant.name %></li>
+          <li class="grow last:rounded-b-lg pl-6 pr-10 py-3">
+            <%= result_badge(result, result.tournament_participant) %>
+          </li>
         <% end %>
       </ul>
     </div>

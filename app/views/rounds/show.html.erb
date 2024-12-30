@@ -36,18 +36,42 @@
       <%= link_to [@round.tournament, :tournament_participants], data: {turbo_frame: "modal"}, class: "inline-block text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" do %>
         Standings
       <% end %>
-      <%= render partial: "round", collection: @round.tournament.rounds.sort_by(&:number) %>
+      <%= render partial: "round", collection: @round.tournament.rounds.published.sort_by(&:number) %>
       <%= render "future_rounds" %>
     </ul>
+
+    <div class="flex items-center">
+      <% if @round.started? %>
+        <span data-action="click->round-timer#toggleFullscreen" class="cursor-zoom-in bg-gray-100 text-gray-800 font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-500" data-controller="round-timer" data-round-timer-round-time-value="<%= @round.duration %>" data-round-timer-started-at-value="<%= @round.started_at.iso8601 %>" data-round-timer-finished-at-value="<%= @round.finished_at&.iso8601 %>" >
+          --:--
+        </span>
+      <% end %>
+    </div>
   </div>
 <% end %>
 
+<div class="col-span-full">
+  <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pairings</h1>
 
-<div class="col-span-2 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pairings</h5>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="py-2">
+    <label for="table-search" class="sr-only">Search</label>
+    <div class="relative mt-1">
+      <%= form_tag [@round.tournament, @round.becomes(Round)], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <%= text_field_tag :query, params[:query], placeholder: "Search for players", class: "block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= turbo_frame_tag "player_list", class: "col-span-2 block p-0 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" do %>
+  <div class="relative overflow-x-auto sm:rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="px-6 py-3 text-left">Player</th>
           <th scope="col" class="px-6 py-3 text-center">Pod</th>
@@ -56,14 +80,14 @@
       </thead>
       <tbody>
         <% @users_map.keys.sort_by { |k| @users_map[k][:name] }.each.with_index do |k, i| %>
-          <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-            <td scope="row" data-tooltip-target="tooltip-pairings-<%= k %>" class="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-100 even:dark:bg-gray-800 border-b dark:border-gray-700 <%= "!bg-purple-600 !text-white" if current_player?(@users_map[k][:tp].player) %>">
+            <td scope="row" data-tooltip-target="tooltip-pairings-<%= k %>" class="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap dark:text-white <%= "!bg-purple-600 !text-white" if current_player?(@users_map[k][:tp].player) %>">
               <%= truncate(@users_map[k][:name]) %>
             </td>
-            <td class="px-6 py-4 text-center"><%= @users_map[k][:pod] %></td>
+            <td class="px-6 py-4 text-center"><%= link_to @users_map[k][:pod], "#pod_#{@users_map[k][:pod_id]}", target: "_top", data: { controller: 'scroller'} %></td>
             <td class="px-6 py-4 text-right"><%= @users_map[k][:seating] %></td>
             <div id="tooltip-pairings-<%= k %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-              <%= @users_map[k][:name] %></br>
+              <%= @users_map[k][:name] %><br/>
               <%= @users_map[k][:tp].obfuscated_key %>
               <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
@@ -72,7 +96,7 @@
       </tbody>
     </table>
   </div>
-</div>
+<% end %>
 
 <div class="grid grid-cols-2 gap-4 content-start col-span-2">
   <%= render @pods %>

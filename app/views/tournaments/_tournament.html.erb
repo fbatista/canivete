@@ -13,6 +13,12 @@
   <% end %>
   <div class="p-5 grow">
     <%= render "tournament_small_header", tournament: tournament %>
+    <% if tournament.ongoing? %>
+      <div class="mb-1 text-base font-medium text-green-700 dark:text-green-500">In progress</div>
+      <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+        <div class="bg-green-600 h-2.5 rounded-full dark:bg-green-500" style="width: <%= tournament.progress_percent %>%"></div>
+      </div>
+    <% end %>
     <div class="markdown mb-3 font-normal text-gray-700 dark:text-gray-400">
       <%= markdown(tournament.prizes).html_safe %>
     </div>

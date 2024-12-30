@@ -16,12 +16,14 @@ export default class extends Controller {
       this.swapPlayer = player;
       this.swapPod = pod;
       let li = event.currentTarget.closest("li");
-      li.classList.add("border-4", "border-indigo-500", "-m-1");
+      li.classList.add("outline-4", "outline-purple-500", "-outline-offset-4", "outline");
       event.stopPropagation();
       event.preventDefault();
     } else if (this.swapPlayer == player) {
       this.swapPlayer = null;
       this.swapPod = null;
+      let li = event.currentTarget.closest("li");
+      li.classList.remove("outline-4", "outline-purple-500", "-outline-offset-4", "outline");
       event.stopPropagation();
       event.preventDefault();
     } else {

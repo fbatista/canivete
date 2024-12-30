@@ -52,10 +52,25 @@
       <%= icon("plus", class: "me-2") %> Add player
     <% end %>
   </h1>
+
+  <div class="pt-2">
+    <label for="table-search" class="sr-only">Search</label>
+    <div class="relative mt-1">
+      <%= form_tag [:organizer, @tournament, :tournament_participants], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
+        <%= hidden_field_tag :layout, "application" %>
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <%= text_field_tag :query, params[:query], placeholder: "Search for players", class: "block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
-<% if @tournament.tournament_participants.present? %>
-  <table class="col-span-full text-md -m-4 md:-m-5 text-left rtl:text-right text-gray-500 dark:text-gray-400">
+<% if @tournament_participants.present? %>
+  <table class="col-span-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <% if @layout_mode == "modal" %>
       <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
         Tournament Participants
@@ -78,6 +93,36 @@
           <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">OAMW%</th>
           <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">OAMP</th>
           <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">W-L-D</th>
+          <div id="tooltip-rank" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Player rank is calculated according to the tiebreakers you can see in this table:<br/>
+            MP > MW% > OAMW% > OAMP
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <div id="tooltip-mp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            MP means Match Points:<br/>
+            <%= @tournament.class::POINTS_PER_WIN %> per win, <%= @tournament.class::POINTS_PER_DRAW %> per draw, 0 per loss.
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <div id="tooltip-mwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            MW% means Match Win %:<br/>
+            Acquired Match Points divided by Attainable Match Points (with 100% Match wins)
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <div id="tooltip-oamwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            OAMW% means Opponent's Average Match Win %:<br/>
+            the Average of your Opponent's Match Win %, with a minimum contribution cap of <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>%
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <div id="tooltip-oamp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            OAMP means Opponent's Average Match Points:<br/>
+            the Average of your Opponent's Match Points.
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
+          <div id="tooltip-wld" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            W-L-D is the tournament track record expressed in:<br/>
+            Wins - Losses - Draws
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
         <% end %>
         <% if @layout_mode == "application" %>
           <th scope="col" class="px-5 py-3">
@@ -87,48 +132,14 @@
             <span class="sr-only">Actions</span>
           </th>
         <% end %>
-        <div id="tooltip-rank" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          Player rank is calculated according to the tiebreakers you can see in this table:</br>
-          MP > MW% > OAMW% > OAMP
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <div id="tooltip-mp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          MP means Match Points:</br>
-          <%= @tournament.class::POINTS_PER_WIN %> per win, <%= @tournament.class::POINTS_PER_DRAW %> per draw, 0 per loss.
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <div id="tooltip-mwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          MW% means Match Win %:</br>
-          Acquired Match Points divided by Attainable Match Points (with 100% Match wins)
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <div id="tooltip-oamwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          OAMW% means Opponent's Average Match Win %:</br>
-          the Average of your Opponent's Match Win %, with a minimum contribution cap of <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>%
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <div id="tooltip-oamp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          OAMP means Opponent's Average Match Points:</br>
-          the Average of your Opponent's Match Points.
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <div id="tooltip-wld" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          W-L-D is the tournament track record expressed in:</br>
-          Wins - Losses - Draws
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
       </tr>
     </thead>
     <tbody id="<%= dom_id(@tournament, :tournament_participants) %>">
-      <!-- TODO updated by turbo stream -->
-      <% case @tournament.state %>
-      <% when 'registration_open', 'registration_closed' %>
-        <%= render @tournament.tournament_participants.sort_by(&:name) %>
-      <% else %>
-        <%= render @tournament.tournament_participants.sort_by { |p| [p.playing? ? 0 : 1, -p.rank_score, p.name] } %>
-      <% end %>
+      <%= render @tournament_participants %>
     </tbody>
   </table>
+<% else %>
+  No players found
 <% end %>
 
 <% content_for :footer do %>

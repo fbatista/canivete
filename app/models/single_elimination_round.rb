@@ -15,6 +15,10 @@ class SingleEliminationRound < Round
     )
   end
 
+  def duration
+    last_single_elimination_round? ? nil : 150.minutes
+  end
+
   def advance_tournament!
     return if last_single_elimination_round?
 
