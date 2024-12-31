@@ -8,6 +8,7 @@ gem 'bootsnap', require: false
 gem 'jbuilder'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'devise'
+gem 'kaminari'
 
 # Frontend
 gem 'hotwire-rails'

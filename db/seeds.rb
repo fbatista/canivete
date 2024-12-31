@@ -21,7 +21,6 @@ users = User.create(
     { name: 'Tiago', email: 'Tiago@canivete.com', password: '123qwe' },
     { name: 'Jose', email: 'Jose@canivete.com', password: '123qwe' },
     { name: 'Vanessa', email: 'Vanessa@canivete.com', password: '123qwe' },
-    { name: 'Virgilio', email: 'Virgilio@canivete.com', password: '123qwe' },
     { name: 'Antonio', email: 'Antonio@canivete.com', password: '123qwe' },
     { name: 'Fernando', email: 'Fernando@canivete.com', password: '123qwe' },
     { name: 'Francisco', email: 'Francisco@canivete.com', password: '123qwe' },
@@ -34,7 +33,8 @@ users = User.create(
     { name: 'Vitor', email: 'Vitor@canivete.com', password: '123qwe' },
     { name: 'Hugo', email: 'Hugo@canivete.com', password: '123qwe' },
     { name: 'Mario', email: 'Mario@canivete.com', password: '123qwe' },
-    { name: 'Manuel', email: 'Manuel@canivete.com', password: '123qwe' }
+    { name: 'Manuel', email: 'Manuel@canivete.com', password: '123qwe' },
+    { name: 'Max', email: 'max@canivete.com', password: '123qwe' }
   ]
 )
 
@@ -43,6 +43,10 @@ users.each(&:initialize_player)
 # Create an initial tournament organizer
 to = TournamentOrganizer.create!(
   user: User.create({ name: 'Kakah', email: 'kakah@canivete.com', password: '123qwe' })
+)
+
+other_to = TournamentOrganizer.create!(
+  user: User.create({ name: 'Virgilio', email: 'virgilio@canivete.com', password: '123qwe' })
 )
 
 # Create a couple of example tournaments
@@ -105,6 +109,19 @@ tournaments = Tournament.create!(
       end_time: 1.week.from_now + 1.day
     }
   ]
+)
+
+empty_tournaments = Tournament.create!(
+  (1..52).map do |w|
+    {
+      name: 'FNM',
+      state: :registration_open,
+      tournament_organizer: other_to,
+      cover: File.open('test/fixtures/files/banner.png'),
+      start_time: w.week.from_now,
+      end_time: w.week.from_now + 5.hours
+    }
+  end
 )
 
 # Add players to the tournaments

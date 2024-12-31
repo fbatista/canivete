@@ -23,6 +23,10 @@
       <%= markdown(tournament.prizes).html_safe %>
     </div>
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+      <span class="inline-flex items-center">
+        <%= icon('calendar', class: "me-2") %><%= time_tag tournament.start_time %>
+      </span>
+      <br/>
       <% if (tournament.price || 0).zero? %>
         Free entry
       <% else %>
@@ -31,6 +35,6 @@
     </p>
   </div>
   <div class="p-5 gap-2 flex items-center justify-start">
-    <%= render "tournament_actions", tournament: tournament %>
+    <%= render "tournament_actions_list", tournament: tournament %>
   </div>
 </div>

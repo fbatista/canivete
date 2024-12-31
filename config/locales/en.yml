@@ -34,3 +34,7 @@ en:
     attributes:
       tournament_participant:
         accepted_terms: "I have read and accepted the rules for this event."
+  views:
+    pagination:
+      previous: "Previous"
+      next: "Next"

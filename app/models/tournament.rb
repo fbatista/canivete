@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  paginates_per 20
+
   belongs_to :tournament_organizer
+  belongs_to :league, optional: true
   has_many :rounds, dependent: :destroy
   has_many :tournament_participants, dependent: :destroy
   has_many :infractions, dependent: :destroy
@@ -10,8 +13,8 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :for_organizer, ->(organizer) { where(tournament_organizer: organizer) }
   scope :past, -> { where(end_time: ...Time.current) }
   scope :upcoming, -> { where(start_time: Time.current..) }
-  scope :ongoing, -> { where(state: [:swiss, :single_elimination]) }
-  scope :for_player, ->(player) { joins(:tournament_participants).where(tournament_participants: { player: player}) }
+  scope :ongoing, -> { where(state: %i[swiss single_elimination]) }
+  scope :for_player, ->(player) { joins(:tournament_participants).where(tournament_participants: { player: player }) }
 
   PREFERRED_POD_SIZE = 4
   SMALLER_POD_SIZE = 3
@@ -161,7 +164,7 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def available_states
     return Tournament.states.slice(:draft) if new_record?
 
-    Tournament.states.slice(*TRANSITIONS[state])
+    Tournament.states.slice(*(TRANSITIONS[state] - [state.to_sym]))
   end
 
   def rounds_info
@@ -185,7 +188,7 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def ongoing?
-    ["swiss", "single_elimination"].include?(state)
+    %w[swiss single_elimination].include?(state)
   end
 
   def populate_slug

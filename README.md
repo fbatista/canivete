@@ -22,3 +22,8 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+# TODO
+
+- [ ] Remove all possible N+1 queries

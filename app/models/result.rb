@@ -6,9 +6,9 @@ class Result < ApplicationRecord
 
   has_one :tournament, through: :round
 
-  SELECTABLE_SUBTYPES = %w[Draw Win Penalty].freeze
-  SUBTYPES = SELECTABLE_SUBTYPES + %w[Loss].freeze
-  ELIMINATION_SELECTABLE_SUBYTPES = %w[Advance Penalty].freeze
+  SELECTABLE_SUBTYPES = %w[Draw Win].freeze
+  SUBTYPES = SELECTABLE_SUBTYPES + %w[Loss Penalty].freeze
+  ELIMINATION_SELECTABLE_SUBYTPES = %w[Advance].freeze
   ELIMINATION_SUBYTPES = ELIMINATION_SELECTABLE_SUBYTPES + %w[Eliminated].freeze
 
   scope :publishable, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
@@ -16,7 +16,6 @@ class Result < ApplicationRecord
   validates(
     :tournament_participant_id,
     {
-      presence: true,
       uniqueness: { scope: :round_id }
     }
   )

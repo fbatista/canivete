@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :tournaments, only: %i[index show] do
     resources :rounds do
-      resources :pods do
-        resources :results
-      end
+      resources :pods
     end
 
     resources :tournament_participants do

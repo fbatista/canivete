@@ -4,8 +4,8 @@
   </div>
   <ol class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch <%= "!text-white" if pod.tournament_participants.any? { |tp| current_player?(tp.player) } %>">
     <% pod.tournament_participants.each do |player| %>
-      <li data-tooltip-placement="left" data-tooltip-target="tooltip-pods-<%= player.id %>" class="list-decimal grow list-inside last:rounded-b-lg pl-6 pr-10 py-3 <%= result_indicator(pod:, player:) %>">
-        <%= truncate(player.name) %>
+      <li data-tooltip-placement="left" data-tooltip-target="tooltip-pods-<%= player.id %>" class="list-decimal grow list-inside last:rounded-b-lg pl-6 pr-10 py-3">
+        <%= result_indicator(pod:, player:) %>
       </li>
       <div id="tooltip-pods-<%= player.id %>" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
         <%= player.name %><br/>

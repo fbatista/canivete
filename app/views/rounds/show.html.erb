@@ -107,7 +107,9 @@
       </div>
       <ul class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch">
         <% @round.byes.sort_by {|r| -r.tournament_participant.rank_score }.each do |result| %>
-          <li class="grow last:rounded-b-lg pl-6 pr-10 py-3 <%= ApplicationHelper::RESULT_CLASSES[result.class] %>"><%= result.tournament_participant.name %></li>
+          <li class="grow last:rounded-b-lg pl-6 pr-10 py-3">
+            <%= result_badge(result, result.tournament_participant) %>
+          </li>
         <% end %>
       </ul>
     </div>
