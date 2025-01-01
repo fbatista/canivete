@@ -34,7 +34,7 @@ class Round < ApplicationRecord
   private
 
   def round_finished
-    return unless finished_at_previously_changed?
+    return unless finished_at.present? && finished_at_previously_changed?
 
     advance_tournament!
   end

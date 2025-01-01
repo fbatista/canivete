@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :tournaments do
       resources :infractions, only: %i[new create]
       resources :tournament_participants do
-        resources :infractions, only: %i[index]
+        resources :infractions, only: %i[index destroy]
       end
       resources :rounds do
         resources :seatings, only: [] do

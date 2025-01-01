@@ -39,7 +39,12 @@ module Organizer
       @tournament.attributes = tournament_params
 
       if @tournament.save
-        redirect_to [:organizer, @tournament], notice: 'Tournament updated successfully'
+        if @tournament.state_previously_changed? && @tournament.single_elimination?
+          redirect_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)],
+                      notice: 'Tournament advanceded!'
+        else
+          redirect_to [:organizer, @tournament], notice: 'Tournament updated successfully'
+        end
       else
         render :edit, status: :unprocessable_entity
       end

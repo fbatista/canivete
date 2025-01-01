@@ -30,6 +30,22 @@ module Organizer
       end
     end
 
+    def destroy
+      tournament = load_tournament
+      tournament_participant = tournament.tournament_participants.includes(:player).find(
+        params[:tournament_participant_id]
+      )
+      @infraction = Infraction.find_by(tournament: tournament, player: tournament_participant.player)
+      message =
+        if @infraction.destroy
+          { notice: 'Infraction removed!' }
+        else
+          { alert: 'Error removing infraction!' }
+        end
+
+      redirect_to [:organizer, @infraction.tournament, :tournament_participants, { layout: 'application' }], **message
+    end
+
     private
 
     def infraction_params

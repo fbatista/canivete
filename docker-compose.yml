@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_MAX_THREADS: 5
+      CANIVETE_DB_USER: ${CANIVETE_DB_USER}
+      CANIVETE_DB_PASSWORD: ${CANIVETE_DB_PASSWORD}
+      DATABASE_URL: postgres://${CANIVETE_DB_USER}:${CANIVETE_DB_PASSWORD}@db:5432/canivete_development
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgis/postgis:16-3.3
+    environment:
+      POSTGRES_USER: ${CANIVETE_DB_USER}
+      POSTGRES_PASSWORD: ${CANIVETE_DB_PASSWORD}
+      POSTGRES_DB: canivete_development
+    entrypoint: >
+      sh -c "
+      sed -e 's/:DB_USER/$CANIVETE_DB_USER/g' -e 's/:DB_PASSWORD/$CANIVETE_DB_PASSWORD/g' /docker-entrypoint-initdb.d/init-db.sql > /docker-entrypoint-initdb.d/processed-init-db.sql &&
+      postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+  redis_data:

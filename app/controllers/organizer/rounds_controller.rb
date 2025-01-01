@@ -31,6 +31,19 @@ module Organizer
       end
     end
 
+    def destroy
+      tournament = load_tournament
+      load_round(tournament).destroy
+      tournament.rounds.max_by(&:number).update(finished_at: nil)
+
+      if tournament.single_elimination? && tournament.rounds.none? { |r| r.instance_of?(SingleEliminationRound) }
+        tournament.update(state: :swiss)
+      end
+
+      redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
+                  notice: 'Ongoing round destroyed, rolled back previous round to unfinished!'
+    end
+
     private
 
     def round_params

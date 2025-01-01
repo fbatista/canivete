@@ -6,7 +6,6 @@ class TournamentParticipant < ApplicationRecord
   belongs_to :player
 
   has_many :results, -> { publishable }, dependent: :destroy, inverse_of: :tournament_participant
-
   has_many :seatings, -> { publishable }, dependent: :destroy
   has_many :pods, -> { publishable }, through: :seatings
   has_many(
@@ -60,6 +59,8 @@ class TournamentParticipant < ApplicationRecord
   end
 
   delegate :name, to: :player
+
+  after_update :rebuild_round, if: -> { dropped_previously_changed? }
 
   SINGLE_ELIM_COEFF = 100_000_000_000_000_000
   MP_COEFF = 100_000_000_000_000
@@ -162,5 +163,12 @@ class TournamentParticipant < ApplicationRecord
                     (match_win_percentage.round(4) * MW_COEFF).to_i +
                     (opponents_average_match_points * OAMP_COEFF).to_i +
                     (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i
+  end
+
+  def rebuild_round
+    return unless tournament.swiss? && !tournament.rounds.max_by(&:number).published
+
+    tournament.rounds.max_by(&:number).destroy
+    Tournaments::StartSwissRoundJob.perform_now(tournament.reload)
   end
 end

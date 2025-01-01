@@ -112,8 +112,6 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_validation :populate_slug
 
-  validate :valid_state_transitions, if: -> { state_changed? }
-
   after_update :perform_state_based_actions, if: -> { state_previously_changed? }
   after_save :geocode_address, if: -> { address_changed? }
 
@@ -195,15 +193,9 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self.slug = name.downcase.gsub(/[^a-z0-9]/, '-')
   end
 
-  def valid_state_transitions
-    unless state_was.present? && Tournament.states.key?(state_was) && Tournament.states[state_was] > state_for_database
-      return
-    end
-
-    errors.add :state, 'cannot transition backwards'
-  end
-
   def perform_state_based_actions
+    return unless TRANSITIONS[state_previously_was.to_sym].include?(state.to_sym)
+
     case state.to_sym
     when :swiss
       Tournaments::StartSwissRoundJob.perform_now(self)
