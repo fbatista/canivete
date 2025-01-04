@@ -96,33 +96,38 @@ tournaments = Tournament.create!(
           Multiplayer Addendum: https://juizes-mtg-portugal.github.io
           Playtest cards: Allowed, no limit.
         RULES
-      cover: File.open('test/fixtures/files/cover.jpg'),
+      cover: File.open('test/fixtures/files/cover1.jpg'),
       start_time: 2.weeks.from_now,
       end_time: 2.weeks.from_now + 8.hours
     },
     {
-      name: 'Even Pods Tournament',
+      name: 'Last Week Tournament example',
+      state: :registration_open,
+      tournament_organizer: other_to,
+      cover: File.open('test/fixtures/files/cover2.jpg'),
+      start_time: 5.minutes.ago,
+      end_time: 10.hours.from_now
+    },
+    {
+      name: 'Qualifier for EU Champ',
       state: :registration_open,
       tournament_organizer: to,
-      cover: File.open('test/fixtures/files/banner.png'),
+      cover: File.open('test/fixtures/files/cover3.jpg'),
+      start_time: 1.week.from_now,
+      end_time: 1.week.from_now + 1.day
+    },
+    {
+      name: 'FNM Commander',
+      state: :registration_open,
+      tournament_organizer: to,
+      cover: File.open('test/fixtures/files/cover4.jpg'),
       start_time: 1.week.from_now,
       end_time: 1.week.from_now + 1.day
     }
   ]
 )
 
-empty_tournaments = Tournament.create!(
-  (1..52).map do |w|
-    {
-      name: 'FNM',
-      state: :registration_open,
-      tournament_organizer: other_to,
-      cover: File.open('test/fixtures/files/banner.png'),
-      start_time: w.week.from_now,
-      end_time: w.week.from_now + 5.hours
-    }
-  end
-)
+
 
 # Add players to the tournaments
 
@@ -139,15 +144,20 @@ users.map(&:player)[0...21].each do |p|
   )
 end
 
-users.map(&:player).each do |p|
-  next if p.blank?
+tournaments[1..].each do |tournament|
+  users.map(&:player).each do |p|
+    next if p.blank?
 
-  TournamentParticipant.create(
-    {
-      tournament: tournaments.last,
-      player: p,
-      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
-      accepted_terms: true
-    }
-  )
+    TournamentParticipant.create(
+      {
+        tournament: tournament,
+        player: p,
+        decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
+        accepted_terms: true
+      }
+    )
+  end
 end
+
+tournaments[1].update(state: :registration_closed)
+tournaments[1].update(state: :swiss)
