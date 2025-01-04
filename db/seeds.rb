@@ -4,7 +4,7 @@
 users = User.create(
   [
     { name: 'Fábio', email: 'fabio@canivete.com', password: '123qwe' },
-    { name: 'Simão', email: 'simaoo@canivete.com', password: '123qwe' },
+    { name: 'Simão', email: 'simao@canivete.com', password: '123qwe' },
     { name: 'Bandeira', email: 'bandeira@canivete.com', password: '123qwe' },
     { name: 'Esgaio', email: 'esgaio@canivete.com', password: '123qwe' },
     { name: 'Nuno', email: 'nuno@canivete.com', password: '123qwe' },

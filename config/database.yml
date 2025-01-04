@@ -2,8 +2,12 @@ default: &default
   adapter: postgis
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['CANIVETE_DB_USER'] %>
-  password: <%= ENV['CANIVETE_DB_PASSWORD'] %>
+  <% if ENV["DB_HOST"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: postgres
+  password: postgres
+  <% end %>
+
 
 development:
   <<: *default
@@ -19,8 +23,16 @@ test:
 production:
   primary:
     <<: *default
-    database: canivete_production
+    url: <%= ENV["PRIMARY_DATABASE_URL"] %>
+  cache:
+    <<: *default
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: canivete_production_queue
+    url: <%= ENV["QUEUE_DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    durl: <%= ENV["CABLE_DATABASE_URL"] %>
+    migrations_paths: db/cable_migrate

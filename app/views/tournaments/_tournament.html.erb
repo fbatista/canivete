@@ -1,8 +1,6 @@
 <div class="space-y-6 flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
   <% if tournament.cover.attached? %>
-    <%= link_to tournament do %>
-      <%= image_tag tournament.cover, class: "rounded-t-lg object-cover aspect-[16/9]" %>
-    <% end %>
+    <%= render partial: "tournament_image", layout: "link_layout", locals: { tournament: tournament } %>
   <% else %>
     <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded-t-lg dark:bg-gray-700">
       <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">

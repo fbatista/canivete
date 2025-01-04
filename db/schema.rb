@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_160214) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_02_164552) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
   enable_extension "postgis"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -163,7 +163,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_160214) do
     t.text "rules"
     t.decimal "price"
     t.integer "currency"
-    t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
     t.index ["location"], name: "index_tournaments_on_location", using: :gist
     t.index ["tournament_organizer_id"], name: "index_tournaments_on_tournament_organizer_id"
   end

@@ -1,46 +1,38 @@
-version: '3.9'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
+  rails-app:
+    env_file:
+      - .env
+    image: fbatista/canivete:latest
+    container_name: canivete-rails-app
     ports:
-      - "3000:3000"
+      - "3003:3000"
     environment:
-      RAILS_MAX_THREADS: 5
-      CANIVETE_DB_USER: ${CANIVETE_DB_USER}
-      CANIVETE_DB_PASSWORD: ${CANIVETE_DB_PASSWORD}
-      DATABASE_URL: postgres://${CANIVETE_DB_USER}:${CANIVETE_DB_PASSWORD}@db:5432/canivete_development
-      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: ${RAILS_ENV}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      PRIMARY_DATABASE_URL: ${PRIMARY_DATABASE_URL}
+      CACHE_DATABASE_URL: ${CACHE_DATABASE_URL}
+      QUEUE_DATABASE_URL: ${QUEUE_DATABASE_URL}
+      CABLE_DATABASE_URL: ${CABLE_DATABASE_URL}
+    volumes:
+      - /volume1/docker/canivete/log:/rails/log
+      - /volume1/docker/canivete/storage:/rails/storage
+      - /volume1/docker/canivete/tmp:/rails/tmp
     depends_on:
-      - db
-      - redis
-
-  db:
-    image: postgis/postgis:16-3.3
+      - database
+  database:
+    image: postgis/postgis:16-3.5
+    container_name: canivete-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: ${CANIVETE_DB_USER}
-      POSTGRES_PASSWORD: ${CANIVETE_DB_PASSWORD}
-      POSTGRES_DB: canivete_development
-    entrypoint: >
-      sh -c "
-      sed -e 's/:DB_USER/$CANIVETE_DB_USER/g' -e 's/:DB_PASSWORD/$CANIVETE_DB_PASSWORD/g' /docker-entrypoint-initdb.d/init-db.sql > /docker-entrypoint-initdb.d/processed-init-db.sql &&
-      postgres"
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
-
-  redis:
-    image: redis:7
+      - /volume1/docker/canivete/postgres:/var/lib/postgresql/data
+  cloudflared:
+    image: cloudflare/cloudflared:latest  # Use the cloudflare/cloudflared image
+    restart: unless-stopped  # Restart the container unless it is explicitly stopped
+    command: tunnel --url http://192.168.1.234:84  # Run the tunnel command with the specified URL
     volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-
-volumes:
-  postgres_data:
-  redis_data:
+      - /volume1/docker/canivete/cloudflared:/etc/cloudflare  # Mount the host directory to the container's /etc/cloudflare directory
+    depends_on:
+      - rails-app  # Ensure the rails-app service is started before the Cloudflared service

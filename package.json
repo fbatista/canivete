@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "flowbite": "^2.5.2",
-    "yarn": "^1.22.22"
+    "flowbite": "^2.5.2"
   }
 }
