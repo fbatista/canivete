@@ -1,29 +1,18 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
 # TODO
 
+## Tech
+
 - [ ] Remove all possible N+1 queries
+- [ ] Proper hosting and domain etc.
+
+## Product
+
+- [ ] Monetization / sponsorship to cover the tech costs.
+- [ ] Extra Time management per pod.
+- [ ] End of Round floor planner displaying extra time.
+- [ ] Judge account
+- [ ] User profiles
+  - For players, check track records.
+  - For TOs see tournaments organized by a TO.
+  - For judges see tournaments they helped run.
+- [ ] Manage staff applications for event.
