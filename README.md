@@ -4,6 +4,7 @@
 
 - [ ] Remove all possible N+1 queries
 - [ ] Proper hosting and domain etc.
+- [ ] Improve mobile experience
 
 ## Product
 

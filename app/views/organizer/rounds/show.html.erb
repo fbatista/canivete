@@ -123,7 +123,7 @@
   </div>
 <% end %>
 
-<div class="grid grid-cols-2 gap-4 content-start col-span-2" data-controller="swap">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 content-start col-span-2" data-controller="swap">
   <%= render @pods %>
   <% if @round.byes.present? %>
     <div class="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
