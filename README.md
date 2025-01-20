@@ -17,3 +17,5 @@
   - For TOs see tournaments organized by a TO.
   - For judges see tournaments they helped run.
 - [ ] Manage staff applications for event.
+- [ ] Multi-To Multi-Event circuits
+- [ ] Accessibility: Fixed seating
