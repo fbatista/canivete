@@ -19,3 +19,5 @@
 - [ ] Manage staff applications for event.
 - [ ] Multi-To Multi-Event circuits
 - [ ] Accessibility: Fixed seating
+
+Live demo in https://robustpenguin.pt/canivete
