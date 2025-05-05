@@ -7,7 +7,6 @@ gem 'rails', '~> 8'
 gem 'bootsnap', require: false
 gem 'jbuilder'
 gem 'tzinfo-data', platforms: %i[windows jruby]
-gem 'devise'
 gem 'kaminari'
 gem 'kamal', require: false
 gem 'thruster', require: false

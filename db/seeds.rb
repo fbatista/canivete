@@ -3,38 +3,38 @@
 # Create an initial list of users
 users = User.create(
   [
-    { name: 'Fábio', email: 'fabio@canivete.com', password: '123qwe' },
-    { name: 'Simão', email: 'simao@canivete.com', password: '123qwe' },
-    { name: 'Bandeira', email: 'bandeira@canivete.com', password: '123qwe' },
-    { name: 'Esgaio', email: 'esgaio@canivete.com', password: '123qwe' },
-    { name: 'Nuno', email: 'nuno@canivete.com', password: '123qwe' },
-    { name: 'Pedro', email: 'pedro@canivete.com', password: '123qwe' },
-    { name: 'Joao', email: 'joao@canivete.com', password: '123qwe' },
-    { name: 'Gil', email: 'gil@canivete.com', password: '123qwe' },
-    { name: 'Lucas', email: 'lucas@canivete.com', password: '123qwe' },
-    { name: 'Artur', email: 'artur@canivete.com', password: '123qwe' },
-    { name: 'Brandao', email: 'brandao@canivete.com', password: '123qwe' },
-    { name: 'Chico', email: 'chico@canivete.com', password: '123qwe' },
-    { name: 'Demerson', email: 'demerson@canivete.com', password: '123qwe' },
-    { name: 'Guilherme', email: 'guilherme@canivete.com', password: '123qwe' },
-    { name: 'Olivio', email: 'olivio@canivete.com', password: '123qwe' },
-    { name: 'Tiago', email: 'tiago@canivete.com', password: '123qwe' },
-    { name: 'Jose', email: 'jose@canivete.com', password: '123qwe' },
-    { name: 'Vanessa', email: 'vanessa@canivete.com', password: '123qwe' },
-    { name: 'Antonio', email: 'antonio@canivete.com', password: '123qwe' },
-    { name: 'Fernando', email: 'fernando@canivete.com', password: '123qwe' },
-    { name: 'Francisco', email: 'francisco@canivete.com', password: '123qwe' },
-    { name: 'Afonso', email: 'afonso@canivete.com', password: '123qwe' },
-    { name: 'Roberto', email: 'roberto@canivete.com', password: '123qwe' },
-    { name: 'Bonifacio', email: 'bonifacio@canivete.com', password: '123qwe' },
-    { name: 'Carlos', email: 'carlos@canivete.com', password: '123qwe' },
-    { name: 'Joel', email: 'joel@canivete.com', password: '123qwe' },
-    { name: 'Emanuel', email: 'emanuel@canivete.com', password: '123qwe' },
-    { name: 'Vitor', email: 'vitor@canivete.com', password: '123qwe' },
-    { name: 'Hugo', email: 'hugo@canivete.com', password: '123qwe' },
-    { name: 'Mario', email: 'mario@canivete.com', password: '123qwe' },
-    { name: 'Manuel', email: 'manuel@canivete.com', password: '123qwe' },
-    { name: 'Max', email: 'max@canivete.com', password: '123qwe' }
+    { name: 'Fábio', email_address: 'fabio@canivete.com', password: '123qwe' },
+    { name: 'Simão', email_address: 'simao@canivete.com', password: '123qwe' },
+    { name: 'Bandeira', email_address: 'bandeira@canivete.com', password: '123qwe' },
+    { name: 'Esgaio', email_address: 'esgaio@canivete.com', password: '123qwe' },
+    { name: 'Nuno', email_address: 'nuno@canivete.com', password: '123qwe' },
+    { name: 'Pedro', email_address: 'pedro@canivete.com', password: '123qwe' },
+    { name: 'Joao', email_address: 'joao@canivete.com', password: '123qwe' },
+    { name: 'Gil', email_address: 'gil@canivete.com', password: '123qwe' },
+    { name: 'Lucas', email_address: 'lucas@canivete.com', password: '123qwe' },
+    { name: 'Artur', email_address: 'artur@canivete.com', password: '123qwe' },
+    { name: 'Brandao', email_address: 'brandao@canivete.com', password: '123qwe' },
+    { name: 'Chico', email_address: 'chico@canivete.com', password: '123qwe' },
+    { name: 'Demerson', email_address: 'demerson@canivete.com', password: '123qwe' },
+    { name: 'Guilherme', email_address: 'guilherme@canivete.com', password: '123qwe' },
+    { name: 'Olivio', email_address: 'olivio@canivete.com', password: '123qwe' },
+    { name: 'Tiago', email_address: 'tiago@canivete.com', password: '123qwe' },
+    { name: 'Jose', email_address: 'jose@canivete.com', password: '123qwe' },
+    { name: 'Vanessa', email_address: 'vanessa@canivete.com', password: '123qwe' },
+    { name: 'Antonio', email_address: 'antonio@canivete.com', password: '123qwe' },
+    { name: 'Fernando', email_address: 'fernando@canivete.com', password: '123qwe' },
+    { name: 'Francisco', email_address: 'francisco@canivete.com', password: '123qwe' },
+    { name: 'Afonso', email_address: 'afonso@canivete.com', password: '123qwe' },
+    { name: 'Roberto', email_address: 'roberto@canivete.com', password: '123qwe' },
+    { name: 'Bonifacio', email_address: 'bonifacio@canivete.com', password: '123qwe' },
+    { name: 'Carlos', email_address: 'carlos@canivete.com', password: '123qwe' },
+    { name: 'Joel', email_address: 'joel@canivete.com', password: '123qwe' },
+    { name: 'Emanuel', email_address: 'emanuel@canivete.com', password: '123qwe' },
+    { name: 'Vitor', email_address: 'vitor@canivete.com', password: '123qwe' },
+    { name: 'Hugo', email_address: 'hugo@canivete.com', password: '123qwe' },
+    { name: 'Mario', email_address: 'mario@canivete.com', password: '123qwe' },
+    { name: 'Manuel', email_address: 'manuel@canivete.com', password: '123qwe' },
+    { name: 'Max', email_address: 'max@canivete.com', password: '123qwe' }
   ]
 )
 
@@ -42,11 +42,11 @@ users.each(&:initialize_player)
 
 # Create an initial tournament organizer
 to = TournamentOrganizer.create!(
-  user: User.create({ name: 'Kakah', email: 'kakah@canivete.com', password: '123qwe' })
+  user: User.create({ name: 'Kakah', email_address: 'kakah@canivete.com', password: '123qwe' })
 )
 
 other_to = TournamentOrganizer.create!(
-  user: User.create({ name: 'Virgilio', email: 'virgilio@canivete.com', password: '123qwe' })
+  user: User.create({ name: 'Virgilio', email_address: 'virgilio@canivete.com', password: '123qwe' })
 )
 
 # Create a couple of example tournaments
@@ -138,7 +138,7 @@ users.map(&:player)[0...21].each do |p|
     {
       tournament: tournaments.first,
       player: p,
-      decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
+      decklist: "https://moxfield.com/decklist/#{p.user.email_address.split('@').first}",
       accepted_terms: true
     }
   )
@@ -152,7 +152,7 @@ tournaments[1..].each do |tournament|
       {
         tournament: tournament,
         player: p,
-        decklist: "https://moxfield.com/decklist/#{p.user.email.split('@').first}",
+        decklist: "https://moxfield.com/decklist/#{p.user.email_address.split('@').first}",
         accepted_terms: true
       }
     )

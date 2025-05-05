@@ -5,10 +5,6 @@ AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
 
-require:
-  - rubocop-rails-omakase
-  - rubocop-performance
-
 Style/Documentation:
   Enabled: false
 

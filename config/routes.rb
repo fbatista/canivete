@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
+  resource :session
+  resources :passwords, param: :token
+
   resources :tournaments, only: %i[index show] do
     resources :rounds do
       resources :pods
@@ -9,7 +11,7 @@ Rails.application.routes.draw do
 
     resources :tournament_participants do
       collection do
-        get 'me'
+        get "me"
       end
     end
   end
@@ -32,5 +34,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root 'tournaments#index'
+  root "tournaments#index"
 end

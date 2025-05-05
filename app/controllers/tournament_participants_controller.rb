@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class TournamentParticipantsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[index]
+  skip_before_action :require_authentication, only: %i[index]
 
   def index
     @tournament = load_tournament
-    render layout: 'modal'
+    render layout: "modal"
   end
 
   def new
@@ -19,9 +19,9 @@ class TournamentParticipantsController < ApplicationController
     @tournament_participant.attributes = tournament_participant_params
 
     if @tournament_participant.save
-      redirect_to @tournament_participant.tournament, notice: 'Registration successful!'
+      redirect_to @tournament_participant.tournament, notice: "Registration successful!"
     else
-      render :new, status: :unprocessable_entity, layout: 'modal'
+      render :new, status: :unprocessable_entity, layout: "modal"
     end
   end
 
@@ -35,20 +35,20 @@ class TournamentParticipantsController < ApplicationController
     @destroyed_participant.destroy
     @tournament_participant = TournamentParticipant.new
 
-    redirect_to @tournament, notice: 'Registration canceled!'
+    redirect_to @tournament, notice: "Registration canceled!"
   end
 
   def edit
     @tournament = load_tournament
     @tournament_participant = load_participant(@tournament)
   end
-  
+
   def update
     @tournament = load_tournament
     @tournament_participant = load_participant(@tournament)
     @tournament_participant.update(tournament_participant_params)
 
-    redirect_to @tournament_participant.tournament, notice: 'Update successful!'
+    redirect_to @tournament_participant.tournament, notice: "Update successful!"
   end
 
   private

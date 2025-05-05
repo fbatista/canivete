@@ -49,7 +49,7 @@ class TournamentParticipant < ApplicationRecord
 
   before_validation on: :create do
     if player_email.present? && player.blank?
-      user = User.find_or_initialize_by(email: player_email) do |u|
+      user = User.find_or_initialize_by(email_address: player_email) do |u|
         u.name = player_name
         u.initialize_player
       end

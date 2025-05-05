@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_02_164552) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_05_224202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -122,6 +122,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_02_164552) do
     t.index ["tournament_participant_id"], name: "index_seatings_on_tournament_participant_id"
   end
 
+  create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "tournament_organizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.datetime "created_at", null: false
@@ -169,16 +178,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_02_164552) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "email", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -194,6 +199,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_02_164552) do
   add_foreign_key "rounds", "tournaments"
   add_foreign_key "seatings", "pods"
   add_foreign_key "seatings", "tournament_participants"
+  add_foreign_key "sessions", "users"
   add_foreign_key "tournament_organizers", "users"
   add_foreign_key "tournament_participants", "players"
   add_foreign_key "tournament_participants", "tournaments"

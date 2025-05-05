@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 class TournamentsController < ApplicationController
-  skip_before_action :authenticate_user!
+  skip_before_action :require_authentication
   def index
     scope = Tournament.where.not(state: %i[draft canceled])
 
     case params[:filter]
-    when 'past'
+    when "past"
       scope = scope.past
-      @title = 'Past tournaments'
+      @title = "Past tournaments"
     else
       scope = scope.upcoming
-      @title = 'Upcoming tournaments'
+      @title = "Upcoming tournaments"
     end
 
     @tournaments = scope.page params[:page]

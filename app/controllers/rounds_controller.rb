@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RoundsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[index show]
+  skip_before_action :require_authentication, only: %i[index show]
   def index
     @rounds = load_tournament.rounds
   end
@@ -22,12 +22,12 @@ class RoundsController < ApplicationController
     @round = load_round(tournament)
 
     case round_params[:action]
-    when 'start'
+    when "start"
       @round.update(started_at: Time.zone.now)
-      redirect_to [@round.tournament, @round.becomes(Round)], notice: 'Round Started!'
-    when 'finish'
+      redirect_to [ @round.tournament, @round.becomes(Round) ], notice: "Round Started!"
+    when "finish"
       @round.update(finished_at: Time.zone.now)
-      redirect_to tournament, notice: 'Round Finished!'
+      redirect_to tournament, notice: "Round Finished!"
     end
   end
 

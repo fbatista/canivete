@@ -1,30 +1,25 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise(
-    :database_authenticatable,
-    :registerable,
-    :recoverable,
-    :rememberable,
-    :validatable
-  )
-
   attribute :organizer, :boolean, default: false
+
+  has_secure_password
+  has_many :sessions, dependent: :destroy
 
   after_create :initialize_player, if: -> { !organizer? }
   after_create :initialize_organizer, if: -> { organizer? }
-  after_update :update_key, if: -> { email_previously_changed? || name_previously_changed? }
+  after_update :update_key, if: -> { email_address_previously_changed? || name_previously_changed? }
 
   has_one :player, dependent: :nullify
   has_one :tournament_organizer, dependent: :nullify
 
-  validates :email, presence: true, uniqueness: true
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  validates :email_address, presence: true, uniqueness: true
   validates :name, presence: true
 
   def compute_key
-    Digest::MD5.hexdigest(email + name)
+    Digest::MD5.hexdigest(email_address + name)
   end
 
   def initialize_player
