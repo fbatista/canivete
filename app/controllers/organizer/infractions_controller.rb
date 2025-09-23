@@ -2,7 +2,7 @@
 
 module Organizer
   class InfractionsController < OrganizerController
-    layout 'modal'
+    layout "modal"
     def index
       @tournament_participant = TournamentParticipant.find(params[:tournament_participant_id])
       @infractions = Infraction.where(
@@ -23,8 +23,8 @@ module Organizer
       @infraction.attributes = infraction_params
 
       if @infraction.save
-        redirect_to [:organizer, @infraction.tournament, :tournament_participants, { layout: 'application' }],
-                    notice: 'Infraction added successfully'
+        redirect_to [ :organizer, @infraction.tournament, :tournament_participants, { layout: "application" } ],
+                    notice: "Infraction added successfully"
       else
         render :new, status: :unprocessable_entity
       end
@@ -38,12 +38,12 @@ module Organizer
       @infraction = Infraction.find_by(tournament: tournament, player: tournament_participant.player, id: params[:id])
       message =
         if @infraction.destroy
-          { notice: 'Infraction removed!' }
+          { notice: "Infraction removed!" }
         else
-          { alert: 'Error removing infraction!' }
+          { alert: "Error removing infraction!" }
         end
 
-      redirect_to [:organizer, @infraction.tournament, :tournament_participants, { layout: 'application' }], **message
+      redirect_to [ :organizer, @infraction.tournament, :tournament_participants, { layout: "application" } ], **message
     end
 
     private

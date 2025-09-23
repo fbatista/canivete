@@ -18,16 +18,16 @@ module Organizer
       @round = load_round(tournament)
 
       case round_params[:action]
-      when 'publish'
+      when "publish"
         @round.update(published: true)
-        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: 'Round Published!'
-      when 'start'
+        redirect_to [ :organizer, @round.tournament, @round.becomes(Round) ], notice: "Round Published!"
+      when "start"
         @round.update(started_at: Time.zone.now)
-        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: 'Round Started!'
-      when 'finish'
+        redirect_to [ :organizer, @round.tournament, @round.becomes(Round) ], notice: "Round Started!"
+      when "finish"
         @round.update(finished_at: Time.zone.now)
-        redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
-                    notice: 'Round Finished!'
+        redirect_to [ :organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round) ],
+                    notice: "Round Finished!"
       end
     end
 
@@ -40,8 +40,8 @@ module Organizer
         tournament.update(state: :swiss)
       end
 
-      redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
-                  notice: 'Ongoing round destroyed, rolled back previous round to unfinished!'
+      redirect_to [ :organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round) ],
+                  notice: "Ongoing round destroyed, rolled back previous round to unfinished!"
     end
 
     private

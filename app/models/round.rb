@@ -27,7 +27,7 @@ class Round < ApplicationRecord
 
   def byes
     results
-      .where(type: 'Advance')
+      .where(type: "Advance")
       .where.not(tournament_participant_id: seatings.select(:tournament_participant_id))
   end
 

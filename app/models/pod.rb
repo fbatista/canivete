@@ -91,7 +91,7 @@ class Pod < ApplicationRecord
   end
 
   def ranked_seatings
-    candidates.sort_by.with_index { |p, i| [-p.rank_score, i] }.each.with_index do |participant, i|
+    candidates.sort_by.with_index { |p, i| [ -p.rank_score, i ] }.each.with_index do |participant, i|
       seatings.build(tournament_participant: participant, order: i + 1)
     end
   end
@@ -100,7 +100,7 @@ class Pod < ApplicationRecord
     ordered_candidates = candidates.shuffle.sort_by.with_index do |participant, i|
       (1..size).to_a.map do |position|
         participant.times_going_at(position)
-      end + [-participant.rank_score, i]
+      end + [ -participant.rank_score, i ]
     end
 
     build_seatings(ordered_candidates)

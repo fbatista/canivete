@@ -16,7 +16,7 @@ module Organizer
         from_seating.save!
       end
 
-      redirect_to [:organizer, tournament, round.becomes(Round)], notice: 'Players Swapped!'
+      redirect_to [ :organizer, tournament, round.becomes(Round) ], notice: "Players Swapped!"
     end
 
     private

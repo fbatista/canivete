@@ -59,18 +59,18 @@ class Infraction < ApplicationRecord
   }
 
   def must_have_tournament_or_pod
-    errors.add(:base, 'Must have tournament or pod') unless tournament.present? || pod.present?
+    errors.add(:base, "Must have tournament or pod") unless tournament.present? || pod.present?
   end
 
   def must_match_kind_with_category
-    errors.add(:category, 'must match penalty type') unless category_for_database / 100 * 100 == kind_for_database
+    errors.add(:category, "must match penalty type") unless category_for_database / 100 * 100 == kind_for_database
   end
 
   def create_associated_penalty
     return if pod.blank? || tournament.blank?
 
     Tournaments::SubmitResultJob.perform_now(
-      type: 'Penalty',
+      type: "Penalty",
       tournament_participant: TournamentParticipant.find_by(tournament:, player:), round: pod.round, pod: pod
     )
   end

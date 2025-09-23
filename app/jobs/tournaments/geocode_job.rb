@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'net/http'
+require "net/http"
 
 module Tournaments
   class GeocodeJob < ApplicationJob
     queue_as :geocode
-    limits_concurrency key: ->(_) { 'GeocodeJob' }
+    limits_concurrency key: ->(_) { "GeocodeJob" }
 
     def perform(tournament)
       # Ensure at least 1 second between API calls
@@ -22,7 +22,7 @@ module Tournaments
     private
 
     def geocode_address(address)
-      request_openstreet(address)&.first&.with_indifferent_access => {lat:, lon:}
+      request_openstreet(address)&.first&.with_indifferent_access => { lat:, lon: }
       return nil unless lat && lon
 
       RGeo::Geographic.spherical_factory(srid: 4326).point(
@@ -32,13 +32,13 @@ module Tournaments
     end
 
     def request_openstreet(address)
-      uri = URI('https://nominatim.openstreetmap.org/search')
-      params = { limit: 1, format: 'jsonv2', q: address }
+      uri = URI("https://nominatim.openstreetmap.org/search")
+      params = { limit: 1, format: "jsonv2", q: address }
       uri.query = URI.encode_www_form(params)
       headers = {
-        'User-Agent' => 'Canivete webapp backend',
-        'Referrer' => 'https://canivete.pt',
-        'Content-type' => 'application/json; charset=UTF-8'
+        "User-Agent" => "Canivete webapp backend",
+        "Referrer" => "https://canivete.pt",
+        "Content-type" => "application/json; charset=UTF-8"
       }
 
       response = Net::HTTP.get(uri, headers)

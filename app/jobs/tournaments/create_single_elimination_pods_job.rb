@@ -27,7 +27,7 @@ module Tournaments
       players_being_paired = players_continuing.last(players_playing)
       players_to_advance = players_continuing - players_being_paired
 
-      [players_to_advance, players_being_paired, players_to_eliminate]
+      [ players_to_advance, players_being_paired, players_to_eliminate ]
     end
 
     def eliminate_players!

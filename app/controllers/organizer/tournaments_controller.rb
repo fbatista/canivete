@@ -15,7 +15,7 @@ module Organizer
           tournament_participants: { player: :user }
         ).find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to url_for(action: :index), alert: 'Not authorized to manage the selected tournament'
+      redirect_to url_for(action: :index), alert: "Not authorized to manage the selected tournament"
     end
 
     def new
@@ -31,7 +31,7 @@ module Organizer
         tournament_params.merge(tournament_organizer: current_organizer)
       )
 
-      redirect_to [:organizer, @tournament], notice: 'Tournament created successfully'
+      redirect_to [ :organizer, @tournament ], notice: "Tournament created successfully"
     end
 
     def update
@@ -40,10 +40,10 @@ module Organizer
 
       if @tournament.save
         if @tournament.state_previously_changed? && @tournament.single_elimination?
-          redirect_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)],
-                      notice: 'Tournament advanceded!'
+          redirect_to [ :organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round) ],
+                      notice: "Tournament advanceded!"
         else
-          redirect_to [:organizer, @tournament], notice: 'Tournament updated successfully'
+          redirect_to [ :organizer, @tournament ], notice: "Tournament updated successfully"
         end
       else
         render :edit, status: :unprocessable_entity

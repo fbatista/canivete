@@ -22,7 +22,7 @@ class TournamentParticipant < ApplicationRecord
           )
         SQL
       )
-    }, class_name: 'TournamentParticipant', through: :pods, source: :tournament_participants
+    }, class_name: "TournamentParticipant", through: :pods, source: :tournament_participants
   )
 
   scope :playing, -> { where(dropped: false) }
@@ -44,7 +44,7 @@ class TournamentParticipant < ApplicationRecord
   attribute :player_name, :string
   attribute :accepted_terms, :boolean, default: false
   validate on: :create do
-    errors.add(:accepted_terms, 'Must accept the terms and conditions') unless accepted_terms?
+    errors.add(:accepted_terms, "Must accept the terms and conditions") unless accepted_terms?
   end
 
   before_validation on: :create do
@@ -153,7 +153,7 @@ class TournamentParticipant < ApplicationRecord
 
     @opponents_average_match_win_percentage ||=
       corrected_opponents.inject(0.0) do |sum, n|
-        [n.match_win_percentage, 1.0 / Tournament::POINTS_PER_WIN].max + sum
+        [ n.match_win_percentage, 1.0 / Tournament::POINTS_PER_WIN ].max + sum
       end / corrected_opponents.size.to_f
   end
 

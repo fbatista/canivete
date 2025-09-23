@@ -19,9 +19,9 @@ module Organizer
         type: result_params[:type],
         tournament_participant:, round: @round, pod: @pod
       )
-      redirect_to [:organizer, @tournament, @round.becomes(Round)], notice: 'Result submitted successfully'
+      redirect_to [ :organizer, @tournament, @round.becomes(Round) ], notice: "Result submitted successfully"
     rescue StandardError => e
-      redirect_to [:organizer, @tournament, @round.becomes(Round)], alert: e
+      redirect_to [ :organizer, @tournament, @round.becomes(Round) ], alert: e
     end
 
     private

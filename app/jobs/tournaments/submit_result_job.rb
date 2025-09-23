@@ -19,13 +19,13 @@ module Tournaments
     def handle_result
       Result.transaction do
         case @type
-        when 'Advance'
+        when "Advance"
           handle_advance
-        when 'Win'
+        when "Win"
           handle_win
-        when 'Draw'
+        when "Draw"
           handle_draw
-        when 'Penalty'
+        when "Penalty"
           handle_penalty
         end
       end
@@ -34,38 +34,38 @@ module Tournaments
     def handle_advance
       @pod.tournament_participants.reject { |tp| tp == @tournament_participant }.each do |tp|
         Result.create_or_update_by(round: @round, tournament_participant: tp) do |result|
-          result.type = 'Eliminated'
+          result.type = "Eliminated"
         end
       end
       Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
-        result.type = 'Advance'
+        result.type = "Advance"
       end
     end
 
     def handle_win
-      raise 'Must select a winner' if @tournament_participant.blank?
+      raise "Must select a winner" if @tournament_participant.blank?
 
       @pod.tournament_participants.reject { |tp| tp == @tournament_participant }.each do |tp|
         Result.create_or_update_by(round: @round, tournament_participant: tp) do |result|
-          result.type = 'Loss' unless result.type == 'Penalty'
+          result.type = "Loss" unless result.type == "Penalty"
         end
       end
       Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
-        result.type = 'Win'
+        result.type = "Win"
       end
     end
 
     def handle_draw
       @pod.tournament_participants.each do |tournament_participant|
         Result.create_or_update_by(round: @round, tournament_participant:) do |result|
-          result.type = 'Draw' unless result.type == 'Penalty'
+          result.type = "Draw" unless result.type == "Penalty"
         end
       end
     end
 
     def handle_penalty
       Result.create_or_update_by(round: @round, tournament_participant: @tournament_participant) do |result|
-        result.type = 'Penalty'
+        result.type = "Penalty"
       end
     end
   end

@@ -5,7 +5,7 @@ module Organizer
     before_action :authorize_user!
 
     def authorize_user!
-      redirect_to root_url, alert: 'Not allowed' unless current_user.organizer?
+      redirect_to root_url, alert: "Not allowed" unless current_user.organizer?
     end
 
     def current_organizer

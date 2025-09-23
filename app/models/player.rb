@@ -3,7 +3,7 @@
 class Player < ApplicationRecord
   belongs_to :user, optional: true
 
-  has_many :tournament_participations, class_name: 'TournamentParticipant', dependent: :destroy
+  has_many :tournament_participations, class_name: "TournamentParticipant", dependent: :destroy
   has_many :tournaments, through: :tournament_participations
   has_many :infractions, dependent: :destroy
 
