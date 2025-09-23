@@ -21,7 +21,7 @@ gem "tailwindcss-rails", "~> 4.3"
 gem "commonmarker"
 
 # Databases
-gem "activerecord-postgis-adapter", git: "https://github.com/fbatista/activerecord-postgis-adapter.git"
+gem "activerecord-postgis-adapter"
 gem "bcrypt"
 gem "pg"
 gem "puma", ">= 5.0"
