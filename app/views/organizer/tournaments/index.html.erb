@@ -10,5 +10,7 @@
 <% if @tournaments.present? %>
   <%= render collection: @tournaments, partial: "tournaments/tournament" %>
 <% else %>
-  <p class="text-gray-500 dark:text-gray-400 col-span-full">You haven't organized any tournaments yet.</p>
+  <p class="text-gray-500 dark:text-gray-400 col-span-full">
+    You haven't organized any tournaments yet.
+  </p>
 <% end %>

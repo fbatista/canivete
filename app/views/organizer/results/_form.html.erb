@@ -1,6 +1,7 @@
 <%= modal_form_for [:organizer, @result.tournament, @result.round.becomes(Round), @pod, @result] do |f| %>
   <% content_for :title do %>
-    Submit results for Pod <%= @pod.number %>
+    Submit results for Pod
+    <%= @pod.number %>
   <% end %>
 
   <% if @result.errors.present? %>
@@ -13,6 +14,7 @@
   <% when SingleEliminationRound %>
     <%= f.select_with_label :type, Result::ELIMINATION_SELECTABLE_SUBYTPES %>
   <% end %>
+
   <%= f.select_with_label :tournament_participant_id, @pod.tournament_participants.map { |p| [p.name, p.id] }, include_blank: true %>
 
   <% content_for :footer do %>

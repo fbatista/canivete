@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 # Backend
-gem "rails", "~> 8.0.2"
+gem "rails", "~> 8.0.3"
 gem "bootsnap", require: false
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[windows jruby]
@@ -13,12 +13,12 @@ gem "thruster", require: false
 
 # Frontend
 gem "propshaft"
-gem "hotwire-rails"
 gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "tailwindcss-rails", "~> 4.3"
 gem "commonmarker"
+gem "reactionview", "~> 0.1.2"
 
 # Databases
 gem "activerecord-postgis-adapter"

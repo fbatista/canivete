@@ -1,6 +1,7 @@
 <%= modal_form_for [:organizer, @infraction.tournament, @infraction] do |f| %>
   <% content_for :title do %>
-    Record Infraction for <%= @infraction.player.name %>
+    Record Infraction for
+    <%= @infraction.player.name %>
   <% end %>
 
   <% if @infraction.errors.present? %>
@@ -12,11 +13,20 @@
 
   <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
     <% if @infraction.pod.present? %>
-      This infraction is associated with an issue that occurred in Pod #<%= @infraction.pod.number %> during <%= @infraction.pod.round.display_name %> of <%= @infraction.tournament.name %>.
+      This infraction is associated with an issue that occurred in Pod #
+      <%= @infraction.pod.number %>
+      during
+      <%= @infraction.pod.round.display_name %>
+      of
+      <%= @infraction.tournament.name %>
+      .
     <% else %>
-      This infraction is associated with an issue that occurred in <%= @infraction.tournament.name %>, but is not associated with a specific Round or Pod.
+      This infraction is associated with an issue that occurred in
+      <%= @infraction.tournament.name %>
+      , but is not associated with a specific Round or Pod.
     <% end %>
   </p>
+
   <%= f.select_with_label :kind, Infraction.kinds.keys.map { |k| [k.titleize, k] } %>
   <%= f.select_with_label :category, grouped_options_for_select(infraction_categories_grouped_by_kind, @infraction.category) %>
   <%= f.select_with_label :penalty, Infraction.penalties.keys.map { |p| [p.titleize, p] } %>

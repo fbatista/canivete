@@ -1,6 +1,7 @@
 <%= modal_form_for [:organizer,  @tournament_participant.tournament, @tournament_participant] do |f| %>
   <% content_for :title do %>
-    Add Player to <%= @tournament_participant.tournament.name %>
+    Add Player to
+    <%= @tournament_participant.tournament.name %>
   <% end %>
 
   <% if @tournament_participant.errors.present? %>
@@ -15,7 +16,6 @@
   <%= f.text_field_with_label :player_name, placeholder: "John Smith" %>
   <%= f.text_field_with_label :decklist, placeholder: "https://moxfield.com/xyz" %>
   <%= f.check_box_with_label :accepted_terms, label: {text: "Player has read and accepted event rules"} %>
-
 
   <% content_for :footer do %>
     <%= f.submit %>

@@ -1,4 +1,5 @@
-<%# Link to the "Previous" page
+<%#
+  Link to the "Previous" page
   - available local variables
     url:           url to the previous page
     current_page:  a page object for the currently displayed page
@@ -6,10 +7,23 @@
     per_page:      number of items to fetch per page
     remote:        data-remote
 -%>
+
 <% unless current_page.first? %>
   <%= link_to url, rel: 'prev', remote: remote, class: "flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" do %>
-    <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+    <svg
+      class="w-3.5 h-3.5 me-2 rtl:rotate-180"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 14 10"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M13 5H1m0 0 4 4M1 5l4-4"
+      />
     </svg>
     <%= t('views.pagination.previous').html_safe %>
   <% end %>

@@ -1,6 +1,7 @@
 <%= modal_form_for [@tournament_participant.tournament, @tournament_participant] do |f| %>
   <% content_for :title do %>
-    Are you sure you want to Sign up for <%= @tournament_participant.tournament.name %>
+    Are you sure you want to Sign up for
+    <%= @tournament_participant.tournament.name %>
   <% end %>
 
   <% if @tournament_participant.errors.present? %>

@@ -1,7 +1,18 @@
 <% if @ongoing.present? %>
-  <h1 class="mb-4 text-4xl flex items-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white col-span-full">
+  <h1
+    class="
+      mb-4 text-4xl flex items-center font-extrabold leading-none
+      tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white
+      col-span-full
+    "
+  >
     <div class="relative inline-flex items-center me-2">
-      <span class="absolute inline-flex h-3 w-3 rounded-full bg-red-500 opacity-75 animate-ping"></span>
+      <span
+        class="
+          absolute inline-flex h-3 w-3 rounded-full bg-red-500 opacity-75
+          animate-ping
+        "
+      ></span>
       <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
     </div>
     Your Ongoing tournaments
@@ -10,28 +21,70 @@
 <% end %>
 
 <div class="col-span-full">
-  <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+  <h1
+    class="
+      text-4xl font-extrabold leading-none tracking-tight text-gray-900
+      md:text-5xl lg:text-6xl dark:text-white
+    "
+  >
     <%= @title %>
   </h1>
   <% if params[:filter] == 'past' %>
-    <p class="my-4 text-lg text-gray-500">Here you can find past commander events. Enjoy your trip down memory lane!</p>
-    <p class="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">Gathered enough information to win your next tournament? Find upcoming events by clicking the link below!</p>
+    <p class="my-4 text-lg text-gray-500">
+      Here you can find past commander events. Enjoy your trip down memory lane!
+    </p>
+    <p class="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
+      Gathered enough information to win your next tournament? Find upcoming
+      events by clicking the link below!
+    </p>
     <%= link_to url_for(filter: nil), class: "inline-flex items-center text-lg text-blue-600 dark:text-blue-500 hover:underline" do %>
       Check out upcoming events
-      <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      <svg
+        class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 14 10"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M1 5h12m0 0L9 1m4 4L9 9"
+        />
       </svg>
     <% end %>
   <% else %>
-    <p class="my-4 text-lg text-gray-500">Here you can find upcoming commander events. Hope you enjoy them and have a great time!</p>
-    <p class="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">Looking for records of past events? Check them out by clicking the link below!</p>
+    <p class="my-4 text-lg text-gray-500">
+      Here you can find upcoming commander events. Hope you enjoy them and have
+      a great time!
+    </p>
+    <p class="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
+      Looking for records of past events? Check them out by clicking the link
+      below!
+    </p>
     <%= link_to url_for(filter: 'past'), class: "inline-flex items-center text-lg text-blue-600 dark:text-blue-500 hover:underline" do %>
       Check out past events
-      <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      <svg
+        class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 14 10"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M1 5h12m0 0L9 1m4 4L9 9"
+        />
       </svg>
     <% end %>
   <% end %>
 </div>
+
 <%= render @tournaments %>
+
 <%= paginate @tournaments %>

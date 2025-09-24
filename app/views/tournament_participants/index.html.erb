@@ -1,12 +1,25 @@
 <% content_for :title do %>
-  <%= @tournament.name %> Participants
+  <%= @tournament.name %>
+  Participants
 <% end %>
 
 <% content_for :close do %>
   <% if @tournament.rounds.present? %>
     <%= link_to [@tournament, @tournament.rounds.published.max_by(&:number).becomes(Round)], class:"text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" do %>
-      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+      <svg
+        class="w-3 h-3"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 14 14"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+        />
       </svg>
       <span class="sr-only">Close modal</span>
     <% end %>
@@ -14,44 +27,138 @@
 <% end %>
 
 <% if @tournament.tournament_participants.present? %>
-  <table class="col-span-full text-md -m-4 md:-m-5 text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+  <table
+    class="
+      col-span-full text-md -m-4 md:-m-5 text-left rtl:text-right
+      text-gray-500 dark:text-gray-400
+    "
+  >
+    <thead
+      class="
+        text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700
+        dark:text-gray-400
+      "
+    >
       <tr>
-        <th scope="col" class="px-5 py-3 text-center" data-tooltip-target="tooltip-rank">Rank</th>
+        <th
+          scope="col"
+          class="px-5 py-3 text-center"
+          data-tooltip-target="tooltip-rank"
+        >
+          Rank
+        </th>
         <th scope="col" class="px-5 py-3">Player</th>
-        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mp">MP</th>
-        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mwp">MW%</th>
-        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">OAMW%</th>
-        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">OAMP</th>
-        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">W-L-D</th>
+        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mp">
+          MP
+        </th>
+        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mwp">
+          MW%
+        </th>
+        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">
+          OAMW%
+        </th>
+        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">
+          OAMP
+        </th>
+        <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">
+          W-L-D
+        </th>
 
-        <div id="tooltip-rank" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          Player rank is calculated according to the tiebreakers you can see in this table:<br/>
+        <div
+          id="tooltip-rank"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          Player rank is calculated according to the tiebreakers you can see in
+          this table:
+          <br>
           MP > MW% > OAMW% > OAMP
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div id="tooltip-mp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          MP means Match Points:<br/>
-          <%= @tournament.class::POINTS_PER_WIN %> per win, <%= @tournament.class::POINTS_PER_DRAW %> per draw, 0 per loss.
+        <div
+          id="tooltip-mp"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          MP means Match Points:
+          <br>
+          <%= @tournament.class::POINTS_PER_WIN %>
+          per win,
+          <%= @tournament.class::POINTS_PER_DRAW %>
+          per draw, 0 per loss.
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div id="tooltip-mwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          MW% means Match Win %:<br/>
-          Acquired Match Points divided by Attainable Match Points (with 100% Match wins)
+        <div
+          id="tooltip-mwp"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          MW% means Match Win %:
+          <br>
+          Acquired Match Points divided by Attainable Match Points (with 100%
+          Match wins)
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div id="tooltip-oamwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          OAMW% means Opponent's Average Match Win %:<br/>
-          the Average of your Opponent's Match Win %, with a minimum contribution cap of <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>%
+        <div
+          id="tooltip-oamwp"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          OAMW% means Opponent's Average Match Win %:
+          <br>
+          the Average of your Opponent's Match Win %, with a minimum
+          contribution cap of
+          <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>
+          %
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div id="tooltip-oamp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          OAMP means Opponent's Average Match Points:<br/>
+        <div
+          id="tooltip-oamp"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          OAMP means Opponent's Average Match Points:
+          <br>
           the Average of your Opponent's Match Points.
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div id="tooltip-wld" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          W-L-D is the tournament track record expressed in:<br/>
+        <div
+          id="tooltip-wld"
+          role="tooltip"
+          class="
+            absolute z-10 invisible inline-block px-3 py-2 text-sm
+            font-medium text-white transition-opacity duration-300
+            bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+            dark:bg-gray-700
+          "
+        >
+          W-L-D is the tournament track record expressed in:
+          <br>
           Wins - Losses - Draws
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>

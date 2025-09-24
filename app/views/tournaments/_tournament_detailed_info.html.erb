@@ -1,23 +1,54 @@
 <div class="col-span-full">
   <%= image_tag @tournament.cover, class: "w-full object-cover aspect-[16/9]" if @tournament.cover.attached? %>
 </div>
-<div class="col-span-full py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-  <div class="grid grid-cols-1 gap-4 px-4 my-4 md:grid-cols-2 xl:grid-cols-6">
 
+<div
+  class="
+    col-span-full py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16
+    lg:px-12
+  "
+>
+  <div class="grid grid-cols-1 gap-4 px-4 my-4 md:grid-cols-2 xl:grid-cols-6">
     <div class="<%= @tournament.start_time.month != @tournament.end_time.month ? 'col-span-4' : 'col-span-2 col-start-2' %> p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">When</h2>
+      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+        When
+      </h2>
+
       <p class="mb-4 text-xl text-gray-500 dark:text-gray-400">
-        <span class="font-bold">From:</span> <time data-controller="date" data-date-timestamp-value="<%= @tournament.start_time.iso8601 %>"></time>
+        <span class="font-bold">From:</span>
+        <time
+          data-controller="date"
+          data-date-timestamp-value="<%= @tournament.start_time.iso8601 %>"
+        ></time>
       </p>
+
       <p class="mb-4 text-xl text-gray-500 dark:text-gray-400">
-        <span class="font-bold">To:</span> <time data-controller="date" data-date-timestamp-value="<%= @tournament.end_time.iso8601 %>"></time>
+        <span class="font-bold">To:</span>
+        <time
+          data-controller="date"
+          data-date-timestamp-value="<%= @tournament.end_time.iso8601 %>"
+        ></time>
       </p>
-      <div id="datepicker-inline" data-controller="date-calendar" data-date-calendar-start-time-value="<%= @tournament.start_time.iso8601 %>" data-date-calendar-end-time-value="<%= @tournament.end_time.iso8601 %>"></div>
+
+      <div
+        id="datepicker-inline"
+        data-controller="date-calendar"
+        data-date-calendar-start-time-value="<%= @tournament.start_time.iso8601 %>"
+        data-date-calendar-end-time-value="<%= @tournament.end_time.iso8601 %>"
+      ></div>
     </div>
 
     <% if @tournament.prizes.present? %>
-      <div class="col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Prizes</h2>
+      <div
+        class="
+          col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow
+          hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700
+          dark:hover:bg-gray-700
+        "
+      >
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+          Prizes
+        </h2>
         <div class="markdown text-gray-500 dark:text-gray-400 text-left">
           <%= markdown(@tournament.prizes).html_safe %>
         </div>
@@ -25,48 +56,116 @@
     <% end %>
 
     <% if @tournament.address.present? %>
-      <div class="col-start-2 col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Where</h2>
-        <h3 class="mb-2 font-medium text-gray-900 dark:text-white"><%= @tournament.address.titleize %></h3>
+      <div
+        class="
+          col-start-2 col-span-4 p-6 bg-white border border-gray-200
+          rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800
+          dark:border-gray-700 dark:hover:bg-gray-700
+        "
+      >
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+          Where
+        </h2>
+
+        <h3 class="mb-2 font-medium text-gray-900 dark:text-white">
+          <%= @tournament.address.titleize %>
+        </h3>
+
         <iframe
+          title="Tournament Location"
           class="rounded-md"
-          width="100%" height="400"
-          frameborder="0" scrolling="no"
-          marginheight="0" marginwidth="0"
-          src="<%= map_embed_url(@tournament) %>">
-        </iframe>
+          width="100%"
+          height="400"
+          frameborder="0"
+          scrolling="no"
+          marginheight="0"
+          marginwidth="0"
+          src="<%= map_embed_url(@tournament) %>"
+        ></iframe>
       </div>
     <% end %>
 
     <% if @tournament.schedule.present? %>
-      <div class="col-start-1 col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Schedule</h2>
+      <div
+        class="
+          col-start-1 col-span-2 p-6 bg-white border border-gray-200
+          rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800
+          dark:border-gray-700 dark:hover:bg-gray-700
+        "
+      >
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+          Schedule
+        </h2>
         <div class="markdown mb-4 text-gray-500 dark:text-gray-400">
           <%= markdown(@tournament.schedule).html_safe %>
         </div>
       </div>
     <% end %>
 
-    <div class="col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <div
+      class="
+        col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow
+        hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700
+        dark:hover:bg-gray-700
+      "
+    >
       <% if (@tournament.price.presence || 0).zero? %>
-        <h2 class="mb-2 text-3xl font-medium text-gray-900 dark:text-white">Free Entry</h2>
+        <h2 class="mb-2 text-3xl font-medium text-gray-900 dark:text-white">
+          Free Entry
+        </h2>
       <% else %>
-        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Price</h2>
-        <p class="mb-4 text-3xl text-gray-500 dark:text-gray-400"><%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %></p>
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+          Price
+        </h2>
+        <p class="mb-4 text-3xl text-gray-500 dark:text-gray-400">
+          <%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %>
+        </p>
       <% end %>
     </div>
 
-    <div class="col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Participants</h2>
-      <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Minimum:</span> <%= @tournament.participants_range&.min %></p>
-      <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Maximum:</span> <%= (@tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : @tournament.participants_range&.max %></p>
-      <p class="mb-4 text-gray-500 dark:text-gray-400"><span class="font-bold">Currently registered:</span> <%= @tournament.tournament_participants_count %></p>
+    <div
+      class="
+        col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow
+        hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700
+        dark:hover:bg-gray-700
+      "
+    >
+      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
+        Participants
+      </h2>
+
+      <p class="mb-4 text-gray-500 dark:text-gray-400">
+        <span class="font-bold">Minimum:</span>
+        <%= @tournament.participants_range&.min %>
+      </p>
+
+      <p class="mb-4 text-gray-500 dark:text-gray-400">
+        <span class="font-bold">Maximum:</span>
+        <%= (@tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : @tournament.participants_range&.max %>
+      </p>
+
+      <p class="mb-4 text-gray-500 dark:text-gray-400">
+        <span class="font-bold">Currently registered:</span>
+        <%= @tournament.tournament_participants_count %>
+      </p>
     </div>
 
     <% if @tournament.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
-        <h3 class="mb-8 text-xl font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Rules:</h3>
-        <p class="text-sm font-normal text-gray-500 dark:text-gray-400 whitespace-pre-line">
+        <h3
+          class="
+            mb-8 text-xl font-normal text-gray-500 lg:text-xl sm:px-16
+            xl:px-48 dark:text-gray-400
+          "
+        >
+          Rules:
+        </h3>
+        <p
+          class="
+            text-sm font-normal text-gray-500 dark:text-gray-400
+            whitespace-pre-line
+          "
+        >
           <%= @tournament.rules %>
         </p>
       </div>
@@ -74,8 +173,20 @@
 
     <% if @tournament.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
-        <h3 class="mb-8 text-xl font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Additional info:</h3>
-        <p class="text-sm font-normal text-gray-500 dark:text-gray-400 whitespace-pre-line">
+        <h3
+          class="
+            mb-8 text-xl font-normal text-gray-500 lg:text-xl sm:px-16
+            xl:px-48 dark:text-gray-400
+          "
+        >
+          Additional info:
+        </h3>
+        <p
+          class="
+            text-sm font-normal text-gray-500 dark:text-gray-400
+            whitespace-pre-line
+          "
+        >
           <%= @tournament.description %>
         </p>
       </div>

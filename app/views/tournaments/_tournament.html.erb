@@ -1,37 +1,68 @@
-<div class="space-y-6 flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+<div
+  class="
+    space-y-6 flex flex-col bg-white border border-gray-200 rounded-lg
+    shadow-sm dark:border-gray-700 dark:bg-gray-800
+  "
+>
   <% if tournament.cover.attached? %>
     <%= render partial: "tournament_image", layout: "link_layout", locals: { tournament: tournament } %>
   <% else %>
-    <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded-t-lg dark:bg-gray-700">
-      <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-        <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z"/>
-        <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+    <div
+      class="
+        flex items-center justify-center h-48 mb-4 bg-gray-300 rounded-t-lg
+        dark:bg-gray-700
+      "
+    >
+      <svg
+        class="w-10 h-10 text-gray-200 dark:text-gray-600"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 16 20"
+      >
+        <path
+          d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z"
+        />
+        <path
+          d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"
+        />
       </svg>
     </div>
   <% end %>
+
   <div class="p-5 grow">
     <%= render "tournament_small_header", tournament: tournament %>
     <% if tournament.ongoing? %>
-      <div class="mb-1 text-base font-medium text-green-700 dark:text-green-500">In progress</div>
+      <div class="mb-1 text-base font-medium text-green-700 dark:text-green-500">
+        In progress
+      </div>
       <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-        <div class="bg-green-600 h-2.5 rounded-full dark:bg-green-500" style="width: <%= tournament.progress_percent %>%"></div>
+        <div
+          class="bg-green-600 h-2.5 rounded-full dark:bg-green-500"
+          style="width: <%= tournament.progress_percent %>%"
+        ></div>
       </div>
     <% end %>
+
     <div class="markdown mb-3 font-normal text-gray-700 dark:text-gray-400">
       <%= markdown(tournament.prizes).html_safe %>
     </div>
+
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
       <span class="inline-flex items-center">
-        <%= icon('calendar', class: "me-2") %><%= time_tag tournament.start_time %>
+        <%= icon('calendar', class: "me-2") %>
+        <%= time_tag tournament.start_time %>
       </span>
-      <br/>
+      <br>
       <% if (tournament.price || 0).zero? %>
         Free entry
       <% else %>
-        Price: <%= number_to_currency(tournament.price, number_to_currency_options(tournament.currency)) %>
+        Price:
+        <%= number_to_currency(tournament.price, number_to_currency_options(tournament.currency)) %>
       <% end %>
     </p>
   </div>
+
   <div class="p-5 gap-2 flex items-center justify-start">
     <%= render "tournament_actions_list", tournament: tournament %>
   </div>

@@ -1,12 +1,25 @@
 <% content_for :title do %>
-  <%= @tournament.name %> Participants
+  <%= @tournament.name %>
+  Participants
 <% end %>
 
 <% content_for :close do %>
   <% if @tournament.rounds.present? %>
     <%= link_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)], class:"text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" do %>
-      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+      <svg
+        class="w-3 h-3"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 14 14"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+        />
       </svg>
       <span class="sr-only">Close modal</span>
     <% end %>
@@ -18,13 +31,33 @@
     <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
       <li class="inline-flex items-center">
         <%= link_to root_url, class:"inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white" do %>
-          <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+          <svg
+            class="w-5 h-5 mr-2.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+            ></path>
+          </svg>
           Home
         <% end %>
       </li>
       <li>
         <div class="flex items-center">
-          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <svg
+            class="w-6 h-6 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
           <%= link_to [:organizer, :tournaments], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
             Tournaments
           <% end %>
@@ -32,7 +65,18 @@
       </li>
       <li>
         <div class="flex items-center">
-          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <svg
+            class="w-6 h-6 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
           <%= link_to [:organizer, @tournament], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
             <%= @tournament.name %>
           <% end %>
@@ -40,16 +84,37 @@
       </li>
       <li>
         <div class="flex items-center">
-          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-          <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Players</span>
+          <svg
+            class="w-6 h-6 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          <span
+            class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500"
+            aria-current="page"
+          >
+            Players
+          </span>
         </div>
       </li>
     </ol>
   </nav>
+
   <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-    <%= @tournament.name %> Participants (<%= @tournament.tournament_participants_count %>)
+    <%= @tournament.name %>
+    Participants (
+    <%= @tournament.tournament_participants_count %>
+    )
     <%= link_to [:new, :organizer, @tournament, :tournament_participant], data: {turbo_frame: "modal"}, class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
-      <%= icon("plus", class: "me-2") %> Add player
+      <%= icon("plus", class: "me-2") %>
+      Add player
     <% end %>
   </h1>
 
@@ -58,11 +123,29 @@
     <div class="relative mt-1">
       <%= form_tag [:organizer, @tournament, :tournament_participants], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
         <%= hidden_field_tag :layout, "application" %>
-        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+        <div
+          class="
+            absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3
+            pointer-events-none
+          "
+        >
+          <svg
+            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
           </svg>
         </div>
+
         <%= text_field_tag :query, params[:query], placeholder: "Search for players", class: "block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
       <% end %>
     </div>
@@ -70,56 +153,162 @@
 <% end %>
 
 <% if @tournament_participants.present? %>
-  <table class="col-span-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+  <table
+    class="
+      col-span-full text-md text-left rtl:text-right text-gray-500
+      dark:text-gray-400
+    "
+  >
     <% if @layout_mode == "modal" %>
-      <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+      <caption
+        class="
+          p-5 text-lg font-semibold text-left rtl:text-right text-gray-900
+          bg-white dark:text-white dark:bg-gray-800
+        "
+      >
         Tournament Participants
         <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-          Here you can find all <span class="font-bold" id="<%= dom_id(@tournament, :participants_count)%>"><%= @tournament.tournament_participants_count %></span> tournament participants.
-          On the bottom of the table you will find a button to export this table for printing / sharing.
+          Here you can find all
+          <span
+            class="font-bold"
+            id="<%= dom_id(@tournament, :participants_count) %>"
+          >
+            <%= @tournament.tournament_participants_count %>
+          </span>
+          tournament participants. On the bottom of the table you will find a
+          button to export this table for printing / sharing.
         </p>
       </caption>
     <% end %>
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <thead
+      class="
+        text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700
+        dark:text-gray-400
+      "
+    >
       <tr>
         <% case @tournament.state %>
         <% when 'registration_open', 'registration_closed' %>
           <th scope="col" class="px-5 py-3">Name</th>
         <% else %>
-          <th scope="col" class="px-5 py-3 text-center" data-tooltip-target="tooltip-rank">Rank</th>
+          <th
+            scope="col"
+            class="px-5 py-3 text-center"
+            data-tooltip-target="tooltip-rank"
+          >
+            Rank
+          </th>
           <th scope="col" class="px-5 py-3">Player</th>
-          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mp">MP</th>
-          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mwp">MW%</th>
-          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">OAMW%</th>
-          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">OAMP</th>
-          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">W-L-D</th>
-          <div id="tooltip-rank" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            Player rank is calculated according to the tiebreakers you can see in this table:<br/>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mp">
+            MP
+          </th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-mwp">
+            MW%
+          </th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamwp">
+            OAMW%
+          </th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-oamp">
+            OAMP
+          </th>
+          <th scope="col" class="px-5 py-3" data-tooltip-target="tooltip-wld">
+            W-L-D
+          </th>
+          <div
+            id="tooltip-rank"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            Player rank is calculated according to the tiebreakers you can see
+            in this table:
+            <br>
             MP > MW% > OAMW% > OAMP
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <div id="tooltip-mp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            MP means Match Points:<br/>
-            <%= @tournament.class::POINTS_PER_WIN %> per win, <%= @tournament.class::POINTS_PER_DRAW %> per draw, 0 per loss.
+          <div
+            id="tooltip-mp"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            MP means Match Points:
+            <br>
+            <%= @tournament.class::POINTS_PER_WIN %>
+            per win,
+            <%= @tournament.class::POINTS_PER_DRAW %>
+            per draw, 0 per loss.
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <div id="tooltip-mwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            MW% means Match Win %:<br/>
-            Acquired Match Points divided by Attainable Match Points (with 100% Match wins)
+          <div
+            id="tooltip-mwp"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            MW% means Match Win %:
+            <br>
+            Acquired Match Points divided by Attainable Match Points (with 100%
+            Match wins)
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <div id="tooltip-oamwp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            OAMW% means Opponent's Average Match Win %:<br/>
-            the Average of your Opponent's Match Win %, with a minimum contribution cap of <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>%
+          <div
+            id="tooltip-oamwp"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            OAMW% means Opponent's Average Match Win %:
+            <br>
+            the Average of your Opponent's Match Win %, with a minimum
+            contribution cap of
+            <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>
+            %
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <div id="tooltip-oamp" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            OAMP means Opponent's Average Match Points:<br/>
+          <div
+            id="tooltip-oamp"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            OAMP means Opponent's Average Match Points:
+            <br>
             the Average of your Opponent's Match Points.
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
-          <div id="tooltip-wld" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            W-L-D is the tournament track record expressed in:<br/>
+          <div
+            id="tooltip-wld"
+            role="tooltip"
+            class="
+              absolute z-10 invisible inline-block px-3 py-2 text-sm
+              font-medium text-white transition-opacity duration-300
+              bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip
+              dark:bg-gray-700
+            "
+          >
+            W-L-D is the tournament track record expressed in:
+            <br>
             Wins - Losses - Draws
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>

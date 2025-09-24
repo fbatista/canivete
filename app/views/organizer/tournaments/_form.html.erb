@@ -1,7 +1,8 @@
 <%= modal_form_for [:organizer, @tournament] do |f| %>
   <% content_for :title do %>
     <% if @tournament.persisted? %>
-      Edit <%= @tournament.name %>
+      Edit
+      <%= @tournament.name %>
     <% else %>
       New Tournament
     <% end %>
