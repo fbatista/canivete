@@ -43,10 +43,10 @@ module Organizer
     end
 
     def result_params
-      params.require(:result).permit(
+      params.expect(result: [
         :type,
         :tournament_participant_id
-      )
+      ])
     end
   end
 end

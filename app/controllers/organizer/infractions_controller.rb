@@ -49,7 +49,7 @@ module Organizer
     private
 
     def infraction_params
-      params.require(:infraction).permit(:player_id, :pod_id, :kind, :category, :description, :penalty)
+      params.expect(infraction: [ :player_id, :pod_id, :kind, :category, :description, :penalty ])
     end
 
     def load_player

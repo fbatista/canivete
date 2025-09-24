@@ -1,0 +1,45 @@
+# Tournament participants fixtures for connecting players to tournaments
+
+# Small tournament participants (4 players)
+small_tournament_participant_one:
+  tournament: small_tournament
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_tournament_participant_two:
+  tournament: small_tournament
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_tournament_participant_three:
+  tournament: small_tournament
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_tournament_participant_four:
+  tournament: small_tournament
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
+
+# Medium tournament participants (6 players) - we only have 4 players defined so reuse them
+medium_tournament_participant_one:
+  tournament: medium_tournament
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_tournament_participant_two:
+  tournament: medium_tournament
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false

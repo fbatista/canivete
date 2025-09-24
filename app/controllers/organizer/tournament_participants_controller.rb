@@ -75,14 +75,14 @@ module Organizer
     end
 
     def tournament_participant_params
-      params.require(:tournament_participant).permit(
+      params.expect(tournament_participant: [
         :dropped,
         :checked_in,
         :paid,
         :player_email,
         :player_name,
         :decklist
-      )
+      ])
     end
   end
 end

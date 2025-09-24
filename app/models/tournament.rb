@@ -170,7 +170,7 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def progress_percent
-    (rounds.count.to_f / (number_of_swiss_rounds + number_of_single_elimination_rounds)) * 100
+    (rounds.finished.count.to_f / (number_of_swiss_rounds + number_of_single_elimination_rounds)) * 100
   end
 
   def number_of_swiss_rounds
@@ -178,7 +178,7 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def number_of_single_elimination_rounds
-    rounds_info.dig(:top, :pods)&.size
+    rounds_info.dig(:top, :pods)&.size || 0
   end
 
   def single_elimination_round_name(round_number)

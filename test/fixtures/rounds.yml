@@ -1,0 +1,28 @@
+# Rounds fixture for testing result relationships
+
+# Swiss round for small tournament
+small_tournament_round_1:
+  tournament: small_tournament
+  number: 1
+  type: "SwissRound"
+  started_at: <%= 1.hour.ago %>
+  finished_at: <%= 30.minutes.ago %>
+  published: true
+
+# Swiss round for medium tournament
+medium_tournament_round_1:
+  tournament: medium_tournament
+  number: 1
+  type: "SwissRound"
+  started_at: <%= 2.hours.ago %>
+  finished_at: <%= 1.hour.ago %>
+  published: true
+
+# Ongoing round (not finished) for testing
+ongoing_round:
+  tournament: standard_tournament
+  number: 1
+  type: "SwissRound"
+  started_at: <%= 1.hour.ago %>
+  finished_at: null
+  published: false

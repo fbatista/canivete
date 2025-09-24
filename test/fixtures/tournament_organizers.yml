@@ -1,0 +1,4 @@
+# Tournament organizers fixture for testing
+standard_organizer:
+  user: organizer_user
+  default_currency: 0

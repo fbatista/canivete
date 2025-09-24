@@ -1,0 +1,37 @@
+# Results fixture for testing different result types and their point calculations
+
+# Win result - should award 7 points
+win_result:
+  tournament_participant: small_tournament_participant_one
+  round: small_tournament_round_1
+  type: "Win"
+
+# Loss result - should award 0 points
+loss_result:
+  tournament_participant: small_tournament_participant_two
+  round: small_tournament_round_1
+  type: "Loss"
+
+# Draw result - should award 1 point
+draw_result:
+  tournament_participant: small_tournament_participant_three
+  round: small_tournament_round_1
+  type: "Draw"
+
+# Penalty result - should award 0 points (inherits from Loss)
+penalty_result:
+  tournament_participant: small_tournament_participant_four
+  round: small_tournament_round_1
+  type: "Penalty"
+
+# Advance result for single elimination
+advance_result:
+  tournament_participant: medium_tournament_participant_one
+  round: medium_tournament_round_1
+  type: "Advance"
+
+# Eliminated result for single elimination
+eliminated_result:
+  tournament_participant: medium_tournament_participant_two
+  round: medium_tournament_round_1
+  type: "Eliminated"

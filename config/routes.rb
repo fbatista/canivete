@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
+  resources :registrations, only: %i[new create]
 
   resources :tournaments, only: %i[index show] do
     resources :rounds do

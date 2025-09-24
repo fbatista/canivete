@@ -1,0 +1,23 @@
+<%= modal_form_for @user, url: registrations_path do |f| %>
+  <% content_for :title do %>
+    Sign up
+  <% end %>
+
+  <% if @user.errors.present? %>
+    <%= safe_join(@user.errors.full_messages, raw("<br>")) %>
+  <% end %>
+
+  <%= f.text_field_with_label :name, required: true, autofocus: true, placeholder: "Enter your full name" %>
+  <%= f.email_field_with_label :email_address, required: true, autocomplete: "username", placeholder: "Enter your email address" %>
+  <%= f.password_field_with_label :password, required: true, autocomplete: "new-password", placeholder: "Enter your password", minlength: 8 %>
+  <%= f.password_field_with_label :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm your password", minlength: 8 %>
+
+  <%= f.check_box_with_label :organizer %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Sign up" %>
+    <%= link_to root_url, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

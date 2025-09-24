@@ -19,6 +19,7 @@ gem "stimulus-rails"
 gem "tailwindcss-rails", "~> 4.3"
 gem "commonmarker"
 gem "reactionview", "~> 0.1.2"
+gem "herb", force_ruby_platform: RUBY_PLATFORM.include?("darwin")
 
 # Databases
 gem "activerecord-postgis-adapter"
@@ -39,10 +40,10 @@ end
 
 group :development do
   gem "web-console"
-  gem "herb"
 end
 
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
+  gem "webmock"
 end

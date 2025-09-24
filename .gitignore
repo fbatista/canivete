@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore claude plans
+/.claude/plans
+
 # Ignore all environment files.
 /.env*
 

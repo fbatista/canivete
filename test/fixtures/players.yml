@@ -1,0 +1,16 @@
+# Players fixture for testing
+player_one:
+  user: player_one
+  key: "player_one"
+
+player_two:
+  user: player_two
+  key: "player_two"
+
+player_three:
+  user: player_three
+  key: "player_three"
+
+player_four:
+  user: player_four
+  key: "player_four"

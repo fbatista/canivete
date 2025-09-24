@@ -34,7 +34,7 @@ class RoundsController < ApplicationController
   private
 
   def round_params
-    params.require(:round).permit(:action)
+    params.expect(round: [ :action ])
   end
 
   def load_tournament

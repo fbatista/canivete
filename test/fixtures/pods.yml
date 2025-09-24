@@ -1,0 +1,13 @@
+# Pods fixture for testing job functionality
+
+small_tournament_pod_1:
+  round: small_tournament_round_1
+  number: 1
+  size: 4
+  extra_time: 0
+
+medium_tournament_pod_1:
+  round: medium_tournament_round_1
+  number: 1
+  size: 4
+  extra_time: 0

@@ -53,7 +53,7 @@ module Organizer
     private
 
     def tournament_params
-      params.require(:tournament).permit(
+      params.expect(tournament: [
         :name,
         :state,
         :description,
@@ -68,7 +68,7 @@ module Organizer
         :price,
         :currency,
         :cover
-      )
+      ])
     end
   end
 end

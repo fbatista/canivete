@@ -9,6 +9,7 @@ class Round < ApplicationRecord
   has_many :results, dependent: :destroy
 
   scope :published, -> { where(published: true) }
+  scope :finished, -> { where.not(finished_at: nil) }
 
   after_create :create_pods
   after_update :round_finished

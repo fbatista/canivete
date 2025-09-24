@@ -74,20 +74,14 @@
             <% end %>
           </div>
           <div class="flex justify-between items-center lg:order-2">
-            <button
-              data-controller="dark-mode"
-              data-action="click->dark-mode#toggle"
-              type="button"
-              class="
-                text-xl me-2 text-gray-500 dark:text-gray-400
-                hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none
-                focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700
-                rounded-lg p-2.5 flex items-center
-              "
-            >
+            <%= button_tag(
+              type: "button",
+              class: "text-xl me-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg p-2.5 flex items-center",
+              data: { controller: "dark-mode", action: "click->dark-mode#toggle" }
+              ) do %>
               <%= icon('moon', class: 'dark:hidden') %>
               <%= icon('sun', class: 'hidden dark:inline') %>
-            </button>
+            <% end %>
 
             <% if current_user&.organizer? %>
               <%= link_to organizer_path_builder, class: "me-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 flex items-center" do %>
@@ -105,7 +99,7 @@
                       after:bg-white after:border-gray-300 after:border
                       after:rounded-full after:h-5 after:w-5
                       after:transition-all dark:border-gray-600
-                      peer-checked:bg-blue-600
+                      peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600
                     "
                   ></div>
                   <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Organizer mode</span>
@@ -116,7 +110,7 @@
             <% if authenticated? %>
               <%= link_to 'Logout', session_path(Current.session), data: { "turbo-method": :delete }, class: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5" %>
             <% else %>
-              <%= link_to new_session_path, data: {turbo_frame: "modal"}, class: "inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" do %>
+              <%= link_to new_session_path, data: { turbo_frame: "modal" }, class: "inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" do %>
                 Log in
                 <%= icon("arrow-right", class:"ml-2") %>
               <% end %>

@@ -78,7 +78,7 @@
           this table:
           <br>
           MP > MW% > OAMW% > OAMP
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
         <div
           id="tooltip-mp"
@@ -96,7 +96,7 @@
           per win,
           <%= @tournament.class::POINTS_PER_DRAW %>
           per draw, 0 per loss.
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
         <div
           id="tooltip-mwp"
@@ -112,7 +112,7 @@
           <br>
           Acquired Match Points divided by Attainable Match Points (with 100%
           Match wins)
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
         <div
           id="tooltip-oamwp"
@@ -130,7 +130,7 @@
           contribution cap of
           <%= ((@tournament.class::POINTS_PER_DRAW / @tournament.class::POINTS_PER_WIN.to_f) * 100).round(2) %>
           %
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
         <div
           id="tooltip-oamp"
@@ -145,7 +145,7 @@
           OAMP means Opponent's Average Match Points:
           <br>
           the Average of your Opponent's Match Points.
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
         <div
           id="tooltip-wld"
@@ -160,7 +160,7 @@
           W-L-D is the tournament track record expressed in:
           <br>
           Wins - Losses - Draws
-          <div class="tooltip-arrow" data-popper-arrow></div>
+          <div class="tooltip-arrow" data-popper-arrow="true"></div>
         </div>
       </tr>
     </thead>

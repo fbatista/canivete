@@ -1,11 +1,61 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Tournament fixtures for testing different player count thresholds and states
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+# 4 players: 1 swiss round, no top cut - boundary testing
+small_tournament:
+  name: "Small Tournament"
+  slug: "small-tournament"
+  tournament_organizer: standard_organizer
+  state: 0  # draft
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 4
+
+# 6 players: 2 swiss rounds, top 4 - boundary testing (6 is first player count with 2 rounds)
+medium_tournament:
+  name: "Medium Tournament"
+  slug: "medium-tournament"
+  tournament_organizer: standard_organizer
+  state: 1  # registration_open
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 6
+
+# 16 players: 2 swiss rounds, top 4 - boundary testing (16 is last player count with top 4)
+standard_tournament:
+  name: "Standard Tournament"
+  slug: "standard-tournament"
+  tournament_organizer: standard_organizer
+  state: 2  # registration_closed
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 16
+
+# 17 players: 3 swiss rounds, top 7 - boundary testing (17 is first player count with top 7)
+large_tournament:
+  name: "Large Tournament"
+  slug: "large-tournament"
+  tournament_organizer: standard_organizer
+  state: 3  # swiss
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 17
+
+# 5 players: 1 swiss round, no top cut - boundary testing (5 is last player count with 1 round)
+boundary_five_tournament:
+  name: "Boundary Five Tournament"
+  slug: "boundary-five-tournament"
+  tournament_organizer: standard_organizer
+  state: 4  # single_elimination
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 5
+
+# Finished tournament for testing completed state
+finished_tournament:
+  name: "Finished Tournament"
+  slug: "finished-tournament"
+  tournament_organizer: standard_organizer
+  state: 5  # finished
+  start_time: <%= 1.week.ago %>
+  end_time: <%= 3.days.ago %>
+  tournament_participants_count: 4

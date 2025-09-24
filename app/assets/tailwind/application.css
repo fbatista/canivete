@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.markdown {
+  @apply py-3;
+
+  & p {
+    @apply mb-4;
+  }
+  & li {
+    @apply ml-2 mb-2;
+  }
+}

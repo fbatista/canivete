@@ -22,7 +22,9 @@ module Tournaments
     private
 
     def geocode_address(address)
-      request_openstreet(address)&.first&.with_indifferent_access => { lat:, lon: }
+      response = request_openstreet(address)&.first&.with_indifferent_access
+      return nil unless response
+      response => { lat:, lon: }
       return nil unless lat && lon
 
       RGeo::Geographic.spherical_factory(srid: 4326).point(

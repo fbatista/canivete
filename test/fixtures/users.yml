@@ -1,0 +1,25 @@
+# Users fixture for testing
+organizer_user:
+  name: "Tournament Organizer"
+  email_address: "organizer@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_one:
+  name: "Player One"
+  email_address: "player1@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_two:
+  name: "Player Two"
+  email_address: "player2@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_three:
+  name: "Player Three"
+  email_address: "player3@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_four:
+  name: "Player Four"
+  email_address: "player4@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"

@@ -54,10 +54,10 @@ class TournamentParticipantsController < ApplicationController
   private
 
   def tournament_participant_params
-    params.require(:tournament_participant).permit(
+    params.expect(tournament_participant: [
       :accepted_terms,
       :decklist
-    )
+    ])
   end
 
   def load_tournament

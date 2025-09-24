@@ -1,0 +1,33 @@
+# Seatings fixture to connect pods and tournament participants
+
+# Small tournament pod seatings
+small_pod_seat_1:
+  pod: small_tournament_pod_1
+  tournament_participant: small_tournament_participant_one
+  order: 1
+
+small_pod_seat_2:
+  pod: small_tournament_pod_1
+  tournament_participant: small_tournament_participant_two
+  order: 2
+
+small_pod_seat_3:
+  pod: small_tournament_pod_1
+  tournament_participant: small_tournament_participant_three
+  order: 3
+
+small_pod_seat_4:
+  pod: small_tournament_pod_1
+  tournament_participant: small_tournament_participant_four
+  order: 4
+
+# Medium tournament pod seatings
+medium_pod_seat_1:
+  pod: medium_tournament_pod_1
+  tournament_participant: medium_tournament_participant_one
+  order: 1
+
+medium_pod_seat_2:
+  pod: medium_tournament_pod_1
+  tournament_participant: medium_tournament_participant_two
+  order: 2
