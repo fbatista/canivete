@@ -6,8 +6,8 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
 
-  after_create :initialize_player, if: -> { !organizer? }
-  after_create :initialize_organizer, if: -> { organizer? }
+  after_create :initialize_player, if: -> { !organizer }
+  after_create :initialize_organizer, if: -> { organizer }
   after_update :update_key, if: -> { email_address_previously_changed? || name_previously_changed? }
 
   has_one :player, dependent: :nullify

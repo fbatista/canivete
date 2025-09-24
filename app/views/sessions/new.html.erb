@@ -1,4 +1,4 @@
-<%= modal_form_for :session, url: session_url do |f| %>
+<%= modal_form_for :session, url: session_url, html: { id: "login-form" } do |f| %>
   <% content_for :title do %>
     Sign in
   <% end %>
