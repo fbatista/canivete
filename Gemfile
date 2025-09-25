@@ -29,6 +29,8 @@ gem "puma", ">= 5.0"
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
+gem "prosopite"
+gem "pg_query"
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
