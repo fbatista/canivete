@@ -3,7 +3,7 @@
 class TournamentsController < ApplicationController
   skip_before_action :require_authentication
   def index
-    scope = Tournament.where.not(state: %i[draft canceled])
+    scope = Tournament.with_attached_cover.where.not(state: %i[draft canceled]).preload(:rounds)
 
     case params[:filter]
     when "past"
