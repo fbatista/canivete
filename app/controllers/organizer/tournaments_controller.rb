@@ -3,7 +3,7 @@
 module Organizer
   class TournamentsController < OrganizerController
     def index
-      @tournaments = Tournament.where.not(state: :canceled).for_organizer(current_organizer)
+      @tournaments = Tournament.with_attached_cover.where.not(state: :canceled).for_organizer(current_organizer).preload(:rounds)
     end
 
     def show
