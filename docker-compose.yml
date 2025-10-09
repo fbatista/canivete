@@ -28,11 +28,13 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - /volume1/docker/canivete/postgres:/var/lib/postgresql/data
-  cloudflared:
-    image: cloudflare/cloudflared:latest  # Use the cloudflare/cloudflared image
-    restart: unless-stopped  # Restart the container unless it is explicitly stopped
-    command: tunnel --url http://192.168.1.234:84  # Run the tunnel command with the specified URL
-    volumes:
-      - /volume1/docker/canivete/cloudflared:/etc/cloudflare  # Mount the host directory to the container's /etc/cloudflare directory
+  ngrok:
+    env_file:
+      - .env
+    image: ngrok/ngrok:latest  # Use the ngrok image
+    restart: unless-stopped  # Restart the container unless explicitly stopped
+    command: http --url=${NGROK_HOST} 192.168.1.222:84
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}  # Replace with your Ngrok auth token
     depends_on:
-      - rails-app  # Ensure the rails-app service is started before the Cloudflared service
+      - rails-app
