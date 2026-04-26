@@ -2,7 +2,7 @@
 
 class AddFieldsToTournament < ActiveRecord::Migration[7.2]
   def change
-    enable_extension 'postgis'
+    enable_extension "postgis"
     change_table :tournaments, bulk: true do |t|
       t.datetime :start_time
       t.datetime :end_time
@@ -16,7 +16,7 @@ class AddFieldsToTournament < ActiveRecord::Migration[7.2]
       t.st_point :location, geographic: true
     end
 
-    add_column :tournament_organizers, :default_currency, :integer, default: 0
+    add_column :event_organizers, :default_currency, :integer, default: 0
 
     add_index :tournaments, :location, using: :gist
   end
