@@ -26,6 +26,10 @@ class Round < ApplicationRecord
     finished_at.present?
   end
 
+  def advance_tournament!
+    # No-op default. Override in subclasses (SwissRound, SingleEliminationRound).
+  end
+
   def byes
     results
       .where(type: "Advance")
