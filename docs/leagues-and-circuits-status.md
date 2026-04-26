@@ -58,7 +58,7 @@
 ### Phase 4 — League Jobs
 
 **4.1 `Leagues::StartPlayRoundJob`** ✅ — Creates new Swiss play rounds
-**4.2 `Leagues::CreatePickupPodJob`** ⏳ — Not yet implemented
+**4.2 `Leagues::CreatePickupPodJob`** ❌ — Not yet implemented
 **4.3 `Leagues::StartSingleEliminationRoundJob`** ✅ (exists as `StartFinalsRoundJob`) — Creates finals single-elimination round
 **4.4 `Leagues::FinishLeagueJob`** ✅ — Finalizes league, sets positions
 
@@ -68,8 +68,8 @@
 - ✅ `test/fixtures/circuits.yml`
 - ✅ `test/models/league_test.rb`
 - ✅ `test/models/circuit_test.rb`
-- ⏳ `app/models/circuit_standing.rb` — Model file not yet created (table exists)
-- ⏳ `app/models/league.rb` — `play_mode` enum not yet defined in code
+- ✅ `app/models/circuit_standing.rb` — Created with `ranked`/`for_circuit` scopes
+- ✅ `app/models/league.rb` — `play_mode` enum defined with `prefix: true`
 
 ---
 
@@ -90,10 +90,9 @@
 
 | Item | Status |
 |------|--------|
-| `CircuitStanding` model | ❌ Missing (table exists) |
 | `Circuits::CalculatePoints` service | ❌ Missing |
 | `Circuits::UpdateStandingsJob` | ❌ Missing |
-| Hook in tournament finish | ❌ Missing |
+| Hook in `FinishLeagueJob`/`FinishTournamentJob` | ❌ Missing |
 
 ### Phase 7 — Polish
 
@@ -126,9 +125,9 @@
 | Phase 1 — Cleanup | ✅ Complete |
 | Phase 2 — Migrations | ✅ Complete |
 | Phase 3 — Point Wager | ✅ Complete |
-| Phase 4 — Jobs | 🟡 Mostly done (missing CreatePickupPodJob, play_mode enum) |
+| Phase 4 — Jobs & Models | 🟡 Almost complete (missing CreatePickupPodJob, wager validation, job tests) |
 | Phase 5 — Controllers/Views | ❌ Not started |
 | Phase 6 — Circuit Scoring | ❌ Not started |
 | Phase 7 — Polish | ❌ Not started |
 
-**Test health:** All 101 tests passing.
+**Test health:** All 101 tests passing (101 runs, 338 assertions, 0 failures, 0 errors, 0 skips).

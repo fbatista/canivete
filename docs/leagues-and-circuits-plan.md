@@ -94,7 +94,7 @@ All migrations created and applied:
 
 ---
 
-## 🟡 Phase 4 — League Jobs & Pairing (MOSTLY COMPLETE)
+## 🟡 Phase 4 — League Jobs & Pairing (ALMOST COMPLETE)
 
 ### 4.1 Job: `Leagues::StartPlayRoundJob` ✅
 - Creates new Swiss play rounds for scheduled mode
@@ -108,17 +108,22 @@ All migrations created and applied:
 ### 4.4 Job: `Leagues::FinishLeagueJob` ✅
 - Sets final positions, triggers circuit integration (Phase 6)
 
-### 4.5 Update `League` model ⏳
+### 4.5 Update `League` model ✅
 - ✅ State machine defined (`draft → registration_open → registration_closed → play → finals → finished/canceled`)
-- ❌ `enum :play_mode, { scheduled: 0, pickup: 1 }` — column exists but enum not defined in model
+- ✅ `enum :play_mode, { scheduled: 0, pickup: 1 }` — added with `prefix: true`
 - ❌ `validates :wager_percentage, numericality: ...` — not added
 
-### 4.6 Update `EventParticipant` for league scoring ❌
-- `rank_score` needs league-aware delegation (return `league_score` for leagues)
+### 4.6 Update `EventParticipant` for league scoring ✅
+- ✅ `rank_score` league-aware delegation (returns `league_score` for leagues)
+- ✅ `before_save :reset_rank_score_cache` callback when `league_score` changes
 
 ### 4.7 Tests ⏳
 - ✅ `test/models/league_test.rb`, `test/models/circuit_test.rb`
 - ❌ `test/jobs/leagues/*_test.rb` — job tests not yet written
+
+### 4.8 Create `CircuitStanding` model ✅
+- ✅ `app/models/circuit_standing.rb` with `ranked` and `for_circuit` scopes
+- ✅ `Circuit` model updated with `has_many :circuit_standings, dependent: :destroy`
 
 ---
 
