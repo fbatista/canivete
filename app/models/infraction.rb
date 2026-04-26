@@ -2,7 +2,7 @@
 
 class Infraction < ApplicationRecord
   belongs_to :player
-  belongs_to :tournament, optional: true
+  belongs_to :event, optional: true
   belongs_to :pod, optional: true
 
   enum :kind, {
@@ -58,8 +58,8 @@ class Infraction < ApplicationRecord
     Infraction.penalties.slice(:match_loss, :disqualification).value?(penalty_for_database)
   }
 
-  def must_have_tournament_or_pod
-    errors.add(:base, "Must have tournament or pod") unless tournament.present? || pod.present?
+  def must_have_event_or_pod
+    errors.add(:base, "Must have event or pod") unless event.present? || pod.present?
   end
 
   def must_match_kind_with_category
@@ -67,20 +67,20 @@ class Infraction < ApplicationRecord
   end
 
   def create_associated_penalty
-    return if pod.blank? || tournament.blank?
+    return if pod.blank? || event.blank?
 
     Events::SubmitResultJob.perform_now(
       type: "Penalty",
-      event_participant: EventParticipant.find_by(tournament: tournament, player: player), round: pod.round, pod: pod
+      event_participant: EventParticipant.find_by(event: event, player: player), round: pod.round, pod: pod
     )
   end
 
   def remove_associated_penalty
-    return if pod.blank? || tournament.blank?
+    return if pod.blank? || event.blank?
 
     Penalty.destroy_by(round: pod.round,
                        event_participant: EventParticipant.find_by(
-                         tournament: tournament, player: player
+                         event: event, player: player
                        ))
   end
 end

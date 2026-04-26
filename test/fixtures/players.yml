@@ -14,3 +14,55 @@ player_three:
 player_four:
   user: player_four
   key: "player_four"
+
+player_five:
+  user: player_five
+  key: "player_five"
+
+player_six:
+  user: player_six
+  key: "player_six"
+
+player_seven:
+  user: player_seven
+  key: "player_seven"
+
+player_eight:
+  user: player_eight
+  key: "player_eight"
+
+player_nine:
+  user: player_nine
+  key: "player_nine"
+
+player_ten:
+  user: player_ten
+  key: "player_ten"
+
+player_eleven:
+  user: player_eleven
+  key: "player_eleven"
+
+player_twelve:
+  user: player_twelve
+  key: "player_twelve"
+
+player_thirteen:
+  user: player_thirteen
+  key: "player_thirteen"
+
+player_fourteen:
+  user: player_fourteen
+  key: "player_fourteen"
+
+player_fifteen:
+  user: player_fifteen
+  key: "player_fifteen"
+
+player_sixteen:
+  user: player_sixteen
+  key: "player_sixteen"
+
+player_seventeen:
+  user: player_seventeen
+  key: "player_seventeen"

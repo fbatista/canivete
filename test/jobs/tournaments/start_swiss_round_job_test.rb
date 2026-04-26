@@ -6,7 +6,7 @@ module Tournaments
   class StartSwissRoundJobTest < ActiveJob::TestCase
     test "creates new swiss round with incremented number" do
       # Use large_tournament which doesn't have fixture rounds
-      tournament = events(:large_tournament)
+      tournament = Tournament.find_by(slug: "large-tournament")
       initial_round_count = tournament.rounds.count
 
       # Perform the job
@@ -23,7 +23,7 @@ module Tournaments
     end
 
     test "job is queued with correct arguments" do
-      tournament = events(:small_tournament)
+      tournament = Tournament.find_by(slug: "small-tournament")
 
       assert_enqueued_with(job: Tournaments::StartSwissRoundJob, args: [tournament]) do
         Tournaments::StartSwissRoundJob.perform_later(tournament)
