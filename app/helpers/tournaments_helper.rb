@@ -22,7 +22,7 @@ module TournamentsHelper
   }.with_indifferent_access.freeze
 
   def currency_options
-    TournamentOrganizer::CURRENCIES.keys.map { |c| [ CURRENCY_SYMBOLS[c], c ] }
+    EventOrganizer::CURRENCIES.keys.map { |c| [CURRENCY_SYMBOLS[c], c] }
   end
 
   def number_to_currency_options(currency)

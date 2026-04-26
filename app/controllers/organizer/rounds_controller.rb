@@ -20,13 +20,13 @@ module Organizer
       case round_params[:action]
       when "publish"
         @round.update(published: true)
-        redirect_to [ :organizer, @round.tournament, @round.becomes(Round) ], notice: "Round Published!"
+        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: "Round Published!"
       when "start"
         @round.update(started_at: Time.zone.now)
-        redirect_to [ :organizer, @round.tournament, @round.becomes(Round) ], notice: "Round Started!"
+        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: "Round Started!"
       when "finish"
         @round.update(finished_at: Time.zone.now)
-        redirect_to [ :organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round) ],
+        redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
                     notice: "Round Finished!"
       end
     end
@@ -40,14 +40,14 @@ module Organizer
         tournament.update(state: :swiss)
       end
 
-      redirect_to [ :organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round) ],
+      redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
                   notice: "Ongoing round destroyed, rolled back previous round to unfinished!"
     end
 
     private
 
     def round_params
-      params.expect(round: [ :action ])
+      params.expect(round: [:action])
     end
 
     def load_tournament
@@ -59,16 +59,16 @@ module Organizer
     end
 
     def load_pods(round)
-      round.pods.preload(seatings: { tournament_participant: { player: :user } })
+      round.pods.preload(seatings: { event_participant: { player: :user } })
     end
 
     def load_users_map(pods)
       users_map = {}
       pods.each do |p|
         p.seatings.each do |s|
-          users_map[s.tournament_participant_id] = {
-            tp: s.tournament_participant,
-            name: s.tournament_participant.name,
+          users_map[s.event_participant_id] = {
+            tp: s.event_participant,
+            name: s.event_participant.name,
             pod: "Pod #{p.number}",
             pod_id: p.id,
             seating: s.order.ordinalize

@@ -24,7 +24,7 @@ class RoundsController < ApplicationController
     case round_params[:action]
     when "start"
       @round.update(started_at: Time.zone.now)
-      redirect_to [ @round.tournament, @round.becomes(Round) ], notice: "Round Started!"
+      redirect_to [@round.tournament, @round.becomes(Round)], notice: "Round Started!"
     when "finish"
       @round.update(finished_at: Time.zone.now)
       redirect_to tournament, notice: "Round Finished!"
@@ -34,7 +34,7 @@ class RoundsController < ApplicationController
   private
 
   def round_params
-    params.expect(round: [ :action ])
+    params.expect(round: [:action])
   end
 
   def load_tournament
@@ -46,16 +46,16 @@ class RoundsController < ApplicationController
   end
 
   def load_pods(round)
-    round.pods.preload(seatings: { tournament_participant: { player: :user } })
+    round.pods.preload(seatings: { event_participant: { player: :user } })
   end
 
   def load_users_map(pods)
     users_map = {}
     pods.each do |p|
       p.seatings.each do |s|
-        users_map[s.tournament_participant_id] = {
-          tp: s.tournament_participant,
-          name: s.tournament_participant.name,
+        users_map[s.event_participant_id] = {
+          tp: s.event_participant,
+          name: s.event_participant.name,
           pod: "Pod #{p.number}",
           seating: s.order.ordinalize
         }

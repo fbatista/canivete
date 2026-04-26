@@ -17,10 +17,10 @@ module ApplicationHelper
     Loss => "smiley-nervous",
     Eliminated => "smiley-x-eyes",
     Draw => "handshake"
-  }
+  }.freeze
 
   def result_indicator(pod:, player:)
-    result = pod.results.find { |r| r.tournament_participant_id == player.id }
+    result = pod.results.find { |r| r.event_participant_id == player.id }
     if result.instance_of?(Advance) && pod.present?
       tag.span(class: RESULT_CLASSES[Win]) do
         concat icon(pod.round.last_single_elimination_round? ? "trophy" : "medal", class: "me-2")
@@ -38,13 +38,13 @@ module ApplicationHelper
     end
   end
 
-  def badge(color:, &)
+  def badge(color:, &block)
     tag.span(class: %w[
       text-xs font-medium me-2 px-2.5 py-0.5 rounded
     ] + [
       "bg-#{color}-100", "text-#{color}-800",
       "dark:bg-#{color}-900", "dark:text-#{color}-300"
-    ], &)
+    ], &block)
   end
 
   def icon(name, options = nil)
@@ -57,18 +57,19 @@ module ApplicationHelper
   end
 
   def organizer_path_builder
-    path = params.dup.tap do |p|
-      p[:controller] = organizer_mode? ? p[:controller].gsub("organizer", "") : "organizer/#{p[:controller]}"
-    end
+    path =
+      params.dup.tap do |p|
+        p[:controller] = organizer_mode? ? p[:controller].gsub("organizer", "") : "organizer/#{p[:controller]}"
+      end
 
     url_for(path.permit!)
   rescue ActionController::UrlGenerationError
     url_for(organizer_mode? ? :tournaments : %i[organizer tournaments])
   end
 
-  def modal_form_for(record, options = {}, &)
+  def modal_form_for(record, options = {}, &block)
     options[:builder] = ModalFormBuilder
-    form_for(record, options, &)
+    form_for(record, options, &block)
   end
 
   def markdown(text)

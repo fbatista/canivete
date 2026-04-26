@@ -33,7 +33,7 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
                               dark:text-red-300].join(" ")
   WRAPPER_CLASSES = %w[flex flex-col gap-1 mb-4].join(" ")
 
-  def method_missing(method_name, *args, &)
+  def method_missing(method_name, *args, &block)
     return super unless method_name.to_s.end_with?("_with_label")
 
     original_method = method_name.to_s.chomp("_with_label")
@@ -41,29 +41,30 @@ class ModalFormBuilder < ActionView::Helpers::FormBuilder
 
     name, *rest = args
     options = rest.extract_options!
-    required = !!options[:required]
-    label_html = label(name, { class: LABEL_CLASSES }.merge(options[:label] || {})) do |translation|
-      @template.safe_join(
-        [
-          @template.content_tag(:span, translation),
-          required ? @template.content_tag(:span, "required", class: REQUIRED_BADGE_CLASSES) : nil
-        ].compact
-      )
-    end
+    required = !options[:required].nil?
+    label_html =
+      label(name, { class: LABEL_CLASSES }.merge(options[:label] || {})) do |translation|
+        @template.safe_join(
+          [
+            @template.content_tag(:span, translation),
+            required ? @template.content_tag(:span, "required", class: REQUIRED_BADGE_CLASSES) : nil
+          ].compact
+        )
+      end
     field_html = public_send(
       original_method, name,
-      *(rest + [ { class: "#{FIELD_CLASSES.fetch(original_method, FIELD_CLASSES['default'])} #{options[:class]}" }.merge(options.except(:class)) ]), &
+      *(rest + [{ class: "#{FIELD_CLASSES.fetch(original_method, FIELD_CLASSES['default'])} #{options[:class]}" }.merge(options.except(:class))]), &block
     )
 
     @template.content_tag(:div, class: WRAPPER_CLASSES) do
-      @template.safe_join([ label_html, field_html ])
+      @template.safe_join([label_html, field_html])
     end
   end
 
-  def select(method, choices = nil, options = {}, html_options = {}, &)
+  def select(method, choices = nil, options = {}, html_options = {}, &block)
     @template.select(
       @object_name, method, choices, objectify_options(options),
-      @default_html_options.merge(class: FIELD_CLASSES["default"]).merge(html_options), &
+      @default_html_options.merge(class: FIELD_CLASSES["default"]).merge(html_options), &block
     )
   end
 

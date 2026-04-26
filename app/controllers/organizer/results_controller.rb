@@ -13,15 +13,15 @@ module Organizer
       @tournament = load_tournament
       @round = load_round(@tournament)
       @pod = load_pod(@round)
-      tournament_participant = load_participant(@pod) if result_params[:tournament_participant_id].present?
+      event_participant = load_participant(@pod) if result_params[:event_participant_id].present?
 
-      Tournaments::SubmitResultJob.perform_now(
+      Events::SubmitResultJob.perform_now(
         type: result_params[:type],
-        tournament_participant:, round: @round, pod: @pod
+        event_participant: event_participant, round: @round, pod: @pod
       )
-      redirect_to [ :organizer, @tournament, @round.becomes(Round) ], notice: "Result submitted successfully"
+      redirect_to [:organizer, @tournament, @round.becomes(Round)], notice: "Result submitted successfully"
     rescue StandardError => e
-      redirect_to [ :organizer, @tournament, @round.becomes(Round) ], alert: e
+      redirect_to [:organizer, @tournament, @round.becomes(Round)], alert: e
     end
 
     private
@@ -39,14 +39,14 @@ module Organizer
     end
 
     def load_participant(pod)
-      pod.tournament_participants.find result_params[:tournament_participant_id]
+      pod.event_participants.find result_params[:event_participant_id]
     end
 
     def result_params
       params.expect(result: [
-        :type,
-        :tournament_participant_id
-      ])
+                      :type,
+                      :event_participant_id
+                    ])
     end
   end
 end
