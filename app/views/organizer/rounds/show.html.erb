@@ -85,7 +85,7 @@
         text-gray-500 dark:text-gray-400
       "
     >
-      <%= link_to [:organizer, @round.tournament, :tournament_participants], data: {turbo_frame: "modal"}, class: "inline-block text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" do %>
+      <%= link_to [:organizer, @round.tournament, :event_participants], data: {turbo_frame: "modal"}, class: "inline-block text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" do %>
         Standings
       <% end %>
       <%= render partial: "round", collection: @round.tournament.rounds.sort_by(&:number) %>
@@ -273,9 +273,9 @@
           justify-items-stretch
         "
       >
-        <% @round.byes.sort_by {|r| -r.tournament_participant.rank_score }.each do |result| %>
+        <% @round.byes.sort_by {|r| -r.event_participant.rank_score }.each do |result| %>
           <li class="grow last:rounded-b-lg pl-6 pr-10 py-3">
-            <%= result_badge(result, result.tournament_participant) %>
+            <%= result_badge(result, result.event_participant) %>
           </li>
         <% end %>
       </ul>

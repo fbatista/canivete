@@ -15,7 +15,7 @@
     <%= f.select_with_label :type, Result::ELIMINATION_SELECTABLE_SUBYTPES %>
   <% end %>
 
-  <%= f.select_with_label :tournament_participant_id, @pod.tournament_participants.map { |p| [p.name, p.id] }, include_blank: true %>
+  <%= f.select_with_label :event_participant_id, @pod.event_participants.map { |p| [p.name, p.id] }, include_blank: true %>
 
   <% content_for :footer do %>
     <%= f.submit %>

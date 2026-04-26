@@ -10,7 +10,7 @@
         Decklist
       <% end %>
     <% else %>
-      <%= link_to [:new, tournament, :tournament_participant], data: {turbo_frame: "modal"}, class: "inline-flex justify-center items-center px-3 py-2 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" do %>
+      <%= link_to [:new, tournament, :event_participant], data: {turbo_frame: "modal"}, class: "inline-flex justify-center items-center px-3 py-2 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" do %>
         <%= icon("arrow-square-in", class:"mr-2") %>
         Sign up
       <% end %>

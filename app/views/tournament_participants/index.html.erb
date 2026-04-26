@@ -26,7 +26,7 @@
   <% end %>
 <% end %>
 
-<% if @tournament.tournament_participants.present? %>
+<% if @tournament.event_participants.present? %>
   <table
     class="
       col-span-full text-md -m-4 md:-m-5 text-left rtl:text-right
@@ -164,13 +164,13 @@
         </div>
       </tr>
     </thead>
-    <tbody id="<%= dom_id(@tournament, :tournament_participants) %>">
+    <tbody id="<%= dom_id(@tournament, :event_participants) %>">
       <!-- TODO updated by turbo stream -->
       <% case @tournament.state %>
       <% when 'registration_open', 'registration_closed' %>
-        <%= render @tournament.tournament_participants.sort_by(&:name) %>
+        <%= render @tournament.event_participants.sort_by(&:name) %>
       <% else %>
-        <%= render @tournament.tournament_participants.sort_by { |p| [p.playing? ? 0 : 1, -p.rank_score, p.name] } %>
+        <%= render @tournament.event_participants.sort_by { |p| [p.playing? ? 0 : 1, -p.rank_score, p.name] } %>
       <% end %>
     </tbody>
   </table>

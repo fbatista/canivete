@@ -1,11 +1,11 @@
-<%= modal_form_for [:organizer,  @tournament_participant.tournament, @tournament_participant] do |f| %>
+<%= modal_form_for [:organizer,  @event_participant.tournament, @event_participant] do |f| %>
   <% content_for :title do %>
     Add Player to
-    <%= @tournament_participant.tournament.name %>
+    <%= @event_participant.tournament.name %>
   <% end %>
 
-  <% if @tournament_participant.errors.present? %>
-    <%= safe_join(@tournament_participant.errors.full_messages, raw("<br>")) %>
+  <% if @event_participant.errors.present? %>
+    <%= safe_join(@event_participant.errors.full_messages, raw("<br>")) %>
   <% end %>
 
   <p class="my-2 text-sm text-gray-500 dark:text-gray-400">
@@ -19,7 +19,7 @@
 
   <% content_for :footer do %>
     <%= f.submit %>
-    <%= link_to [:organizer, @tournament_participant.tournament], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+    <%= link_to [:organizer, @event_participant.tournament], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
       Cancel
     <% end %>
   <% end %>

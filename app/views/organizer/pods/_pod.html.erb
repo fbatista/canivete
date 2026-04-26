@@ -33,7 +33,7 @@
       justify-items-stretch
     "
   >
-    <% pod.tournament_participants.each do |player| %>
+    <% pod.event_participants.each do |player| %>
       <li
         data-tooltip-placement="left"
         data-tooltip-target="tooltip-pods-<%= player.id %>"
