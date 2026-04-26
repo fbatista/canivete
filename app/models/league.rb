@@ -25,6 +25,13 @@ class League < Event
 
   scope :ongoing, -> { where(state: %i[play finals]) }
 
+  def rounds_info
+    {
+      rounds: [{ swiss_round: :standard }, { swiss_round: :standard }, { swiss_round: :standard }],
+      top: { players: 3, pods: [1] }
+    }
+  end
+
   def perform_state_based_actions
     return unless TRANSITIONS[state_previously_was.to_sym].include?(state.to_sym)
 
