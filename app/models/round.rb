@@ -10,6 +10,8 @@ class Round < ApplicationRecord
 
   scope :published, -> { where(published: true) }
   scope :finished, -> { where.not(finished_at: nil) }
+  scope :play_rounds, -> { where(is_play_round: true) }
+  scope :finals_rounds, -> { where(is_finals_round: true) }
 
   after_create :create_pods
   after_update :round_finished
