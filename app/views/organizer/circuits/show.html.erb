@@ -1,0 +1,86 @@
+<%= content_for :sub_navigation do %>
+  <nav class="flex mb-5" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+      <li class="inline-flex items-center">
+        <%= link_to organizer_path, class:"inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white" do %>
+          <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 001-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+          </svg>
+          Home
+        <% end %>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          <%= link_to organizer_circuits_path, class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
+            Circuits
+          <% end %>
+        </div>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">
+            <%= @circuit.name %>
+          </span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+<% end %>
+
+<div class="col-span-full">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      <%= @circuit.name %>
+    </h1>
+    <div class="flex gap-2">
+      <%= link_to edit_organizer_circuit_path(@circuit), class:"inline-flex items-center text-blue-600 hover:underline" do %>
+        <%= icon('pencil') %>
+        Edit
+      <% end %>
+      <%= link_to "View public page", circuit_path(@circuit), target: "_blank", class:"inline-flex items-center text-blue-600 hover:underline" %>
+    </div>
+  </div>
+
+  <% if @circuit.event_organizer %>
+    <p class="mb-4 text-gray-500 dark:text-gray-400">Organized by <%= @circuit.event_organizer.name %></p>
+  <% end %>
+
+  <% if @circuit.tournaments.any? %>
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Events (<%= @circuit.tournaments.count %>)</h2>
+    <%= render @circuit.tournaments %>
+  <% else %>
+    <p class="text-gray-500 dark:text-gray-400">No events in this circuit yet.</p>
+  <% end %>
+
+  <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3 mt-6">Standings</h2>
+  <% if @circuit.circuit_standings.any? %>
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th class="px-6 py-3">#</th>
+          <th class="px-6 py-3">Player</th>
+          <th class="px-6 py-3 text-right">Points</th>
+          <th class="px-6 py-3 text-right">Events</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @circuit.circuit_standings.each_with_index do |standing, idx| %>
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white"><%= idx + 1 %></td>
+            <td class="px-6 py-4"><%= standing.player_name %></td>
+            <td class="px-6 py-4 text-right"><%= standing.points %></td>
+            <td class="px-6 py-4 text-right"><%= standing.tournament_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-gray-500 dark:text-gray-400">No standings yet.</p>
+  <% end %>
+</div>

@@ -84,7 +84,7 @@
 | `CircuitsController` (public) | ✅ Created |
 | `Organizer::CircuitsController` | ✅ Created |
 | Routes for leagues/circuits | ✅ Added |
-| View templates | ❌ Missing |
+| View templates | ✅ Created |
 
 ### Phase 6 — Circuit Scoring Service
 
@@ -126,7 +126,7 @@
 | Phase 2 — Migrations | ✅ Complete |
 | Phase 3 — Point Wager | ✅ Complete |
 | Phase 4 — Jobs & Models | 🟡 Almost complete (missing CreatePickupPodJob, wager validation, job tests) |
-| Phase 5 — Controllers/Views | 🟡 Controllers/routes done, views pending |
+| Phase 5 — Controllers/Views | ✅ Complete |
 | Phase 6 — Circuit Scoring | ❌ Not started |
 | Phase 7 — Polish | ❌ Not started |
 
