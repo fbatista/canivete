@@ -304,3 +304,32 @@ large_event_participant_seventeen:
   paid: true
   checked_in: true
   dropped: false
+
+# League participants
+league_event_participant_one:
+  event: standard_league
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_two:
+  event: standard_league
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_three:
+  event: standard_league
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_four:
+  event: standard_league
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
