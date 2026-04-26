@@ -4,6 +4,7 @@
 > **Current State:** [leagues-and-circuits-status.md](leagues-and-circuits-status.md)
 > **Goal:** Add leagues and circuits, refactor tournaments to extend from a shared Event base (STI).
 > **Tests:** 132 runs, 417 assertions, 0 failures, 0 errors, 0 skips
+> **Commits:** Small, digestible commits with clear, concise messages. One logical change per commit.
 
 ---
 
