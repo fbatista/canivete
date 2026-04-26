@@ -7,6 +7,8 @@ class League < Event
   POINTS_PER_LOSS = 0
   POINTS_PER_DRAW = 1
 
+  enum :play_mode, { scheduled: 0, pickup: 1 }, prefix: true
+
   enum :state, {
     draft: 0,
     registration_open: 1,

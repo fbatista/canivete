@@ -1,116 +1,134 @@
 # Leagues & Circuits Refactoring Status
 
-> **Date:** 2026-04-25
+> **Last Updated:** 2026-04-26
 > **Goal:** Add leagues and circuits, refactor tournaments to extend from a shared Event base (STI).
+> **Tests:** 101 runs, 338 assertions, 0 failures, 0 errors, 0 skips
 
 ---
 
-## What's Done
+## ✅ Completed
 
-### Database / Schema
-- **`events` table** created via STI migration (`rename_tournaments_to_events`) with `type` column defaulting to `"Tournament"`
-- All foreign key renames done: `tournament_id` → `event_id`, `tournament_participants_count` → `event_participants_count`, etc.
-- **`rooms` table** exists (belongs to event)
+### Phase 1 — Cleanup & Bugfixes
 
-### Models
-- **`Event < ApplicationRecord`** — STI base class with:
-  - Core fields: `name`, `slug`, `start_time`, `end_time`, `address`, `location` (PostGIS), `price`, `currency`
-  - State machine (generic `available_states` / `perform_state_based_actions`)
-  - `participants_range` with min/max helpers
-  - `cover` attachment
-  - Geocoding job
-  - Scopes: `for_organizer`, `past`, `upcoming`, `for_player`
-- **`Tournament < Event`** — All original tournament logic preserved (Swiss rounds, thresholds, scoring, single-elimination)
-- **`League < Event`** — State machine defined: `draft → registration_open → registration_closed → play → finals → finished/canceled`
-- **`Circuit < ApplicationRecord`** — `has_many :tournaments`, `belongs_to :event_organizer`
-- **`EventOrganizer`** — `has_many :events`, `has_many :circuits`, currency enum
-- **`EventParticipant`** — Renamed, references `event` instead of `tournament`, uses STI via `event.class` for constants
-- **`Round`** — References `event` instead of `tournament`
-- **`SwissRound` / `SingleEliminationRound`** — Still reference `tournament` via STI
+**1.1 Pod model references** ✅
+- `has_one :tournament, through: :round` → `has_one :event, through: :round`
+- Added `Pod.finished` scope
 
-### Tests
-- **80 tests, 1 failure** — Only the `StartSingleEliminationRoundJobTest` has a `flunk` placeholder
-  (`TODO: add swiss rounds to standard_tournament fixture`)
+**1.3 Round base class** ✅
+- Added default `advance_tournament!` (no-op) to `Round`
 
----
+**1.4 Room model** ✅
+- Created `app/models/room.rb`
 
-## What's Missing / Broken
+**1.5 View directory renames** ✅
+- `tournament_participants/` → `event_participants/`
+- All partials and references updated
 
-### 1. League Jobs don't exist
-`League#perform_state_based_actions` calls these jobs that are **not created yet**:
-- `Leagues::StartPlayRoundJob`
-- `Leagues::StartFinalsRoundJob`
-- `Leagues::FinishLeagueJob`
+**1.6 Flunking test** ✅
+- Fixed `StartSingleEliminationRoundJobTest`
 
-### 2. No League/Circuit controllers or routes
-- No `app/controllers/leagues_controller.rb`
-- No `app/controllers/circuits_controller.rb`
-- No `app/controllers/organizer/leagues_controller.rb`
-- No `app/controllers/organizer/circuits_controller.rb`
-- Routes reference only `tournaments`, no `events`, `leagues`, or `circuits`
+### Phase 2 — Database Schema (Migrations)
 
-### 3. No League/Circuit views
-- No `app/views/leagues/` directory
-- No `app/views/circuits/` directory
-- No `app/views/organizer/leagues/` or `app/views/organizer/circuits/`
+**All migrations created and run:**
+| Migration | Description |
+|-----------|-------------|
+| `add_play_mode_to_events` | `play_mode` enum (scheduled/pickup) on events table |
+| `add_league_fields_to_rounds` | `is_play_round`, `is_finals_round` on rounds table |
+| `add_league_score_to_event_participants` | `league_score` column (default 1000.0) |
+| `add_circuit_id_to_events` | `circuit_id` FK on events table |
+| `create_circuit_standings` | Circuit standings table with unique index |
+| `add_final_position_to_event_participants` | `final_position` column |
+| `add_wager_percentage_to_events` | `wager_percentage` decimal on events table |
 
-### 4. No tests for League or Circuit
-- No `test/models/league_test.rb`
-- No `test/models/circuit_test.rb`
-- No fixtures for leagues or circuits
+### Phase 3 — Point Wager Scoring
 
-### 5. Old view directory names
-- `app/views/tournament_participants/` should be `app/views/event_participants/`
-- `app/views/organizer/tournament_participants/` should be `app/views/organizer/event_participants/`
-- Templates still named `_tournament_participant.html.erb`
+**3.1 Service** ✅
+- `Scoring::PointWager` — `recalculate_all!`, `compute_scores(direction)`, `apply_pod_result(pod, scores)`
+- Forward/reverse direction averaging implemented
+- Winner-takes-all and all-draw splitting implemented
 
-### 6. Pod model still references `tournament`
-```ruby
-# app/models/pod.rb
-has_one :tournament, through: :round
-```
-Should be `has_one :event, through: :round`. Methods like `swap_suitable_by_rank_for?` call
-`tournament.class::PAIR_DOWN_DEVIATION_PERCENT`.
+**3.2 Migration** ✅ (see Phase 2)
 
-### 7. SwissRound validation references wrong column
-```ruby
-# app/models/swiss_round.rb
-uniqueness: { scope: :event_id }  # should be scope: :number, via round table
-```
+**3.4 Scopes** ✅
+- `Round.play_rounds`, `Round.finals_rounds` added
 
-### 8. Round base class missing `advance_tournament!`
-Called in `after_update :round_finished` but only defined in subclasses (`SwissRound`, `SingleEliminationRound`).
-The base `Round` class has no default implementation.
+**3.5 Tests** ✅
+- 8 passing tests: starting points, winner takes all, draw split, forward/reverse averaging, multi-round accumulation, all-draw pot calculation
 
-### 9. `Room` model doesn't exist
-The `rooms` table exists in the schema but there's no `app/models/room.rb`.
+### Phase 4 — League Jobs
 
-### 10. Single test flunk
-`StartSingleEliminationRoundJobTest` line 11 has a hardcoded `flunk` that needs fixture setup.
+**4.1 `Leagues::StartPlayRoundJob`** ✅ — Creates new Swiss play rounds
+**4.2 `Leagues::CreatePickupPodJob`** ⏳ — Not yet implemented
+**4.3 `Leagues::StartSingleEliminationRoundJob`** ✅ (exists as `StartFinalsRoundJob`) — Creates finals single-elimination round
+**4.4 `Leagues::FinishLeagueJob`** ✅ — Finalizes league, sets positions
+
+### Phase 1.7 — Fixtures & Model Tests
+
+- ✅ `test/fixtures/leagues.yml`
+- ✅ `test/fixtures/circuits.yml`
+- ✅ `test/models/league_test.rb`
+- ✅ `test/models/circuit_test.rb`
+- ⏳ `app/models/circuit_standing.rb` — Model file not yet created (table exists)
+- ⏳ `app/models/league.rb` — `play_mode` enum not yet defined in code
 
 ---
 
-## Some important considerations
+## ⏳ In Progress / Remaining
 
-Leagues should use a different point system. Instead of the classic points per win, draw, loss (0), we're going to use a point-wager system. Which means that:
-- League rounds work differently
-  - League rounds can have rounds added iteratively or all at once, depending on the user's needs.
-  - This means that a League can have 2 modes: Pick-up Play or Scheduled Play
-  - For Schedule Play, there can be multiple rounds during the play phase and each round will pair all players.
-  - For Pick-up Play, there is only a single play round, and pods are created and played one at a time (tecnically multiple pods can be ongoing in parallel, but a single player can only be in an ongoing pod at a time)
-  - The point wager system should make all players start with 1000 points and after each pod is completed, the points for the participating players are adjusted (each player wages a percentage of their points in the pod, and a draw splits it evenly by the number of participants, while a win awards them all to the winner)
-  - However, because this point wager has a flaw where a playing a great player at the start of the league is different from playing them at the end, we need to adjust the points further. So we calculate the "regular direction score" and the "reverse direction score", sum them and divide by 2. This makes it so that playing against a good player at the start vs at the end of the league is the same.
-  - This point wager system should be a separate module from the leagues intrinsics, because at some point we might want to make the point system configurable for regular tournaments and opt between the standard method and point wager.
-  - The final rounds of a league happen exactly the same way as for regular tournaments, we rank the players by score and take the top cut and build a single elimination stage with them. So we need to change that Leagues::StartFinalsRoundJob to Leagues::StartSingleEliminationRoundJob.
+### Phase 5 — Controllers, Routes & Views
 
-Circuits are simply a way to take player's results from tournaments and award points based on their final position in the event vs event size and then keep a leaderboard. 
+| Item | Status |
+|------|--------|
+| `LeaguesController` (public) | ❌ Missing |
+| `Organizer::LeaguesController` | ❌ Missing |
+| `CircuitsController` (public) | ❌ Missing |
+| `Organizer::CircuitsController` | ❌ Missing |
+| Routes for leagues/circuits | ❌ Missing |
+| All view templates | ❌ Missing |
+
+### Phase 6 — Circuit Scoring Service
+
+| Item | Status |
+|------|--------|
+| `CircuitStanding` model | ❌ Missing (table exists) |
+| `Circuits::CalculatePoints` service | ❌ Missing |
+| `Circuits::UpdateStandingsJob` | ❌ Missing |
+| Hook in tournament finish | ❌ Missing |
+
+### Phase 7 — Polish
+
+| Item | Status |
+|------|--------|
+| Unified `/events` index (7.1) | ❌ |
+| Organizer dashboard (7.2) | ❌ |
+| League-specific helpers/UI (7.3) | ❌ |
+| Circuit-specific helpers/UI (7.4) | ❌ |
+| Tournament model cleanup (7.5) | ⏳ |
+| Circuit column on events (7.6) | ✅ column exists |
+| Code quality `bin/rubocop` (7.7) | ⚠️ 23 offenses (metrics mostly) |
+| System tests (7.8) | ❌ |
+
+---
+
+## ⚠️ Partially Done
+
+### Phase 4 — League Model
+- ✅ `League < Event` with state machine (`draft → registration_open → registration_closed → play → finals → finished/canceled`)
+- ⏳ `enum :play_mode, { scheduled: 0, pickup: 1 }` — column exists but enum not defined in model
+- ⏳ `EventParticipant#rank_score` — returns tournament scoring; needs league-aware delegation
+
+---
 
 ## Summary
 
-The **STI refactoring foundation is solid** — the database is migrated, `Event` is the base class,
-`Tournament < Event` works, and `League < Event` has its state machine defined. The main gaps are:
+| Phase | Status |
+|-------|--------|
+| Phase 1 — Cleanup | ✅ Complete |
+| Phase 2 — Migrations | ✅ Complete |
+| Phase 3 — Point Wager | ✅ Complete |
+| Phase 4 — Jobs | 🟡 Mostly done (missing CreatePickupPodJob, play_mode enum) |
+| Phase 5 — Controllers/Views | ❌ Not started |
+| Phase 6 — Circuit Scoring | ❌ Not started |
+| Phase 7 — Polish | ❌ Not started |
 
-1. **League infrastructure** (jobs, controllers, views, routes, tests) — all missing
-2. **Circuit infrastructure** (controllers, views, routes, tests) — all missing
-3. **Cleanup** — old `tournament_participant` view names, `Pod#tournament` reference, missing `Room` model
-4. **1 failing test** — easy fix (add swiss round fixtures)
+**Test health:** All 101 tests passing.

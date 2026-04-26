@@ -61,6 +61,7 @@ class EventParticipant < ApplicationRecord
 
   delegate :name, to: :player
 
+  before_save :reset_rank_score_cache, if: -> { league_score_previously_changed? }
   after_update :rebuild_round, if: -> { dropped_previously_changed? }
 
   SINGLE_ELIM_COEFF = 100_000_000_000_000_000
@@ -159,11 +160,16 @@ class EventParticipant < ApplicationRecord
   end
 
   def rank_score # rubocop:disable Metrics/AbcSize
-    @rank_score ||= (number_of_advancements * SINGLE_ELIM_COEFF) +
-                    (match_points * MP_COEFF) +
-                    (match_win_percentage.round(4) * MW_COEFF).to_i +
-                    (opponents_average_match_points * OAMP_COEFF).to_i +
-                    (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i
+    @rank_score ||=
+      if event.is_a?(League)
+        league_score.to_f
+      else
+        (number_of_advancements * SINGLE_ELIM_COEFF) +
+          (match_points * MP_COEFF) +
+          (match_win_percentage.round(4) * MW_COEFF).to_i +
+          (opponents_average_match_points * OAMP_COEFF).to_i +
+          (opponents_average_match_win_percentage.round(4) * OAMW_COEFF).to_i
+      end
   end
 
   def rebuild_round
@@ -171,5 +177,11 @@ class EventParticipant < ApplicationRecord
 
     event.rounds.max_by(&:number).destroy
     Tournaments::StartSwissRoundJob.perform_now(event.reload)
+  end
+
+  private
+
+  def reset_rank_score_cache
+    @rank_score = nil
   end
 end

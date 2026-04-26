@@ -131,9 +131,10 @@ module Scoring
 
     def create_league(wager_percentage: 5.0, pod_size: 4)
       organizer = event_organizers(:standard_organizer)
+      slug = "test-league-scoring-#{SecureRandom.hex(8)}"
       league = League.create!(
-        name: "Test League",
-        slug: "test-league-scoring",
+        name: "Test League #{slug}",
+        slug: slug,
         event_organizer: organizer,
         wager_percentage: wager_percentage,
         start_time: 1.week.from_now,
