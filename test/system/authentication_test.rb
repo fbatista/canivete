@@ -49,7 +49,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_not_nil user
     assert_equal "New Organizer", user.name
     assert_equal true, user.organizer?
-    assert_not_nil user.tournament_organizer
+    assert_not_nil user.event_organizer
   end
 
   test "sign up validates required fields" do
