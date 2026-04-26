@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Result < ApplicationRecord
-  belongs_to :tournament_participant
+  belongs_to :event_participant
   belongs_to :round
 
-  has_one :tournament, through: :round
+  has_one :event, through: :round
 
   SELECTABLE_SUBTYPES = %w[Draw Win].freeze
   SUBTYPES = SELECTABLE_SUBTYPES + %w[Loss Penalty].freeze
@@ -14,7 +14,7 @@ class Result < ApplicationRecord
   scope :publishable, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
 
   validates(
-    :tournament_participant_id,
+    :event_participant_id,
     {
       uniqueness: { scope: :round_id }
     }

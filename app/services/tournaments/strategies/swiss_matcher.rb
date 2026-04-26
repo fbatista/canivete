@@ -22,7 +22,7 @@ module Tournaments
           @sorted_players.each do |player|
             next if @player_pods[player].present?
 
-            match!(player:, pod:, forced: @forced)
+            match!(player: player, pod: pod, forced: @forced)
 
             break if pod.full?
           end
@@ -31,21 +31,21 @@ module Tournaments
 
       def handle_unmatched_players!
         unmatched_players.each do |player|
-          next if attempt_swaping!(player:) == :success
+          next if attempt_swaping!(player: player) == :success
 
-          match!(player:, pod: @round.pods.reject(&:full?).last)
+          match!(player: player, pod: @round.pods.reject(&:full?).last)
         end
       end
 
       def attempt_swaping!(player:)
-        @round.pods.select(&:full?).sort { |a, b| sort_pod_by_rank_diff(a, b, player:) }.each do |pod|
+        @round.pods.select(&:full?).sort { |a, b| sort_pod_by_rank_diff(a, b, player: player) }.each do |pod|
           next unless pod.swap_suitable_by_rank_for?(player)
 
-          candidate_player = find_swap_candidate(pod:, player:)
+          candidate_player = find_swap_candidate(pod: pod, player: player)
           candidate_pod = incomplete_pods.find { |incomplete_pod| incomplete_pod.can_match?(candidate_player) }
           next unless candidate_pod
 
-          swap!(unmatched_player: player, matched_player: candidate_player, pod:, candidate_pod:)
+          swap!(unmatched_player: player, matched_player: candidate_player, pod: pod, candidate_pod: candidate_pod)
           break(:success)
         end
         :failure

@@ -1,24 +1,12 @@
 # frozen_string_literal: true
 
-class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Tournament < Event # rubocop:disable Metrics/ClassLength
   paginates_per 20
 
-  belongs_to :tournament_organizer
-  belongs_to :league, optional: true
-  has_many :rounds, dependent: :destroy
-  has_many :tournament_participants, dependent: :destroy
-  has_many :infractions, dependent: :destroy
-  has_many :pods, through: :rounds
+  belongs_to :circuit, optional: true
 
-  scope :for_organizer, ->(organizer) { where(tournament_organizer: organizer) }
-  scope :past, -> { where(end_time: ...Time.current) }
-  scope :upcoming, -> { where(start_time: Time.current..) }
   scope :ongoing, -> { where(state: %i[swiss single_elimination]) }
-  scope :for_player, ->(player) { joins(:tournament_participants).where(tournament_participants: { player: player }) }
 
-  PREFERRED_POD_SIZE = 4
-  SMALLER_POD_SIZE = 3
-  LARGER_POD_SIZE = 5
   POINTS_PER_WIN = 7
   POINTS_PER_LOSS = 0
   POINTS_PER_DRAW = 1
@@ -26,60 +14,61 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   PLAYERS_ROUNDS_THRESHOLDS = {
     4..5 => {
-      rounds: [ { swiss_round: :standard } ],
+      rounds: [{ swiss_round: :standard }],
       top: nil
     },
     6..16 => {
-      rounds: [ { swiss_round: :standard }, { swiss_round: :standard } ],
-      top: { players: 4, pods: [ 1 ] }
+      rounds: [{ swiss_round: :standard }, { swiss_round: :standard }],
+      top: { players: 4, pods: [1] }
     },
     17..24 => {
-      rounds: [ { swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard } ],
-      top: { players: 7, pods: [ 1, 1 ] }
+      rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard }],
+      top: { players: 7, pods: [1, 1] }
     },
     25..32 => {
-      rounds: [ { swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard },
-               { swiss_round: :forced } ],
-      top: { players: 10, pods: [ 2, 1 ] }
+      rounds: [{ swiss_round: :standard }, { swiss_round: :spread }, { swiss_round: :standard },
+               { swiss_round: :forced }],
+      top: { players: 10, pods: [2, 1] }
     },
     33..40 => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 2) + [ { swiss_round: :forced } ],
-      top: { players: 13, pods: [ 2, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
+      top: { players: 13, pods: [2, 1] }
     },
     41..64 => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 2) + [ { swiss_round: :forced } ],
-      top: { players: 16, pods: [ 4, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 2) + [{ swiss_round: :forced }],
+      top: { players: 16, pods: [4, 1] }
     },
     65..128 => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 3) + [ { swiss_round: :forced } ],
-      top: { players: 16, pods: [ 4, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 3) + [{ swiss_round: :forced }],
+      top: { players: 16, pods: [4, 1] }
     },
     129..256 => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 4) + [ { swiss_round: :forced } ],
-      top: { players: 40, pods: [ 8, 4, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 4) + [{ swiss_round: :forced }],
+      top: { players: 40, pods: [8, 4, 1] }
     },
     257..512 => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 5) + [ { swiss_round: :forced } ],
-      top: { players: 40, pods: [ 8, 4, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 5) + [{ swiss_round: :forced }],
+      top: { players: 40, pods: [8, 4, 1] }
     },
     513.. => {
-      rounds: [ { swiss_round: :standard },
-               { swiss_round: :spread } ] + ([ { swiss_round: :standard } ] * 6) + [ { swiss_round: :forced } ],
-      top: { players: 64, pods: [ 16, 4, 1 ] }
+      rounds: [{ swiss_round: :standard },
+               { swiss_round: :spread }] + ([{ swiss_round: :standard }] * 6) + [{ swiss_round: :forced }],
+      top: { players: 64, pods: [16, 4, 1] }
     }
   }.tap do |thresholds|
-    thresholds.default_proc = proc do |hash, key|
-      return nil unless key.is_a?(Integer)
+    thresholds.default_proc =
+      proc do |hash, key|
+        return nil unless key.is_a?(Integer)
 
-      range_key = hash.keys.find { |r| r.include?(key) }
+        range_key = hash.keys.find { |r| r.include?(key) }
 
-      hash[range_key]
-    end
+        hash[range_key]
+      end
   end.freeze
 
   enum :state, {
@@ -98,75 +87,12 @@ class Tournament < ApplicationRecord # rubocop:disable Metrics/ClassLength
     registration_closed: %i[registration_closed swiss canceled],
     swiss: %i[single_elimination finished canceled],
     single_elimination: %i[finished canceled],
-    finished: [ :finished ],
-    canceled: [ :canceled ]
+    finished: [:finished],
+    canceled: [:canceled]
   }.with_indifferent_access.freeze
 
-  enum :currency, TournamentOrganizer::CURRENCIES
-
-  has_one_attached :cover
-
-  with_options presence: true do
-    validates :state, :name, :slug, :start_time, :end_time
-  end
-
-  before_validation :populate_slug
-
-  after_update :perform_state_based_actions, if: -> { state_previously_changed? }
-  after_save :geocode_address, if: -> { address_changed? }
-
-  def geocode_address
-    Tournaments::GeocodeJob.perform_later(self)
-  end
-
-  def latitude=(latitude)
-    self.location = RGeo::Geographic
-                    .spherical_factory(srid: 4326)
-                    .point(longitude, latitude)
-  end
-
-  def longitude=(longitude)
-    self.location = RGeo::Geographic
-                    .spherical_factory(srid: 4326)
-                    .point(longitude, latitude)
-  end
-
-  def latitude
-    location&.y || 0
-  end
-
-  def longitude
-    location&.x || 0
-  end
-
-  def minimum_participants=(num_players)
-    self.participants_range = (num_players.presence || 0).to_i..maximum_participants
-  end
-
-  def maximum_participants=(num_players)
-    self.participants_range = minimum_participants..(num_players.presence&.to_i)
-  end
-
-  def minimum_participants
-    participants_range&.begin || 0
-  end
-
-  def maximum_participants
-    if participants_range&.end == Float::INFINITY || participants_range&.end.nil?
-      Float::INFINITY
-    else
-      participants_range&.end
-    end
-  end
-
-  def available_states
-    return Tournament.states.slice(:draft) if new_record?
-
-    Tournament.states.slice(*(TRANSITIONS[state] - [ state.to_sym ]))
-  end
-
   def rounds_info
-    PLAYERS_ROUNDS_THRESHOLDS[tournament_participants.size]
+    PLAYERS_ROUNDS_THRESHOLDS[event_participants.size]
   end
 
   def progress_percent

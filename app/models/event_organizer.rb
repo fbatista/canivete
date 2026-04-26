@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class TournamentOrganizer < ApplicationRecord
+class EventOrganizer < ApplicationRecord
   belongs_to :user, optional: true
 
-  has_many :tournaments, dependent: :destroy
+  has_many :events, dependent: :destroy
+  has_many :circuits, dependent: :destroy
 
   delegate :name, to: :user
 

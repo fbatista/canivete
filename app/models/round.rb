@@ -2,8 +2,8 @@
 
 # Model representing a round in the tournament
 class Round < ApplicationRecord
-  belongs_to :tournament, counter_cache: true
-  has_many :tournament_participants, -> { playing.not_eliminated }, through: :tournament
+  belongs_to :event, counter_cache: true
+  has_many :event_participants, -> { playing.not_eliminated }, through: :event
   has_many :pods, dependent: :destroy
   has_many :seatings, through: :pods
   has_many :results, dependent: :destroy
@@ -33,7 +33,7 @@ class Round < ApplicationRecord
   def byes
     results
       .where(type: "Advance")
-      .where.not(tournament_participant_id: seatings.select(:tournament_participant_id))
+      .where.not(event_participant_id: seatings.select(:event_participant_id))
   end
 
   private

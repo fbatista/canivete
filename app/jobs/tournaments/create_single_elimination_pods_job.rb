@@ -27,18 +27,18 @@ module Tournaments
       players_being_paired = players_continuing.last(players_playing)
       players_to_advance = players_continuing - players_being_paired
 
-      [ players_to_advance, players_being_paired, players_to_eliminate ]
+      [players_to_advance, players_being_paired, players_to_eliminate]
     end
 
     def eliminate_players!
       @players_to_eliminate&.each do |player|
-        Eliminated.create(round: @round, tournament_participant: player)
+        Eliminated.create(round: @round, event_participant: player)
       end
     end
 
     def advance_players!
       @players_to_advance&.each do |player|
-        Advance.create(round: @round, tournament_participant: player)
+        Advance.create(round: @round, event_participant: player)
       end
     end
 

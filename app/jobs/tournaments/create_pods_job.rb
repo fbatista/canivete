@@ -29,7 +29,7 @@ module Tournaments
     end
 
     def load_strategy
-      @round.tournament.rounds_info[:rounds][@round.number - 1].values.first
+      @round.event.rounds_info[:rounds][@round.number - 1].values.first
     end
   end
 end

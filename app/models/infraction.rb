@@ -69,15 +69,18 @@ class Infraction < ApplicationRecord
   def create_associated_penalty
     return if pod.blank? || tournament.blank?
 
-    Tournaments::SubmitResultJob.perform_now(
+    Events::SubmitResultJob.perform_now(
       type: "Penalty",
-      tournament_participant: TournamentParticipant.find_by(tournament:, player:), round: pod.round, pod: pod
+      event_participant: EventParticipant.find_by(tournament: tournament, player: player), round: pod.round, pod: pod
     )
   end
 
   def remove_associated_penalty
     return if pod.blank? || tournament.blank?
 
-    Penalty.destroy_by(round: pod.round, tournament_participant: TournamentParticipant.find_by(tournament:, player:))
+    Penalty.destroy_by(round: pod.round,
+                       event_participant: EventParticipant.find_by(
+                         tournament: tournament, player: player
+                       ))
   end
 end

@@ -2,7 +2,7 @@
 
 class Seating < ApplicationRecord
   belongs_to :pod, inverse_of: :seatings
-  belongs_to :tournament_participant
+  belongs_to :event_participant
 
   has_one :round, through: :pod
 

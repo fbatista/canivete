@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 # The tournament representation of a player
-class TournamentParticipant < ApplicationRecord
-  belongs_to :tournament, counter_cache: true
+class EventParticipant < ApplicationRecord
+  belongs_to :event, counter_cache: true
   belongs_to :player
 
-  has_many :results, -> { publishable }, dependent: :destroy, inverse_of: :tournament_participant
+  has_many :results, -> { publishable }, dependent: :destroy, inverse_of: :event_participant
   has_many :seatings, -> { publishable }, dependent: :destroy
   has_many :pods, -> { publishable }, through: :seatings
   has_many(
     :opponents,
-    lambda { |tournament_participant|
-      where.not(tournament_participants: { id: tournament_participant.id })
+    lambda { |event_participant|
+      where.not(event_participants: { id: event_participant.id })
       .where(
         <<~SQL.squish
           pods.id not in (
@@ -22,7 +22,7 @@ class TournamentParticipant < ApplicationRecord
           )
         SQL
       )
-    }, class_name: "TournamentParticipant", through: :pods, source: :tournament_participants
+    }, class_name: "EventParticipant", through: :pods, source: :event_participants
   )
 
   scope :playing, -> { where(dropped: false) }
@@ -32,7 +32,7 @@ class TournamentParticipant < ApplicationRecord
         not exists (
           select 1
           from results
-          where results.tournament_participant_id = tournament_participants.id
+          where results.event_participant_id = event_participants.id
             and results.type = 'Eliminated'
         )
       SQL
@@ -49,10 +49,11 @@ class TournamentParticipant < ApplicationRecord
 
   before_validation on: :create do
     if player_email.present? && player.blank?
-      user = User.find_or_initialize_by(email_address: player_email) do |u|
-        u.name = player_name
-        u.initialize_player
-      end
+      user =
+        User.find_or_initialize_by(email_address: player_email) do |u|
+          u.name = player_name
+          u.initialize_player
+        end
 
       self.player = user.player
     end
@@ -78,7 +79,7 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def number_of_infractions
-    player.infractions.count { |p| p.tournament_id == tournament_id }
+    player.infractions.count { |p| p.event_id == event_id }
   end
 
   def playing?
@@ -90,7 +91,7 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def played_in_smaller_pod?(except_in:)
-    pods.where.not(round_id: except_in).any? { |pod| pod.size == tournament.class::SMALLER_POD_SIZE }
+    pods.where.not(round_id: except_in).any? { |pod| pod.size == event.class::SMALLER_POD_SIZE }
   end
 
   def times_going_at(position)
@@ -106,9 +107,9 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def number_of_ghost_opponents
-    pods.count { |pod|
-      pod.size == tournament.class::SMALLER_POD_SIZE
-    } * (tournament.class::PREFERRED_POD_SIZE - tournament.class::SMALLER_POD_SIZE)
+    pods.count do |pod|
+      pod.size == event.class::SMALLER_POD_SIZE
+    end * (event.class::PREFERRED_POD_SIZE - event.class::SMALLER_POD_SIZE)
   end
 
   def number_of_advancements
@@ -128,23 +129,23 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def match_points
-    @match_points ||= (number_of_draws * Tournament::POINTS_PER_DRAW) +
-                      (number_of_wins * Tournament::POINTS_PER_WIN)
+    @match_points ||= (number_of_draws * event.class::POINTS_PER_DRAW) +
+                      (number_of_wins * event.class::POINTS_PER_WIN)
   end
 
   def match_win_percentage
     return 0.0 if results.empty?
 
-    @match_win_percentage ||= match_points / (results.count { |result|
+    @match_win_percentage ||= match_points / (results.count do |result|
       !result.is_a?(Advance) && !result.is_a?(Eliminated)
-    } * Tournament::POINTS_PER_WIN).to_f
+    end * event.class::POINTS_PER_WIN).to_f
   end
 
   def opponents_average_match_points
     return 0.0 if corrected_opponents.empty?
 
     @opponents_average_match_points ||= (
-      corrected_opponents.inject(0.0) { |sum, n| n.match_points + sum } / corrected_opponents.size.to_f
+      corrected_opponents.reduce(0.0) { |sum, n| n.match_points + sum } / corrected_opponents.size.to_f
     ).round(2)
   end
 
@@ -152,8 +153,8 @@ class TournamentParticipant < ApplicationRecord
     return 0.0 if corrected_opponents.empty?
 
     @opponents_average_match_win_percentage ||=
-      corrected_opponents.inject(0.0) do |sum, n|
-        [ n.match_win_percentage, 1.0 / Tournament::POINTS_PER_WIN ].max + sum
+      corrected_opponents.reduce(0.0) do |sum, n|
+        [n.match_win_percentage, 1.0 / event.class::POINTS_PER_WIN].max + sum
       end / corrected_opponents.size.to_f
   end
 
@@ -166,9 +167,9 @@ class TournamentParticipant < ApplicationRecord
   end
 
   def rebuild_round
-    return unless tournament.swiss? && !tournament.rounds.max_by(&:number).published
+    return unless event.swiss? && !event.rounds.max_by(&:number).published
 
-    tournament.rounds.max_by(&:number).destroy
-    Tournaments::StartSwissRoundJob.perform_now(tournament.reload)
+    event.rounds.max_by(&:number).destroy
+    Tournaments::StartSwissRoundJob.perform_now(event.reload)
   end
 end

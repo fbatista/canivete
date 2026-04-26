@@ -2,21 +2,21 @@
 
 require "net/http"
 
-module Tournaments
+module Events
   class GeocodeJob < ApplicationJob
     queue_as :geocode
     limits_concurrency key: ->(_) { "GeocodeJob" }
 
-    def perform(tournament)
+    def perform(event)
       # Ensure at least 1 second between API calls
       sleep(1)
       # Geocode the address using Nominatim
-      point = geocode_address(tournament.address)
+      point = geocode_address(event.address)
 
       return unless point
 
-      # Update the tournament with the geocoded location
-      tournament.update!(location: point)
+      # Update the event with the geocoded location
+      event.update!(location: point)
     end
 
     private
@@ -24,6 +24,7 @@ module Tournaments
     def geocode_address(address)
       response = request_openstreet(address)&.first&.with_indifferent_access
       return nil unless response
+
       response => { lat:, lon: }
       return nil unless lat && lon
 

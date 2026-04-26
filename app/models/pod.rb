@@ -2,7 +2,7 @@
 
 class Pod < ApplicationRecord
   belongs_to :round
-  has_one :event, through: :round
+  has_one :tournament, through: :round
 
   has_many :seatings, -> { order(order: :asc) }, dependent: :destroy, inverse_of: :pod
   has_many :event_participants, through: :seatings
@@ -56,8 +56,8 @@ class Pod < ApplicationRecord
 
   def swap_suitable_by_rank_for?(candidate)
     full? && candidates_average_rank.between?(
-      (candidate.match_win_percentage * 1.0) - event.class::PAIR_DOWN_DEVIATION_PERCENT,
-      (candidate.match_win_percentage * 1.0) + event.class::PAIR_DOWN_DEVIATION_PERCENT
+      (candidate.match_win_percentage * 1.0) - tournament.class::PAIR_DOWN_DEVIATION_PERCENT,
+      (candidate.match_win_percentage * 1.0) + tournament.class::PAIR_DOWN_DEVIATION_PERCENT
     )
   end
 
