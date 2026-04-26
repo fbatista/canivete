@@ -127,7 +127,7 @@ All migrations created and applied:
 
 ---
 
-## ❌ Phase 5 — League Controllers, Routes & Views (NOT STARTED)
+## ✅ Phase 5 — Controllers, Routes & Views (COMPLETE)
 
 ### 5.1 Routes
 ```ruby
