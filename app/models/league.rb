@@ -9,6 +9,8 @@ class League < Event
 
   enum :play_mode, { scheduled: 0, pickup: 1 }, prefix: true
 
+  validates :wager_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_blank: true }
+
   enum :state, {
     draft: 0,
     registration_open: 1,
