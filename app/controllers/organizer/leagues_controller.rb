@@ -56,7 +56,8 @@ module Organizer
 
     def create_pickup_pod
       @league = League.for_organizer(current_organizer).find(params[:id])
-      redirect_to [:organizer, @league], notice: "Pick-up pod creation triggered"
+      Leagues::CreatePickupPodJob.perform_now(@league)
+      redirect_to [:organizer, @league], notice: "Pick-up pod created successfully"
     rescue ActiveRecord::RecordNotFound
       redirect_to [:organizer, :leagues], alert: "Not authorized to manage the selected league"
     end
