@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class Event < ApplicationRecord
+  belongs_to :circuit, optional: true
   belongs_to :event_organizer
   has_many :rounds, dependent: :destroy
   has_many :event_participants, dependent: :destroy
   has_many :infractions, dependent: :destroy
+  has_many :rooms, dependent: :destroy
   has_many :pods, through: :rounds
 
   PREFERRED_POD_SIZE = 4
   SMALLER_POD_SIZE = 3
   LARGER_POD_SIZE = 5
+  PAIR_DOWN_DEVIATION_PERCENT = 0.1
 
   scope :for_organizer, ->(organizer) { where(event_organizer: organizer) }
   scope :past, -> { where(end_time: ...Time.current) }
@@ -81,5 +84,37 @@ class Event < ApplicationRecord
 
   def name_with_dates
     "#{name} (#{start_time.strftime('%d/%m/%Y')} - #{end_time.strftime('%d/%m/%Y')})"
+  end
+
+  def rounds_info
+    # Default fallback: single standard round
+    { rounds: [{ swiss_round: :standard }], top: nil }
+  end
+
+  def number_of_swiss_rounds
+    rounds.where(type: 'SwissRound').count
+  end
+
+  def number_of_single_elimination_rounds
+    rounds.where(type: 'SingleEliminationRound').count
+  end
+
+  def self.reset_counters
+    all.each do |event|
+      event.reset_counters if event.respond_to?(:reset_counters)
+    end
+  end
+
+  def reset_counters
+    # Manually update counter caches that fixtures don't properly set
+    self.update_columns(
+      rounds_count: rounds.count,
+      event_participants_count: event_participants.count
+    )
+    touch
+  end
+
+  def populate_slug
+    self.slug = name.downcase.gsub(/[^a-z0-9]/, "-")
   end
 end
