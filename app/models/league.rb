@@ -3,6 +3,10 @@
 class League < Event
   paginates_per 20
 
+  POINTS_PER_WIN = 7
+  POINTS_PER_LOSS = 0
+  POINTS_PER_DRAW = 1
+
   enum :state, {
     draft: 0,
     registration_open: 1,
