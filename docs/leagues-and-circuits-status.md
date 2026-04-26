@@ -79,12 +79,12 @@
 
 | Item | Status |
 |------|--------|
-| `LeaguesController` (public) | ❌ Missing |
-| `Organizer::LeaguesController` | ❌ Missing |
-| `CircuitsController` (public) | ❌ Missing |
-| `Organizer::CircuitsController` | ❌ Missing |
-| Routes for leagues/circuits | ❌ Missing |
-| All view templates | ❌ Missing |
+| `LeaguesController` (public) | ✅ Created |
+| `Organizer::LeaguesController` | ✅ Created |
+| `CircuitsController` (public) | ✅ Created |
+| `Organizer::CircuitsController` | ✅ Created |
+| Routes for leagues/circuits | ✅ Added |
+| View templates | ❌ Missing |
 
 ### Phase 6 — Circuit Scoring Service
 
@@ -126,7 +126,7 @@
 | Phase 2 — Migrations | ✅ Complete |
 | Phase 3 — Point Wager | ✅ Complete |
 | Phase 4 — Jobs & Models | 🟡 Almost complete (missing CreatePickupPodJob, wager validation, job tests) |
-| Phase 5 — Controllers/Views | ❌ Not started |
+| Phase 5 — Controllers/Views | 🟡 Controllers/routes done, views pending |
 | Phase 6 — Circuit Scoring | ❌ Not started |
 | Phase 7 — Polish | ❌ Not started |
 
