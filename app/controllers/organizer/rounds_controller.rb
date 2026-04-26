@@ -3,8 +3,8 @@
 module Organizer
   class RoundsController < OrganizerController
     def show
-      tournament = load_tournament
-      @round = load_round(tournament)
+      event = load_tournament
+      @round = load_round(event)
       @pods = load_pods(@round)
       @users_map = load_users_map(@pods)
 
@@ -14,33 +14,33 @@ module Organizer
     end
 
     def update
-      tournament = load_tournament
-      @round = load_round(tournament)
+      event = load_tournament
+      @round = load_round(event)
 
       case round_params[:action]
       when "publish"
         @round.update(published: true)
-        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: "Round Published!"
+        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: "Round Published!"
       when "start"
         @round.update(started_at: Time.zone.now)
-        redirect_to [:organizer, @round.tournament, @round.becomes(Round)], notice: "Round Started!"
+        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: "Round Started!"
       when "finish"
         @round.update(finished_at: Time.zone.now)
-        redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
+        redirect_to [:organizer, event, event.rounds.max_by(&:number).becomes(Round)],
                     notice: "Round Finished!"
       end
     end
 
     def destroy
-      tournament = load_tournament
-      load_round(tournament).destroy
-      tournament.rounds.max_by(&:number).update(finished_at: nil)
+      event = load_tournament
+      load_round(event).destroy
+      event.rounds.max_by(&:number).update(finished_at: nil)
 
-      if tournament.single_elimination? && tournament.rounds.none? { |r| r.instance_of?(SingleEliminationRound) }
-        tournament.update(state: :swiss)
+      if event.single_elimination? && event.rounds.none? { |r| r.instance_of?(SingleEliminationRound) }
+        event.update(state: :swiss)
       end
 
-      redirect_to [:organizer, tournament, tournament.rounds.max_by(&:number).becomes(Round)],
+      redirect_to [:organizer, event, event.rounds.max_by(&:number).becomes(Round)],
                   notice: "Ongoing round destroyed, rolled back previous round to unfinished!"
     end
 

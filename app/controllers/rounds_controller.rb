@@ -3,12 +3,12 @@
 class RoundsController < ApplicationController
   skip_before_action :require_authentication, only: %i[index show]
   def index
-    @rounds = load_tournament.rounds
+    @rounds = load_event.rounds
   end
 
   def show
-    tournament = load_tournament
-    @round = load_round(tournament)
+    event = load_event
+    @round = load_round(event)
     @pods = load_pods(@round)
     @users_map = load_users_map(@pods)
 
@@ -18,16 +18,16 @@ class RoundsController < ApplicationController
   end
 
   def update
-    tournament = load_tournament
-    @round = load_round(tournament)
+    event = load_event
+    @round = load_round(event)
 
     case round_params[:action]
     when "start"
       @round.update(started_at: Time.zone.now)
-      redirect_to [@round.tournament, @round.becomes(Round)], notice: "Round Started!"
+      redirect_to [@round.event, @round.becomes(Round)], notice: "Round Started!"
     when "finish"
       @round.update(finished_at: Time.zone.now)
-      redirect_to tournament, notice: "Round Finished!"
+      redirect_to event, notice: "Round Finished!"
     end
   end
 
@@ -37,12 +37,12 @@ class RoundsController < ApplicationController
     params.expect(round: [:action])
   end
 
-  def load_tournament
+  def load_event
     Tournament.find params[:tournament_id]
   end
 
-  def load_round(tournament)
-    tournament.rounds.find params[:id]
+  def load_round(event)
+    event.rounds.find params[:id]
   end
 
   def load_pods(round)

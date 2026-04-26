@@ -49,8 +49,8 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-          <%= link_to [@round.tournament], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
-            <%= @round.tournament.name %>
+          <%= link_to [@round.event], class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
+            <%= @round.event.name %>
           <% end %>
         </div>
       </li>
@@ -85,10 +85,10 @@
         text-gray-500 dark:text-gray-400
       "
     >
-      <%= link_to [@round.tournament, :event_participants], data: {turbo_frame: "modal"}, class: "inline-block text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" do %>
+      <%= link_to [@round.event, :event_participants], data: {turbo_frame: "modal"}, class: "inline-block text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" do %>
         Standings
       <% end %>
-      <%= render partial: "round", collection: @round.tournament.rounds.published.sort_by(&:number) %>
+      <%= render partial: "round", collection: @round.event.rounds.published.sort_by(&:number) %>
       <%= render "future_rounds" %>
     </ul>
 
@@ -121,7 +121,7 @@
   <div class="py-2">
     <label for="table-search" class="sr-only">Search</label>
     <div class="relative mt-1">
-      <%= form_tag [@round.tournament, @round.becomes(Round)], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
+      <%= form_tag [@round.event, @round.becomes(Round)], data: { turbo_frame: "player_list" }, method: "get", remote: true do %>
         <div
           class="
             absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3

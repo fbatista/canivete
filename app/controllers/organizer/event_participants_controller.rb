@@ -5,14 +5,14 @@ module Organizer
     layout "modal"
 
     def index
-      @tournament = load_tournament
+      @event = load_tournament
 
-      case @tournament.state
+      case @event.state
       when "registration_open", "registration_closed"
-        @event_participants = @tournament.event_participants.includes(player: :user).joins(player: :user).order(:name)
+        @event_participants = @event.event_participants.includes(player: :user).joins(player: :user).order(:name)
       else
         @event_participants =
-          @tournament.event_participants.sort_by do |p|
+          @event.event_participants.sort_by do |p|
             [
               p.playing? ? 0 : 1,
               -p.rank_score,
@@ -43,26 +43,26 @@ module Organizer
     end
 
     def new
-      @event_participant = EventParticipant.new(tournament: load_tournament)
+      @event_participant = EventParticipant.new(event: load_tournament)
     end
 
     def create
-      @event_participant = EventParticipant.new(tournament: load_tournament)
+      @event_participant = EventParticipant.new(event: load_tournament)
       @event_participant.attributes = event_participant_params
 
       @event_participant.save
 
-      redirect_to [:organizer, @event_participant.tournament, :event_participants, { layout: "application" }],
+      redirect_to [:organizer, @event_participant.event, :event_participants, { layout: "application" }],
                   notice: "#{@event_participant.name} added!"
     end
 
     def update
-      @tournament = load_tournament
-      @event_participant = load_event_participant(@tournament)
+      @event = load_tournament
+      @event_participant = load_event_participant(@event)
 
       @event_participant.update(event_participant_params)
       # TODO: stay in place or fix the updated item
-      redirect_to [:organizer, @tournament, :event_participants, { layout: "application" }],
+      redirect_to [:organizer, @event, :event_participants, { layout: "application" }],
                   notice: "#{@event_participant.name} #{@event_participant.dropped? ? 'dropped' : 'updated'}!"
     end
 
