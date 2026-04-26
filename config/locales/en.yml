@@ -32,7 +32,7 @@
 en:
   activerecord:
     attributes:
-      tournament_participant:
+      event_participant:
         accepted_terms: "I have read and accepted the rules for this event."
   views:
     pagination:
