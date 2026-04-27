@@ -9,7 +9,8 @@ class League < Event
 
   enum :play_mode, { scheduled: 0, pickup: 1 }, prefix: true
 
-  validates :wager_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_blank: true }
+  validates :wager_percentage,
+            numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_blank: true }
 
   enum :state, {
     draft: 0,
@@ -32,6 +33,12 @@ class League < Event
   }.with_indifferent_access.freeze
 
   scope :ongoing, -> { where(state: %i[play finals]) }
+
+  def playing?
+    state.in?(%w[play finals])
+  end
+
+  alias pickup_play_mode? play_mode_pickup?
 
   def rounds_info
     {

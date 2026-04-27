@@ -43,6 +43,21 @@
         ></div>
       </div>
     <% end %>
+    <% if league.play_mode.present? %>
+      <div class="mb-2">
+        <% if league.play_mode_scheduled? %>
+          <span class="inline-flex items-center text-xs font-medium text-blue-700 bg-blue-100 rounded-full px-2.5 py-0.5 dark:bg-blue-900 dark:text-blue-300">
+            <%= icon('calendar-blank', class: 'me-1 w-3 h-3') %>
+            Scheduled
+          </span>
+        <% else %>
+          <span class="inline-flex items-center text-xs font-medium text-green-700 bg-green-100 rounded-full px-2.5 py-0.5 dark:bg-green-900 dark:text-green-300">
+            <%= icon('lightning', class: 'me-1 w-3 h-3') %>
+            Pick-up
+          </span>
+        <% end %>
+      </div>
+    <% end %>
 
     <div class="markdown mb-3 font-normal text-gray-700 dark:text-gray-400">
       <%= markdown(league.prizes).html_safe %>
