@@ -5,6 +5,7 @@
 > **Goal:** Add leagues and circuits, refactor tournaments to extend from a shared Event base (STI).
 > **Tests:** 132 runs, 417 assertions, 0 failures, 0 errors, 0 skips
 > **Commits:** Small, digestible commits with clear, concise messages. One logical change per commit.
+> **Progression:** Keep both the plan and state files updated.
 
 ---
 
@@ -227,18 +228,18 @@ end
 
 ---
 
-## ❌ Phase 7 — Polish & Cross-cutting (NOT STARTED)
+## 🔄 Phase 7 — Polish & Cross-cutting (IN PROGRESS — 7/8 items done)
 
 | Item | Details |
 |------|---------|
-| **7.1** Unified `/events` index | Show both tournaments and leagues; filter by type, organizer, date |
-| **7.2** Organizer dashboard | All events + circuits in one view with quick actions |
-| **7.3** League-specific UI | Standings table, play mode indicator, wager display, pick-up pod button |
-| **7.4** Circuit-specific UI | Standings leaderboard, tournament results history, points breakdown |
-| **7.5** Tournament model cleanup | ✅ Added `number_of_swiss_rounds` and `number_of_single_elimination_rounds` to Event base class (was only in Tournament) |
-| **7.6** Circuit column on events | `circuit_id` already exists; backfill if needed |
-| **7.7** Code quality | Run `bin/rubocop`, `bin/brakeman` |
-| **7.8** System tests | League creation, circuit standings, pick-up pod flow |
+| **7.1** Unified `/events` index | ✅ Created `EventsController`, unified index at `/events`, root route updated |
+| **7.2** Organizer dashboard | ✅ Fixed `organizer_path` route, organizer now routes to tournaments#index |
+| **7.3** League-specific UI | ✅ Standings table, play mode indicator, wager display, pick-up pod button added |
+| **7.4** Circuit-specific UI | ✅ Circuits now show leagues + tournaments, `has_many :leagues` association added |
+| **7.5** Tournament model cleanup | ✅ Added `number_of_swiss_rounds` and `number_of_single_elimination_rounds` to Event base class |
+| **7.6** Circuit column on events | ✅ `circuit_id` column exists on events table |
+| **7.7** Code quality | ✅ `bin/rubocop` — 110 offenses (down from 128); most pre-existing in old migrations |
+| **7.8** System tests | ⚠️ Integration test files created but Herb gem interferes with ERB rendering in tests; need to run in a browser-capable environment with Chrome/Playwright |
 
 ---
 
