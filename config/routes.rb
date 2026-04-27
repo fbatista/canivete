@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :events, only: %i[index]
   resources :circuits, only: %i[index show]
 
   namespace :organizer do
@@ -69,5 +70,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root "tournaments#index"
+  root "events#index"
 end

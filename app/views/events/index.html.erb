@@ -1,0 +1,94 @@
+<% if @ongoing.any? %>
+  <h1
+    class="
+      mb-4 text-4xl flex items-center font-extrabold leading-none
+      tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white
+      col-span-full
+    "
+  >
+    <div class="relative inline-flex items-center me-2">
+      <span
+        class="
+          absolute inline-flex h-3 w-3 rounded-full bg-red-500 opacity-75
+          animate-ping
+        "
+      ></span>
+      <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+    </div>
+    Ongoing events
+  </h1>
+  <% @ongoing.each do |event| %>
+    <%= render event %>
+  <% end %>
+<% end %>
+
+<div class="col-span-full">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h1
+      class="
+        text-4xl font-extrabold leading-none tracking-tight text-gray-900
+        md:text-5xl lg:text-6xl dark:text-white
+      "
+    >
+      <%= @title %>
+    </h1>
+    <div class="flex gap-2">
+      <%= link_to events_url, class: "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border <%= params[:filter].nil? ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700' %>" do %>
+        <%= icon('calendar') %>
+        Upcoming
+      <% end %>
+      <%= link_to events_url(filter: 'past'), class: "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border <%= params[:filter] == 'past' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700' %>" do %>
+        <%= icon('clock') %>
+        Past
+      <% end %>
+    </div>
+  </div>
+
+  <% if @leagues.any? || @tournaments.any? %>
+    <div class="mb-4 flex gap-4 text-sm">
+      <% if @leagues.any? %>
+        <span class="text-blue-600 dark:text-blue-400 font-medium">
+          <%= icon('trophy', class: 'inline me-1') %>
+          <%= @leagues.size %> league(s)
+        </span>
+      <% end %>
+      <% if @tournaments.any? %>
+        <span class="text-green-600 dark:text-green-400 font-medium">
+          <%= icon('medal', class: 'inline me-1') %>
+          <%= @tournaments.size %> tournament(s)
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @leagues.any? %>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <%= icon('trophy', class: 'inline me-2 w-6 h-6') %>
+      Leagues
+    </h2>
+    <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
+      <%= render @leagues %>
+    </div>
+  <% end %>
+
+  <% if @tournaments.any? %>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <%= icon('medal', class: 'inline me-2 w-6 h-6') %>
+      Tournaments
+    </h2>
+    <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
+      <%= render @tournaments %>
+    </div>
+  <% end %>
+
+  <% if @leagues.none? && @tournaments.none? %>
+    <p class="text-gray-500 dark:text-gray-400 text-center py-12">
+      No events found. Check back later for new tournaments and leagues!
+    </p>
+  <% end %>
+
+  <% if @leagues.any? || @tournaments.any? %>
+    <%= paginate @leagues, theme: 'twitter-bootstrap-5' %>
+    <%= paginate @tournaments, theme: 'twitter-bootstrap-5' %>
+  <% end %>
+</div>
