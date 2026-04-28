@@ -11,6 +11,16 @@ small_tournament:
   tournament_participants_count: 4
 
 # 6 players: 2 swiss rounds, top 4 - boundary testing (6 is first player count with 2 rounds)
+# Alias for tests that expect a registration_open tournament
+medium_tournament_registration_open:
+  name: "Medium Tournament Registration Open"
+  slug: "medium-tournament-registration-open"
+  tournament_organizer: standard_organizer
+  state: 1  # registration_open
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 6
+
 medium_tournament:
   name: "Medium Tournament"
   slug: "medium-tournament"
@@ -29,6 +39,16 @@ standard_tournament:
   start_time: <%= 1.week.from_now %>
   end_time: <%= 2.weeks.from_now %>
   tournament_participants_count: 16
+
+# Small tournament in swiss state for testing round/pod operations
+small_tournament_swiss:
+  name: "Small Tournament Swiss"
+  slug: "small-tournament-swiss"
+  tournament_organizer: standard_organizer
+  state: 3  # swiss
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  tournament_participants_count: 4
 
 # 17 players: 3 swiss rounds, top 7 - boundary testing (17 is first player count with top 7)
 large_tournament:

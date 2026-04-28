@@ -10,6 +10,7 @@ class Round < ApplicationRecord
 
   scope :published, -> { where(published: true) }
   scope :finished, -> { where.not(finished_at: nil) }
+  scope :swiss_rounds, -> { where(type: "SwissRound") }
 
   after_create :create_pods
   after_update :round_finished

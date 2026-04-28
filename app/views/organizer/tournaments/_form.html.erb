@@ -9,7 +9,7 @@
   <% end %>
 
   <% if @tournament.errors.present? %>
-    <%= safe_join(@tournament.errors.full_messages, raw("<br>")) %>
+    <%= safe_join(@tournament.errors.full_messages, tag.br) %>
   <% end %>
 
   <%= f.text_field_with_label :name, placeholder: "A short, appealing name", required: true %>

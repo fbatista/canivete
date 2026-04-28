@@ -5,7 +5,7 @@
   <% end %>
 
   <% if @tournament_participant.errors.present? %>
-    <%= safe_join(@tournament_participant.errors.full_messages, raw("<br>")) %>
+    <%= safe_join(@tournament_participant.errors.full_messages, tag.br) %>
   <% end %>
 
   <%= f.text_field_with_label :decklist, placeholder: "https://moxfield.com/xyz" %>

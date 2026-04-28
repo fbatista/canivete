@@ -1,0 +1,2 @@
+[env]
+TMPDIR = "{{config_root}}/tmp"

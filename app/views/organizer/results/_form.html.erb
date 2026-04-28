@@ -5,7 +5,7 @@
   <% end %>
 
   <% if @result.errors.present? %>
-    <%= safe_join(@result.errors.full_messages, raw("<br>")) %>
+    <%= safe_join(@result.errors.full_messages, tag.br) %>
   <% end %>
 
   <% case @result.round %>

@@ -43,3 +43,33 @@ medium_tournament_participant_two:
   paid: true
   checked_in: true
   dropped: false
+
+# Medium tournament registration open participants
+medium_tournament_registration_open_participant_one:
+  tournament: medium_tournament_registration_open
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_tournament_registration_open_participant_two:
+  tournament: medium_tournament_registration_open
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+# Small tournament swiss participants
+small_tournament_swiss_participant_one:
+  tournament: small_tournament_swiss
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_tournament_swiss_participant_two:
+  tournament: small_tournament_swiss
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false

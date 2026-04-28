@@ -5,7 +5,7 @@
   <% end %>
 
   <% if @infraction.errors.present? %>
-    <%= safe_join(@infraction.errors.full_messages, raw("<br>")) %>
+    <%= safe_join(@infraction.errors.full_messages, tag.br) %>
   <% end %>
 
   <%= f.hidden_field :pod_id %>

@@ -1,5 +1,16 @@
 # Seatings fixture to connect pods and tournament participants
 
+# Small tournament swiss pod seatings
+small_swiss_pod_seat_1:
+  pod: small_tournament_swiss_pod_1
+  tournament_participant: small_tournament_swiss_participant_one
+  order: 1
+
+small_swiss_pod_seat_2:
+  pod: small_tournament_swiss_pod_1
+  tournament_participant: small_tournament_swiss_participant_two
+  order: 2
+
 # Small tournament pod seatings
 small_pod_seat_1:
   pod: small_tournament_pod_1
