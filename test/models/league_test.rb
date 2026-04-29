@@ -2,6 +2,7 @@
 
 require "test_helper"
 
+# rubocop:disable Metrics/ClassLength
 class LeagueTest < ActiveSupport::TestCase
   test "league has correct state enum" do
     assert_includes League.states, "draft"
@@ -62,6 +63,46 @@ class LeagueTest < ActiveSupport::TestCase
     league.registration_closed!
     league.play!
     assert_includes League.ongoing, league
+  end
+
+  test "wager_percentage must be between 0 and 100" do
+    league = leagues(:standard_league)
+    league.wager_percentage = 101
+    assert_not league.valid?
+    assert_match(/less than or equal to 100/, league.errors[:wager_percentage].first)
+
+    league.wager_percentage = -1
+    assert_not league.valid?
+    assert_match(/greater than or equal to 0/, league.errors[:wager_percentage].first)
+
+    league.wager_percentage = 0
+    assert league.valid?
+
+    league.wager_percentage = 100
+    assert league.valid?
+
+    league.wager_percentage = nil
+    assert league.valid?
+  end
+
+  test "play_mode enum is defined" do
+    assert_includes League.play_modes, "scheduled"
+    assert_includes League.play_modes, "pickup"
+  end
+
+  test "league defaults to scheduled play_mode" do
+    league = leagues(:standard_league)
+    assert_equal "scheduled", league.play_mode
+    assert league.play_mode_scheduled?
+  end
+
+  test "scheduled mode league can be set to pickup" do
+    league = leagues(:standard_league)
+    league.play_mode_scheduled!
+    assert league.play_mode_scheduled?
+
+    league.play_mode_pickup!
+    assert league.play_mode_pickup?
   end
 
   test "perform_state_based_actions triggers StartPlayRoundJob" do

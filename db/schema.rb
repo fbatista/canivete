@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_26_184561) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_26_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -112,6 +112,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_26_184561) do
     t.string "type", default: "Tournament", null: false
     t.integer "play_mode", default: 0, null: false
     t.uuid "circuit_id"
+    t.decimal "wager_percentage", precision: 5, scale: 2
     t.index ["circuit_id"], name: "index_events_on_circuit_id"
     t.index ["event_organizer_id"], name: "index_events_on_event_organizer_id"
     t.index ["location"], name: "index_events_on_location", using: :gist

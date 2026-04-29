@@ -1,0 +1,15 @@
+<%= link_to [:organizer, circuit], class: "block" do %>
+  <div class="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white"><%= circuit.name %></h3>
+      <span class="text-sm text-gray-500 dark:text-gray-400">
+        <%= circuit.events.count %> event(s)
+      </span>
+    </div>
+    <% if circuit.event_organizer %>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Organized by <%= circuit.event_organizer.name %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

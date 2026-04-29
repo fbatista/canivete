@@ -3,8 +3,6 @@
 class Tournament < Event # rubocop:disable Metrics/ClassLength
   paginates_per 20
 
-  belongs_to :circuit, optional: true
-
   scope :ongoing, -> { where(state: %i[swiss single_elimination]) }
 
   POINTS_PER_WIN = 7

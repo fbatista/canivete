@@ -1,0 +1,59 @@
+<% if @circuits.any? %>
+  <h1
+    class="
+      text-4xl font-extrabold leading-none tracking-tight text-gray-900
+      md:text-5xl lg:text-6xl dark:text-white
+      col-span-full
+    "
+  >
+    Leagues & Circuits
+  </h1>
+  <p class="my-4 text-lg text-gray-500 dark:text-gray-400">
+    Compete in organized leagues and climb the circuit standings to earn recognition.
+  </p>
+<% end %>
+
+<div class="col-span-full">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+    <% @circuits.each do |circuit| %>
+      <%= link_to circuit, class: "block group" do %>
+        <div
+          class="
+            p-6 bg-white border border-gray-200 rounded-lg shadow-sm
+            hover:bg-gray-50 hover:shadow-md transition-shadow dark:border-gray-700
+            dark:bg-gray-800 dark:hover:bg-gray-750
+          "
+        >
+          <div class="flex items-center justify-between mb-3">
+            <h3
+              class="
+                text-xl font-bold text-gray-900 dark:text-white
+                group-hover:text-blue-600 dark:group-hover:text-blue-400
+              "
+            >
+              <%= circuit.name %>
+            </h3>
+            <%= icon('trophy', class: "text-yellow-500 w-5 h-5") %>
+          </div>
+
+          <% if circuit.event_organizer %>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              Organized by <%= circuit.event_organizer.name %>
+            </p>
+          <% end %>
+
+          <% if circuit.events.any? %>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              <%= number_to_currency(circuit.events.count) %> event(s)
+              <% if circuit.leagues.any? %>
+                (<%= circuit.leagues.count %> leagues)
+              <% end %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= paginate @circuits %>

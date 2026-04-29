@@ -10,6 +10,8 @@ class Round < ApplicationRecord
 
   scope :published, -> { where(published: true) }
   scope :finished, -> { where.not(finished_at: nil) }
+  scope :play_rounds, -> { where(is_play_round: true) }
+  scope :finals_rounds, -> { where(is_finals_round: true) }
 
   after_create :create_pods
   after_update :round_finished
@@ -29,6 +31,11 @@ class Round < ApplicationRecord
   def advance_tournament!
     # No-op default. Override in subclasses (SwissRound, SingleEliminationRound).
   end
+
+  def publish!
+    update!(published: true)
+  end
+  alias published! publish!
 
   def byes
     results

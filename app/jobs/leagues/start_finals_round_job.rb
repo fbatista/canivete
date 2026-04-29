@@ -5,7 +5,7 @@ module Leagues
   class StartFinalsRoundJob < ApplicationJob
     def perform(league)
       league.rounds.create(
-        type: SwissRound,
+        type: SingleEliminationRound,
         number: league.rounds.size + 1,
         is_finals_round: true
       )
