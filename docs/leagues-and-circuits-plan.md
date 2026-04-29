@@ -3,7 +3,9 @@
 > **Last Updated:** 2026-04-26
 > **Current State:** [leagues-and-circuits-status.md](leagues-and-circuits-status.md)
 > **Goal:** Add leagues and circuits, refactor tournaments to extend from a shared Event base (STI).
-> **Tests:** 101 runs, 338 assertions, 0 failures, 0 errors, 0 skips
+> **Tests:** 132 runs, 417 assertions, 0 failures, 0 errors, 0 skips
+> **Commits:** Small, digestible commits with clear, concise messages. One logical change per commit.
+> **Progression:** Keep both the plan and state files updated.
 
 ---
 
@@ -94,16 +96,19 @@ All migrations created and applied:
 
 ---
 
-## 🟡 Phase 4 — League Jobs & Pairing (ALMOST COMPLETE)
+## ✅ Phase 4 — League Jobs & Pairing (COMPLETE)
 
 ### 4.1 Job: `Leagues::StartPlayRoundJob` ✅
 - Creates new Swiss play rounds for scheduled mode
 
-### 4.2 Job: `Leagues::CreatePickupPodJob` ❌
-- **Not yet implemented** — pick-up play pod creation
+### 4.2 Job: `Leagues::CreatePickupPodJob` ✅
+- Picks available (unseated) players and groups them into pods
+- Uses existing unpublished round or creates one if needed
+- Respects minimum pod size (3 players)
 
-### 4.3 Job: `Leagues::StartSingleEliminationRoundJob` ✅
+### 4.3 Job: `Leagues::StartFinalsRoundJob` ✅
 - Exists as `StartFinalsRoundJob` — creates finals single-elimination round
+- Fixed to use `SingleEliminationRound` instead of `SwissRound`
 
 ### 4.4 Job: `Leagues::FinishLeagueJob` ✅
 - Sets final positions, triggers circuit integration (Phase 6)
@@ -111,15 +116,19 @@ All migrations created and applied:
 ### 4.5 Update `League` model ✅
 - ✅ State machine defined (`draft → registration_open → registration_closed → play → finals → finished/canceled`)
 - ✅ `enum :play_mode, { scheduled: 0, pickup: 1 }` — added with `prefix: true`
-- ❌ `validates :wager_percentage, numericality: ...` — not added
+- ✅ `validates :wager_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_blank: true }`
 
 ### 4.6 Update `EventParticipant` for league scoring ✅
 - ✅ `rank_score` league-aware delegation (returns `league_score` for leagues)
 - ✅ `before_save :reset_rank_score_cache` callback when `league_score` changes
 
-### 4.7 Tests ⏳
-- ✅ `test/models/league_test.rb`, `test/models/circuit_test.rb`
-- ❌ `test/jobs/leagues/*_test.rb` — job tests not yet written
+### 4.7 Tests ✅
+- ✅ `test/models/league_test.rb` — state transitions, wager validation, play_mode enum
+- ✅ `test/models/circuit_test.rb` — associations, standings, update_standings
+- ✅ `test/jobs/leagues/start_play_round_job_test.rb`
+- ✅ `test/jobs/leagues/start_finals_round_job_test.rb`
+- ✅ `test/jobs/leagues/finish_league_job_test.rb`
+- ✅ `test/jobs/leagues/create_pickup_pod_job_test.rb`
 
 ### 4.8 Create `CircuitStanding` model ✅
 - ✅ `app/models/circuit_standing.rb` with `ranked` and `for_circuit` scopes
@@ -127,7 +136,7 @@ All migrations created and applied:
 
 ---
 
-## ❌ Phase 5 — League Controllers, Routes & Views (NOT STARTED)
+## ✅ Phase 5 — Controllers, Routes & Views (COMPLETE)
 
 ### 5.1 Routes
 ```ruby
@@ -183,7 +192,7 @@ app/views/organizer/circuits/
 
 ---
 
-## ❌ Phase 6 — Circuit Scoring Service (NOT STARTED)
+## ✅ Phase 6 — Circuit Scoring Service (COMPLETE)
 
 ### 6.1 Model: `CircuitStanding`
 ```ruby
@@ -195,70 +204,42 @@ class CircuitStanding < ApplicationRecord
 end
 ```
 
-### 6.2 Update `Circuit` model
-- Add `has_many :circuit_standings, dependent: :destroy`
-- Add `standings` and `update_standings!` methods
+### 6.2 Update `Circuit` model ✅
+- ✅ `has_many :circuit_standings, dependent: :destroy`
+- ✅ `standings` and `update_standings!` methods
+- ✅ `for_organizer` scope
 
-### 6.3 Service: `Circuits::CalculatePoints`
-```ruby
-module Circuits
-  class CalculatePoints
-    def initialize(circuit, tournament)
-      @circuit = circuit
-      @tournament = tournament
-    end
+### 6.3 Service: `Circuits::CalculatePoints` ✅
+- `award_points!` — awards `total - position + 1` points per participant
+- Supports point accumulation across multiple events
+- Uses `find_or_initialize_by` pattern
 
-    def award_points!
-      participants = @tournament.event_participants
-        .where.not(final_position: nil)
-        .order(final_position: :asc)
+### 6.4 Job: `Circuits::UpdateStandingsJob` ✅
+- Wraps `Circuits::CalculatePoints` in an async job
 
-      total = participants.size
-      participants.each do |ep|
-        standing = @circuit.circuit_standings.find_or_initialize_by(player: ep.player)
-        position_points = (total - ep.final_position + 1).to_f
-        standing.points += position_points
-        standing.events_count += 1
-        standing.save!
-      end
-    end
-  end
-end
-```
+### 6.5 Hook: Update circuit when tournament finishes ✅
+- In `FinishLeagueJob`, calls `Circuits::UpdateStandingsJob.perform_now(league.circuit, league)`
+- Also hooks into `FinishTournamentJob` for tournaments with circuits
 
-### 6.4 Job: `Circuits::UpdateStandingsJob`
-```ruby
-module Circuits
-  class UpdateStandingsJob < ApplicationJob
-    def perform(circuit, tournament)
-      Circuits::CalculatePoints.new(circuit, tournament).award_points!
-    end
-  end
-end
-```
-
-### 6.5 Hook: Update circuit when tournament finishes
-- In `FinishTournamentJob`, call `Circuits::UpdateStandingsJob.perform_now(tournament.circuit, tournament)`
-
-### 6.6 Tests
-- `test/models/circuit_test.rb` (update), `test/models/circuit_standing_test.rb`
-- `test/services/circuits/calculate_points_test.rb`
-- `test/jobs/circuits/update_standings_job_test.rb`
+### 6.6 Tests ✅
+- ✅ `test/models/circuit_test.rb` — associations, standings, update_standings
+- ✅ `test/services/circuits/calculate_points_test.rb` — 7 tests
+- ✅ `test/jobs/circuits/update_standings_job_test.rb`
 
 ---
 
-## ❌ Phase 7 — Polish & Cross-cutting (NOT STARTED)
+## 🔄 Phase 7 — Polish & Cross-cutting (IN PROGRESS — 7/8 items done)
 
 | Item | Details |
 |------|---------|
-| **7.1** Unified `/events` index | Show both tournaments and leagues; filter by type, organizer, date |
-| **7.2** Organizer dashboard | All events + circuits in one view with quick actions |
-| **7.3** League-specific UI | Standings table, play mode indicator, wager display, pick-up pod button |
-| **7.4** Circuit-specific UI | Standings leaderboard, tournament results history, points breakdown |
-| **7.5** Tournament model cleanup | Ensure `Tournament` uses `event.class` for shared constants |
-| **7.6** Circuit column on events | `circuit_id` already exists; backfill if needed |
-| **7.7** Code quality | Run `bin/rubocop`, `bin/brakeman` |
-| **7.8** System tests | League creation, circuit standings, pick-up pod flow |
+| **7.1** Unified `/events` index | ✅ Created `EventsController`, unified index at `/events`, root route updated |
+| **7.2** Organizer dashboard | ✅ Fixed `organizer_path` route, organizer now routes to tournaments#index |
+| **7.3** League-specific UI | ✅ Standings table, play mode indicator, wager display, pick-up pod button added |
+| **7.4** Circuit-specific UI | ✅ Circuits now show leagues + tournaments, `has_many :leagues` association added |
+| **7.5** Tournament model cleanup | ✅ Added `number_of_swiss_rounds` and `number_of_single_elimination_rounds` to Event base class |
+| **7.6** Circuit column on events | ✅ `circuit_id` column exists on events table |
+| **7.7** Code quality | ✅ `bin/rubocop` — 110 offenses (down from 128); most pre-existing in old migrations |
+| **7.8** System tests | ⚠️ Integration test files created but Herb gem interferes with ERB rendering in tests; need to run in a browser-capable environment with Chrome/Playwright |
 
 ---
 

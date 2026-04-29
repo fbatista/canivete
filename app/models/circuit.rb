@@ -3,7 +3,9 @@
 class Circuit < ApplicationRecord
   scope :for_organizer, ->(organizer) { where(event_organizer: organizer) }
 
+  has_many :events, dependent: :nullify
   has_many :tournaments, dependent: :nullify
+  has_many :leagues, dependent: :nullify
   has_many :circuit_standings, dependent: :destroy
   belongs_to :event_organizer
 

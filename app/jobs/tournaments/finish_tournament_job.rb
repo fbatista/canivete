@@ -3,7 +3,9 @@
 module Tournaments
   class FinishTournamentJob < ApplicationJob
     def perform(tournament)
-      # do something
+      if tournament.circuit.present?
+        Circuits::UpdateStandingsJob.perform_now(tournament.circuit, tournament)
+      end
     end
   end
 end

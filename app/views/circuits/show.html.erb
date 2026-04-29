@@ -40,13 +40,16 @@
 
   <% if @circuit.event_organizer %>
     <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-      Organized by <%= link_to @circuit.event_organizer.name, organizer_path(@circuit.event_organizer), class: "text-blue-600 hover:underline" %>
+      Organized by <%= link_to @circuit.event_organizer.name, organizer_root_path, class: "text-blue-600 hover:underline" %>
     </p>
   <% end %>
 
-  <% if @circuit.tournaments.any? %>
+  <% if @circuit.events.any? %>
     <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-      <%= number_to_currency @circuit.tournaments.count %> event(s)
+      <%= number_to_currency @circuit.events.count %> event(s)
+      <% if @circuit.leagues.any? %>
+        (<%= @circuit.leagues.count %> leagues, <%= @circuit.tournaments.count %> tournaments)
+      <% end %>
     </p>
   <% end %>
 
@@ -86,12 +89,27 @@
     <% end %>
   </div>
 
-  <div class="mt-8">
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Events</h2>
-    <% if @circuit.tournaments.any? %>
-      <%= render @circuit.tournaments %>
-    <% else %>
+  <% if @circuit.events.any? %>
+    <div class="mt-8">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Events</h2>
+      <% if @circuit.leagues.any? %>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+          <%= icon('trophy', class: 'inline me-2 w-5 h-5') %>
+          Leagues
+        </h3>
+        <%= render @circuit.leagues %>
+      <% end %>
+      <% if @circuit.tournaments.any? %>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+          <%= icon('medal', class: 'inline me-2 w-5 h-5') %>
+          Tournaments
+        </h3>
+        <%= render @circuit.tournaments %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="mt-8">
       <p class="text-gray-500 dark:text-gray-400">No events in this circuit yet.</p>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
