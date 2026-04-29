@@ -48,7 +48,7 @@ class Infraction < ApplicationRecord
   }, default: :warning
 
   validate :must_match_kind_with_category
-  validate :must_have_tournament_or_pod
+  validate :must_have_event_or_pod
   validates :description, presence: true
 
   after_create :create_associated_penalty, if: lambda {

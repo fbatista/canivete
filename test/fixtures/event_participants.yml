@@ -29,6 +29,36 @@ small_event_participant_four:
   checked_in: true
   dropped: false
 
+
+# Small tournament participants (4 players)
+small_event_swiss_participant_one:
+  event: small_tournament_swiss
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_event_swiss_participant_two:
+  event: small_tournament_swiss
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_event_swiss_participant_three:
+  event: small_tournament_swiss
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+small_event_swiss_participant_four:
+  event: small_tournament_swiss
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
+
 # Medium tournament participants (6 players) - reusing players
 medium_event_participant_one:
   event: medium_tournament

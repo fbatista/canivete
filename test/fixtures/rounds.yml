@@ -9,6 +9,14 @@ small_tournament_round_1:
   finished_at: <%= 30.minutes.ago %>
   published: true
 
+small_tournament_swiss_round_1:
+  event: small_tournament_swiss
+  number: 1
+  type: "SwissRound"
+  started_at: <%= 1.hour.ago %>
+  finished_at: <%= 30.minutes.ago %>
+  published: true
+
 # Swiss round for medium event
 medium_tournament_round_1:
   event: medium_tournament

@@ -33,14 +33,10 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     visit organizer_tournaments_path
     click_link "Organize Tournament"
 
-    puts "loaded form"
-
     # Submit form with missing required fields
     fill_in "Start time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
     fill_in "End time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
     click_button "Create Tournament"
-
-    puts "loaded form again"
 
     # The form should still be visible with Name field (validation error)
     assert_text "Name"

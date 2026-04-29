@@ -8,7 +8,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     sign_in_as(organizer)
 
     # Create tournament - starts as registration_open by default
-    visit organizer_tournament_path
+    visit organizer_tournaments_path
     click_link "Organize Tournament"
 
     fill_in "Name", with: "Test Championship"
@@ -102,11 +102,10 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
   end
 
   test "player can register for tournament and view results" do
-    # Use a tournament where player_three is NOT already registered
-    # medium_tournament only has player_one and player_two
+    # Use a tournament where player_seven is NOT already registered
     tournament = events(:medium_tournament)
     tournament.update!(state: "registration_open")
-    player_user = users(:player_three) # Player not yet registered
+    player_user = users(:player_seven) # Player not yet registered
     sign_in_as(player_user)
 
     # Register for tournament via modal form

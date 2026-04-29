@@ -59,9 +59,10 @@ class Tournament < Event # rubocop:disable Metrics/ClassLength
       top: { players: 64, pods: [16, 4, 1] }
     }
   }.tap do |thresholds|
-    thresholds.default_proc =
-      proc do |hash, key|
-        next nil unless key.is_a?(Integer)
+
+    thresholds.default_proc = 
+      lambda do |hash, key|
+        return nil unless key.is_a?(Integer)
 
         range_key = hash.keys.find { |r| r.include?(key) }
 
@@ -94,11 +95,13 @@ class Tournament < Event # rubocop:disable Metrics/ClassLength
   end
 
   def progress_percent
+    return 0 if rounds_info.nil?
+    
     (rounds.finished.count.to_f / (number_of_swiss_rounds + number_of_single_elimination_rounds)) * 100
   end
 
   def number_of_swiss_rounds
-    rounds_info[:rounds].size
+    rounds_info.dig(:rounds)&.size || 0
   end
 
   def number_of_single_elimination_rounds

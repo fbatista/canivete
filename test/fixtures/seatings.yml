@@ -21,6 +21,27 @@ small_pod_seat_4:
   event_participant: small_event_participant_four
   order: 4
 
+# Small tournament pod seatings
+small_pod_swiss_seat_1:
+  pod: small_tournament_swiss_pod_1
+  event_participant: small_event_swiss_participant_one
+  order: 1
+
+small_pod_swiss_seat_2:
+  pod: small_tournament_swiss_pod_1
+  event_participant: small_event_swiss_participant_two
+  order: 2
+
+small_pod_swiss_seat_3:
+  pod: small_tournament_swiss_pod_1
+  event_participant: small_event_swiss_participant_three
+  order: 3
+
+small_pod_swiss_seat_4:
+  pod: small_tournament_swiss_pod_1
+  event_participant: small_event_swiss_participant_four
+  order: 4
+
 # Medium tournament pod seatings
 medium_pod_seat_1:
   pod: medium_tournament_pod_1
