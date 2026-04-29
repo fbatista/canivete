@@ -29,9 +29,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :events, only: %i[index]
   resources :circuits, only: %i[index show]
 
   namespace :organizer do
+    root "tournaments#index"
+
     resources :tournaments do
       resources :infractions, only: %i[new create]
       resources :event_participants do
@@ -62,6 +65,7 @@ Rails.application.routes.draw do
           resources :infractions, only: %i[new create]
         end
       end
+      post :create_pickup_pod, on: :member
     end
 
     resources :circuits do
@@ -69,5 +73,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root "tournaments#index"
+  root "events#index"
 end

@@ -34,7 +34,7 @@ module Leagues
     end
 
     def available_participants(round)
-      seated_participant_ids = round.pods.flat_map { |p| p.event_participant_ids }.compact
+      seated_participant_ids = round.pods.flat_map(&:event_participant_ids).compact
 
       league.event_participants.playing
         .where.not(id: seated_participant_ids)

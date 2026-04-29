@@ -43,9 +43,10 @@ module Scoring
       participants = pod.event_participants
       return if participants.empty?
 
-      participant_results = participants.index_with do |ep|
-        ep.results.find { |r| r.round_id == pod.round_id }
-      end
+      participant_results =
+        participants.index_with do |ep|
+          ep.results.find { |r| r.round_id == pod.round_id }
+        end
 
       wins = participant_results.select { |_, r| r&.is_a?(Win) }.keys
       draws = participant_results.select { |_, r| r&.is_a?(Draw) }.keys

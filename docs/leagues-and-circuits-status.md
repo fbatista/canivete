@@ -2,7 +2,7 @@
 
 > **Last Updated:** 2026-04-26
 > **Goal:** Add leagues and circuits, refactor tournaments to extend from a shared Event base (STI).
-> **Tests:** 101 runs, 338 assertions, 0 failures, 0 errors, 0 skips
+> **Tests:** 132 runs, 417 assertions, 0 failures, 0 errors, 0 skips
 
 ---
 
@@ -58,18 +58,22 @@
 ### Phase 4 — League Jobs
 
 **4.1 `Leagues::StartPlayRoundJob`** ✅ — Creates new Swiss play rounds
-**4.2 `Leagues::CreatePickupPodJob`** ❌ — Not yet implemented
-**4.3 `Leagues::StartSingleEliminationRoundJob`** ✅ (exists as `StartFinalsRoundJob`) — Creates finals single-elimination round
-**4.4 `Leagues::FinishLeagueJob`** ✅ — Finalizes league, sets positions
+**4.2 `Leagues::CreatePickupPodJob`** ✅ — Picks available players, creates pods in existing or new round
+**4.3 `Leagues::StartFinalsRoundJob`** ✅ — Fixed to create `SingleEliminationRound` (was incorrectly using `SwissRound`)
+**4.4 `Leagues::FinishLeagueJob`** ✅ — Finalizes league, triggers circuit integration
 
 ### Phase 1.7 — Fixtures & Model Tests
 
-- ✅ `test/fixtures/leagues.yml`
+- ✅ `test/fixtures/leagues.yml` — Updated with 4 event participants
 - ✅ `test/fixtures/circuits.yml`
-- ✅ `test/models/league_test.rb`
-- ✅ `test/models/circuit_test.rb`
+- ✅ `test/models/league_test.rb` — State transitions, wager validation, play_mode enum
+- ✅ `test/models/circuit_test.rb` — Associations, standings, update_standings
 - ✅ `app/models/circuit_standing.rb` — Created with `ranked`/`for_circuit` scopes
-- ✅ `app/models/league.rb` — `play_mode` enum defined with `prefix: true`
+- ✅ `app/models/league.rb` — `play_mode` enum, wager validation
+- ✅ `test/jobs/leagues/start_play_round_job_test.rb`
+- ✅ `test/jobs/leagues/start_finals_round_job_test.rb`
+- ✅ `test/jobs/leagues/finish_league_job_test.rb`
+- ✅ `test/jobs/leagues/create_pickup_pod_job_test.rb`
 
 ---
 
@@ -90,31 +94,36 @@
 
 | Item | Status |
 |------|--------|
-| `Circuits::CalculatePoints` service | ❌ Missing |
-| `Circuits::UpdateStandingsJob` | ❌ Missing |
-| Hook in `FinishLeagueJob`/`FinishTournamentJob` | ❌ Missing |
+| `Circuits::CalculatePoints` service | ✅ Implemented — 7 tests |
+| `Circuits::UpdateStandingsJob` | ✅ Implemented — 2 tests |
+| Hook in `FinishLeagueJob` | ✅ Implemented — 2 tests |
+| Hook in `FinishTournamentJob` | ✅ Already existed |
+| Circuit model `number_of_swiss_rounds` | ✅ Added to Event base class |
 
 ### Phase 7 — Polish
 
 | Item | Status |
 |------|--------|
-| Unified `/events` index (7.1) | ❌ |
-| Organizer dashboard (7.2) | ❌ |
-| League-specific helpers/UI (7.3) | ❌ |
-| Circuit-specific helpers/UI (7.4) | ❌ |
-| Tournament model cleanup (7.5) | ⏳ |
+| Unified `/events` index (7.1) | ✅ `EventsController` created, root route updated |
+| Organizer dashboard (7.2) | ✅ `organizer_path` route fixed |
+| League-specific helpers/UI (7.3) | ✅ Standings table, play mode indicator, wager display, pick-up pod |
+| Circuit-specific helpers/UI (7.4) | ✅ Circuits now include leagues, `has_many :leagues` added |
+| Tournament model cleanup (7.5) | ✅ Added `number_of_swiss_rounds` and `number_of_single_elimination_rounds` to Event base class |
 | Circuit column on events (7.6) | ✅ column exists |
-| Code quality `bin/rubocop` (7.7) | ⚠️ 23 offenses (metrics mostly) |
+| Code quality `bin/rubocop` (7.7) | ⚠️ 110 offenses (down from 128; most pre-existing in migrations) |
 | System tests (7.8) | ❌ |
 
 ---
 
-## ⚠️ Partially Done
+## ⏳ Remaining
 
-### Phase 4 — League Model
-- ✅ `League < Event` with state machine (`draft → registration_open → registration_closed → play → finals → finished/canceled`)
-- ⏳ `enum :play_mode, { scheduled: 0, pickup: 1 }` — column exists but enum not defined in model
-- ⏳ `EventParticipant#rank_score` — returns tournament scoring; needs league-aware delegation
+### Phase 7 — Polish (partial)
+- [x] 7.1 Unified `/events` index
+- [x] 7.2 Organizer dashboard route
+- [x] 7.3 League-specific UI
+- [x] 7.4 Circuit-specific UI
+- [x] 7.7 Code quality — 110 offenses (down from 128)
+- [ ] 7.8 System tests — League creation, circuit standings, pick-up pod flow
 
 ---
 
@@ -125,9 +134,9 @@
 | Phase 1 — Cleanup | ✅ Complete |
 | Phase 2 — Migrations | ✅ Complete |
 | Phase 3 — Point Wager | ✅ Complete |
-| Phase 4 — Jobs & Models | 🟡 Almost complete (missing CreatePickupPodJob, wager validation, job tests) |
+| Phase 4 — Jobs & Models | ✅ Complete |
 | Phase 5 — Controllers/Views | ✅ Complete |
-| Phase 6 — Circuit Scoring | ❌ Not started |
-| Phase 7 — Polish | ❌ Not started |
+| Phase 6 — Circuit Scoring | ✅ Complete |
+| Phase 7 — Polish | 🔄 In progress (7/8 items done) |
 
-**Test health:** All 101 tests passing (101 runs, 338 assertions, 0 failures, 0 errors, 0 skips).
+**Test health:** All 132 unit tests passing (132 runs, 417 assertions, 0 failures, 0 errors, 0 skips). System tests require Chromium/Playwright browser not available in this environment.
