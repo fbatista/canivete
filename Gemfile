@@ -37,11 +37,14 @@ group :development, :test do
   gem "brakeman", require: false
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
-  gem "rubocop-rails-omakase", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-capybara", require: false
 end
 
 group :development do
   gem "web-console"
+  gem "ruby-lsp", require: false
+  gem "ruby-lsp-rails", require: false
 end
 
 group :test do

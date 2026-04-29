@@ -1,12 +1,175 @@
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+plugins:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-capybara
+
+# Merge Exclude declarations in this file with the defaults from rubocop/rubocop-rails
+inherit_mode:
+  merge:
+    - Exclude
 
 AllCops:
-  SuggestExtensions: false
-  TargetRubyVersion: 3.4
   NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+## Enable Rails cops
+Rails:
+  Enabled: true
+
+# Configuration parameters: Include, TreatCommentsAsGroupSeparators.
+# Include: **/Gemfile, **/gems.rb
+Bundler/OrderedGems:
+  Exclude:
+    - "Gemfile"
+
+Rails/ApplicationController:
+  Enabled: false
+
+Rails/EnvironmentVariableAccess:
+  Enabled: false
+
+Rails/FindByOrAssignmentMemoization:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
+# URISchemes: http, https
+Layout/LineLength:
+  AutoCorrect: true
+  AllowURI: true
+
+##
+## Explicit configuration
+##
+
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
+
+# Disable rule since it is triggered by doorkeeper
+Naming/InclusiveLanguage:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: module_function, extend_self
+Style/ModuleFunction:
+  Enabled: true
+  EnforcedStyle: extend_self
+
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: new_line, same_line
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  EnforcedStyle: new_line
+
+# Configuration parameters: EnforcedStyle, IndentationWidth.
+# SupportedStyles: aligned, indented, indented_relative_to_receiver
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+
+# Configuration parameters: Strict.
+Style/NumericLiterals:
+  Enabled: true
+  MinDigits: 15
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 Style/Documentation:
   Enabled: false
 
-Bundler/OrderedGems:
+Style/GuardClause:
   Enabled: false
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, MinSize, WordRegex.
+# SupportedStyles: percent, brackets
+Style/WordArray:
+  Enabled: true
+  MinSize: 4
+  EnforcedStyle: percent
+
+# Configuration parameters: EnforcedStyle, IndentationWidth.
+# SupportedStyles: special_inside_parentheses, consistent, align_braces
+Layout/FirstHashElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+# Configuration parameters: EmptyLineBetweenMethodDefs, EmptyLineBetweenClassDefs, EmptyLineBetweenModuleDefs
+# AllowAdjacentOneLineDefs, NumberOfEmptyLines
+Layout/EmptyLineBetweenDefs:
+  Enabled: true
+  AllowAdjacentOneLineDefs: true
+
+# Configuration parameters: .
+# SupportedStyles: percent, brackets
+Style/SymbolArray:
+  EnforcedStyle: percent
+  MinSize: 6
+
+Style/CollectionMethods:
+  Description: "Preferred collection methods."
+  StyleGuide: "#map-find-select-reduce-size"
+  Enabled: true
+  PreferredMethods:
+    collect: "map"
+    collect!: "map!"
+    inject: "reduce"
+    detect: "find"
+    find_all: "select"
+
+Style/FormatStringToken:
+  Enabled: true
+  Exclude:
+    - "config/routes.rb"
+    - "config/routes/*"
+
+Style/HashEachMethods:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly, IncludeTernaryExpressions.
+# SupportedStyles: assign_to_condition, assign_inside_condition
+Style/ConditionalAssignment:
+  Enabled: false
+
+# Configuration parameters: MaxLineLength.
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/StringConcatenation:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: snake_case, normalcase, non_integer
+Naming/VariableNumber:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/UnusedIgnoredColumns:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/WhereRange:
+  Enabled: false
+
+Capybara/ClickLinkOrButtonStyle:
+  EnforcedStyle: link_or_button

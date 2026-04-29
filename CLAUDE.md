@@ -27,7 +27,7 @@ This is a **Rails 8** tournament management system ("Canivete") for organizing c
 - **Tournament**: Central entity managing tournament lifecycle (draft → registration_open → registration_closed → swiss → single_elimination → finished)
 - **Round**: Supports both SwissRound and SingleEliminationRound with complex pairing algorithms
 - **Pod**: Tournament matches/tables with 3-5 players per pod
-- **TournamentParticipant**: Player registration and tracking within tournaments
+- **EventParticipant**: Player registration and tracking within tournaments
 - **Result**: Match outcomes with sophisticated scoring system
 - **Infraction**: Tournament violations and penalties
 
