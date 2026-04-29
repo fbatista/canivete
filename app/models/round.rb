@@ -2,8 +2,8 @@
 
 # Model representing a round in the tournament
 class Round < ApplicationRecord
-  belongs_to :tournament, counter_cache: true
-  has_many :tournament_participants, -> { playing.not_eliminated }, through: :tournament
+  belongs_to :event, counter_cache: true
+  has_many :event_participants, -> { playing.not_eliminated }, through: :event
   has_many :pods, dependent: :destroy
   has_many :seatings, through: :pods
   has_many :results, dependent: :destroy
@@ -11,6 +11,8 @@ class Round < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :finished, -> { where.not(finished_at: nil) }
   scope :swiss_rounds, -> { where(type: "SwissRound") }
+  scope :play_rounds, -> { where(is_play_round: true) }
+  scope :finals_rounds, -> { where(is_finals_round: true) }
 
   after_create :create_pods
   after_update :round_finished
@@ -31,10 +33,15 @@ class Round < ApplicationRecord
     # No-op default. Override in subclasses (SwissRound, SingleEliminationRound).
   end
 
+  def publish!
+    update!(published: true)
+  end
+  alias published! publish!
+
   def byes
     results
       .where(type: "Advance")
-      .where.not(tournament_participant_id: seatings.select(:tournament_participant_id))
+      .where.not(event_participant_id: seatings.select(:event_participant_id))
   end
 
   private

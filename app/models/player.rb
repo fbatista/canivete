@@ -3,18 +3,18 @@
 class Player < ApplicationRecord
   belongs_to :user, optional: true
 
-  has_many :tournament_participations, class_name: "TournamentParticipant", dependent: :destroy
-  has_many :tournaments, through: :tournament_participations
+  has_many :event_participations, class_name: "EventParticipant", dependent: :destroy
+  has_many :events, through: :event_participations
   has_many :infractions, dependent: :destroy
 
   validates :key, presence: true
   delegate :name, to: :user
 
-  def participant?(tournament)
-    tournament_participations.any? { |tp| tp.tournament_id == tournament.id }
+  def participant?(event)
+    event_participations.any? { |ep| ep.event_id == event.id }
   end
 
-  def participant(tournament)
-    tournament_participations.find { |tp| tp.tournament_id == tournament.id }
+  def participant(event)
+    event_participations.find { |ep| ep.event_id == event.id }
   end
 end

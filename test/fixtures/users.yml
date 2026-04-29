@@ -23,3 +23,68 @@ player_four:
   name: "Player Four"
   email_address: "player4@example.com"
   password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_five:
+  name: "Player Five"
+  email_address: "player5@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_six:
+  name: "Player Six"
+  email_address: "player6@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_seven:
+  name: "Player Seven"
+  email_address: "player7@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_eight:
+  name: "Player Eight"
+  email_address: "player8@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_nine:
+  name: "Player Nine"
+  email_address: "player9@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_ten:
+  name: "Player Ten"
+  email_address: "player10@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_eleven:
+  name: "Player Eleven"
+  email_address: "player11@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_twelve:
+  name: "Player Twelve"
+  email_address: "player12@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_thirteen:
+  name: "Player Thirteen"
+  email_address: "player13@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_fourteen:
+  name: "Player Fourteen"
+  email_address: "player14@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_fifteen:
+  name: "Player Fifteen"
+  email_address: "player15@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_sixteen:
+  name: "Player Sixteen"
+  email_address: "player16@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"
+
+player_seventeen:
+  name: "Player Seventeen"
+  email_address: "player17@example.com"
+  password_digest: "<%= BCrypt::Password.create('password123') %>"

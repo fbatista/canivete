@@ -4,7 +4,7 @@
 <% end %>
 
 <% unless tournament.draft? %>
-  <%= link_to [:organizer, tournament, :tournament_participants, {layout: 'application'}], class: "inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 dark:focus:ring-orange-900" do %>
+  <%= link_to [:organizer, tournament, :event_participants, {layout: 'application'}], class: "inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 dark:focus:ring-orange-900" do %>
     <%= icon("user-list", class: "mr-2") %>
     Players
   <% end %>

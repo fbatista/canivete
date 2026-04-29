@@ -2,7 +2,7 @@
 
 require "application_system_test_case"
 
-class TournamentManagementTest < ApplicationSystemTestCase
+class TournamentManagementTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
   test "organizer can create tournament with all fields" do
     organizer = users(:organizer_user)
     sign_in_as(organizer)
@@ -27,7 +27,7 @@ class TournamentManagementTest < ApplicationSystemTestCase
 
   test "organizer can edit tournament details" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
     sign_in_as(organizer)
 
     visit organizer_tournament_path(tournament)
@@ -44,7 +44,7 @@ class TournamentManagementTest < ApplicationSystemTestCase
 
   test "organizer can manage tournament participants" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:medium_tournament_registration_open)
+    tournament = events(:medium_tournament_registration_open)
     sign_in_as(organizer)
 
     visit organizer_tournament_path(tournament)
@@ -69,8 +69,8 @@ class TournamentManagementTest < ApplicationSystemTestCase
 
   test "organizer can submit penalties and infractions" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:small_tournament)
-    participant = tournament.tournament_participants.first
+    tournament = events(:small_tournament)
+    participant = tournament.event_participants.first
     sign_in_as(organizer)
 
     # Navigate to infraction creation page
@@ -93,7 +93,7 @@ class TournamentManagementTest < ApplicationSystemTestCase
 
   test "organizer can view comprehensive tournament reports" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:finished_tournament)
+    tournament = events(:finished_tournament)
     sign_in_as(organizer)
 
     visit organizer_tournament_path(tournament)
@@ -105,7 +105,7 @@ class TournamentManagementTest < ApplicationSystemTestCase
     click_link "Players"
 
     assert_text "Participants"
-    tournament.tournament_participants.each do |participant|
+    tournament.event_participants.each do |participant|
       assert_text participant.player.user.name
     end
 
@@ -116,7 +116,7 @@ class TournamentManagementTest < ApplicationSystemTestCase
 
       assert_text "Round #{index + 1}"
       round.pods.each do |pod|
-        pod.tournament_participants.each do |participant|
+        pod.event_participants.each do |participant|
           assert_text participant.player.user.name
         end
       end

@@ -7,8 +7,8 @@ module Tournaments
     end
 
     def sorted_players
-      players_by_rank = @round.tournament_participants.shuffle
-      players_by_rank.sort_by.with_index { |p, i| [ -p.rank_score, i ] }
+      players_by_rank = @round.event_participants.shuffle
+      players_by_rank.sort_by.with_index { |p, i| [-p.rank_score, i] }
     end
   end
 end

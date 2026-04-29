@@ -3,12 +3,12 @@
 class RoundsController < ApplicationController
   skip_before_action :require_authentication, only: %i[index show]
   def index
-    @rounds = load_tournament.rounds
+    @rounds = load_event.rounds
   end
 
   def show
-    tournament = load_tournament
-    @round = load_round(tournament)
+    event = load_event
+    @round = load_round(event)
     @pods = load_pods(@round)
     @users_map = load_users_map(@pods)
 
@@ -18,44 +18,44 @@ class RoundsController < ApplicationController
   end
 
   def update
-    tournament = load_tournament
-    @round = load_round(tournament)
+    event = load_event
+    @round = load_round(event)
 
     case round_params[:action]
     when "start"
       @round.update(started_at: Time.zone.now)
-      redirect_to [ @round.tournament, @round.becomes(Round) ], notice: "Round Started!"
+      redirect_to [@round.event, @round.becomes(Round)], notice: "Round Started!"
     when "finish"
       @round.update(finished_at: Time.zone.now)
-      redirect_to tournament, notice: "Round Finished!"
+      redirect_to event, notice: "Round Finished!"
     end
   end
 
   private
 
   def round_params
-    params.expect(round: [ :action ])
+    params.expect(round: [:action])
   end
 
-  def load_tournament
+  def load_event
     Tournament.find params[:tournament_id]
   end
 
-  def load_round(tournament)
-    tournament.rounds.find params[:id]
+  def load_round(event)
+    event.rounds.find params[:id]
   end
 
   def load_pods(round)
-    round.pods.preload(seatings: { tournament_participant: { player: :user } })
+    round.pods.preload(seatings: { event_participant: { player: :user } })
   end
 
   def load_users_map(pods)
     users_map = {}
     pods.each do |p|
       p.seatings.each do |s|
-        users_map[s.tournament_participant_id] = {
-          tp: s.tournament_participant,
-          name: s.tournament_participant.name,
+        users_map[s.event_participant_id] = {
+          tp: s.event_participant,
+          name: s.event_participant.name,
           pod: "Pod #{p.number}",
           seating: s.order.ordinalize
         }

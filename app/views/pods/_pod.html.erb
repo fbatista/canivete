@@ -1,11 +1,11 @@
-<div class="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 <%= "!bg-purple-600 !text-white" if pod.tournament_participants.any? { |tp| current_player?(tp.player) } %>">
+<div class="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 <%= "!bg-purple-600 !text-white" if pod.event_participants.any? { |tp| current_player?(tp.player) } %>">
   <div class="flex justify-between items-center">
-    <h5 class="px-6 pt-6 pb-3 mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white <%= "!text-white" if pod.tournament_participants.any? { |tp| current_player?(tp.player) } %>">
+    <h5 class="px-6 pt-6 pb-3 mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white <%= "!text-white" if pod.event_participants.any? { |tp| current_player?(tp.player) } %>">
       Pod <%= pod.number %>
     </h5>
   </div>
-  <ol class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch <%= "!text-white" if pod.tournament_participants.any? { |tp| current_player?(tp.player) } %>">
-    <% pod.tournament_participants.each do |player| %>
+  <ol class="font-normal text-gray-700 dark:text-gray-400 grow flex flex-col justify-items-stretch <%= "!text-white" if pod.event_participants.any? { |tp| current_player?(tp.player) } %>">
+    <% pod.event_participants.each do |player| %>
       <li
         data-tooltip-placement="left"
         data-tooltip-target="tooltip-pods-<%= player.id %>"

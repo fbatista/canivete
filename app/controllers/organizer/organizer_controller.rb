@@ -9,7 +9,7 @@ module Organizer
     end
 
     def current_organizer
-      current_user.tournament_organizer
+      current_user.event_organizer
     end
   end
 end

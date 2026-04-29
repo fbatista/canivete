@@ -2,13 +2,13 @@
 
 require "application_system_test_case"
 
-class TournamentLifecycleTest < ApplicationSystemTestCase
-  test "organizer can create and manage complete tournament lifecycle" do
+class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+  test "organizer can create and manage complete tournament lifecycle" do # rubocop:disable Metrics/BlockLength
     organizer = users(:organizer_user)
     sign_in_as(organizer)
 
     # Create tournament - starts as registration_open by default
-    visit organizer_tournaments_path
+    visit organizer_tournament_path
     click_link "Organize Tournament"
 
     fill_in "Name", with: "Test Championship"
@@ -43,7 +43,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
     # Simulate player registrations (using direct model calls for speed)
     players = users.select { |u| u.player? }.first(4)
     players.each do |player|
-      TournamentParticipant.create!(
+      EventParticipant.create!(
         tournament: tournament,
         player: player.player,
         accepted_terms: true
@@ -75,10 +75,10 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
     # Submit results for all pods
     # Each pod needs results for all participants to be "finished"
     first_round.pods.each do |pod|
-      pod.tournament_participants.each_with_index do |tp, idx|
+      pod.event_participants.each_with_index do |tp, idx|
         Result.create!(
           round: first_round,
-          tournament_participant: tp,
+          event_participant: tp,
           type: idx == 0 ? "Win" : "Draw"
         )
       end
@@ -104,7 +104,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
   test "player can register for tournament and view results" do
     # Use a tournament where player_three is NOT already registered
     # medium_tournament only has player_one and player_two
-    tournament = tournaments(:medium_tournament)
+    tournament = events(:medium_tournament)
     tournament.update!(state: "registration_open")
     player_user = users(:player_three) # Player not yet registered
     sign_in_as(player_user)
@@ -115,7 +115,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
 
     # Wait for modal to appear and fill in the form
     fill_in "Decklist", with: "https://moxfield.com/test"
-    find('input[name="tournament_participant[accepted_terms]"]').set(true)
+    find('input[name="event_participant[accepted_terms]"]').set(true)
     click_button "Confirm Sign up"
 
     assert TournamentParticipant.exists?(
@@ -129,7 +129,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
 
   test "tournament cancellation flow works correctly" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:medium_tournament)
+    tournament = events(:medium_tournament)
     tournament.update!(state: "registration_open")
     sign_in_as(organizer)
 

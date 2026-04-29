@@ -20,6 +20,6 @@ class TournamentsController < ApplicationController
   end
 
   def show
-    @tournament = Tournament.preload(rounds: :pods, tournament_participants: { player: :user }).find(params[:id])
+    @tournament = Tournament.preload(rounds: :pods, event_participants: { player: :user }).find(params[:id])
   end
 end

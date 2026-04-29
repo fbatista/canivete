@@ -2,22 +2,22 @@
 
 require "test_helper"
 
-class TournamentTest < ActiveSupport::TestCase
+class TournamentTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
   # ===== BASIC FIXTURE TEST =====
 
   test "fixtures load correctly" do
-    assert_not_nil tournaments(:small_tournament)
-    assert_not_nil tournament_organizers(:standard_organizer)
+    assert_not_nil events(:small_tournament)
+    assert_not_nil event_organizers(:standard_organizer)
     assert_not_nil users(:organizer_user)
     assert_not_nil players(:player_one)
-    assert_equal "Small Tournament", tournaments(:small_tournament).name
+    assert_equal "Small Tournament", events(:small_tournament).name
     assert_equal "Tournament Organizer", users(:organizer_user).name
   end
 
   # ===== STATE MACHINE TESTS =====
 
   test "valid state transitions are allowed" do
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
 
     # draft -> registration_open
     tournament.state = :draft
@@ -32,7 +32,7 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "available_states returns only valid transitions" do
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
 
     # From swiss state, should not include registration_open
     tournament.update!(state: :swiss)
@@ -44,7 +44,7 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "canceled state can be reached from most states" do
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
 
     # registration_open -> canceled
     tournament.update!(state: :registration_open)
@@ -58,7 +58,7 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "available_states returns valid transitions" do
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
 
     tournament.update!(state: :draft)
     available = tournament.available_states.keys.map(&:to_sym)
@@ -70,7 +70,7 @@ class TournamentTest < ActiveSupport::TestCase
   # ===== PLAYER THRESHOLD TESTS - BOUNDARY VALUE ANALYSIS =====
 
   test "4 players generates 1 swiss round with no top cut" do
-    tournament = tournaments(:small_tournament)  # 4 players
+    tournament = events(:small_tournament) # 4 players
     rounds_info = tournament.rounds_info
 
     assert_equal 1, rounds_info[:rounds].size, "Should have 1 swiss round for 4 players"
@@ -80,28 +80,31 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "6 players generates 2 swiss rounds with top 4" do
-    tournament = tournaments(:medium_tournament)  # 6 players
+    tournament = events(:medium_tournament) # 6 players
     rounds_info = tournament.rounds_info
 
     assert_equal 2, rounds_info[:rounds].size, "Should have 2 swiss rounds for 6 players"
     assert_equal 4, rounds_info[:top][:players], "Should have top 4 for 6 players"
-    assert_equal [ 1 ], rounds_info[:top][:pods], "Should have 1 elimination pod"
+    assert_equal [1], rounds_info[:top][:pods], "Should have 1 elimination pod"
     assert_equal 2, tournament.number_of_swiss_rounds
     assert_equal 1, tournament.number_of_single_elimination_rounds
   end
 
   test "boundary at 16-17 players changes top cut size" do
     # 16 players: top 4 (from fixture)
-    tournament_16 = tournaments(:standard_tournament)  # 16 players
+    tournament_16 = Tournament.find_by(slug: "standard-tournament") # 16 players
+    assert_equal 16, tournament_16.event_participants.size, "standard_tournament should have 16 players"
     assert_equal 4, tournament_16.rounds_info[:top][:players], "16 players should have top 4"
 
     # 17 players: top 7 (from fixture)
-    tournament_17 = tournaments(:large_tournament)  # 17 players
+    tournament_17 = Tournament.find_by(slug: "large-tournament") # 17 players
+    assert_equal 17, tournament_17.event_participants.size, "large_tournament should have 17 players"
     assert_equal 7, tournament_17.rounds_info[:top][:players], "17 players should have top 7"
   end
 
   test "17 players generates 3 swiss rounds with spread matching" do
-    tournament = tournaments(:large_tournament)  # 17 players
+    tournament = Tournament.find_by(slug: "large-tournament") # 17 players
+    assert_equal 17, tournament.event_participants.size
     rounds_info = tournament.rounds_info
 
     assert_equal 3, rounds_info[:rounds].size, "Should have 3 swiss rounds for 17 players"
@@ -112,33 +115,33 @@ class TournamentTest < ActiveSupport::TestCase
     assert_equal({ swiss_round: :standard }, rounds_info[:rounds][2])
 
     assert_equal 7, rounds_info[:top][:players], "Should have top 7 for 17 players"
-    assert_equal [ 1, 1 ], rounds_info[:top][:pods], "Should have 2 elimination pods"
+    assert_equal [1, 1], rounds_info[:top][:pods], "Should have 2 elimination pods"
   end
 
   # ===== VALIDATION TESTS =====
 
-  test "requires name, start_time, end_time and tournament_organizer" do
-    tournament = Tournament.new(name: "Test Tournament")  # Provide name to avoid slug generation error
+  test "requires name, start_time, end_time and event_organizer" do
+    tournament = Tournament.new(name: "Test Tournament") # Provide name to avoid slug generation error
     assert_not tournament.valid?
 
     assert_includes tournament.errors[:start_time], "can't be blank"
     assert_includes tournament.errors[:end_time], "can't be blank"
-    # tournament_organizer is required by belongs_to association
+    # event_organizer is required by belongs_to association
   end
 
   test "slug generation from name" do
     tournament = Tournament.new(
       name: "My Awesome Tournament!",
-      tournament_organizer: tournament_organizers(:standard_organizer),
+      event_organizer: event_organizers(:standard_organizer),
       start_time: 1.week.from_now,
       end_time: 2.weeks.from_now
     )
 
-    tournament.valid?  # Triggers before_validation callback
+    tournament.valid? # Triggers before_validation callback
     assert_equal "my-awesome-tournament-", tournament.slug
   end
 
-  test "tournament requires tournament_organizer" do
+  test "tournament requires event_organizer" do
     tournament = Tournament.new(
       name: "Test Tournament",
       slug: "test-tournament",
@@ -147,15 +150,15 @@ class TournamentTest < ActiveSupport::TestCase
     )
 
     assert_not tournament.valid?
-    # Note: belongs_to validation is implicit in Rails
+    # NOTE: belongs_to validation is implicit in Rails
   end
 
   # ===== BUSINESS LOGIC TESTS =====
 
   test "ongoing? returns true for swiss and single_elimination states" do
-    swiss_tournament = tournaments(:large_tournament)  # swiss state
-    single_elim_tournament = tournaments(:boundary_five_tournament)  # single_elimination state
-    finished_tournament = tournaments(:finished_tournament)  # finished state
+    swiss_tournament = events(:large_tournament) # swiss state
+    single_elim_tournament = events(:boundary_five_tournament) # single_elimination state
+    finished_tournament = events(:finished_tournament) # finished state
 
     assert swiss_tournament.ongoing?, "Swiss tournament should be ongoing"
     assert single_elim_tournament.ongoing?, "Single elimination tournament should be ongoing"
@@ -163,7 +166,7 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "single_elimination_round_name generates correct names" do
-    tournament = tournaments(:standard_tournament)  # 16 players: 2 swiss + 1 single elim
+    tournament = events(:standard_tournament) # 16 players: 2 swiss + 1 single elim
 
     # For a tournament with 2 swiss rounds + 1 single elimination round
     # Round 3 (single elimination) should be "Finals"
@@ -171,7 +174,7 @@ class TournamentTest < ActiveSupport::TestCase
   end
 
   test "progress_percent calculation with no rounds completed" do
-    tournament = tournaments(:standard_tournament)  # 16 players: 2 swiss + 1 single elim = 3 total
+    tournament = events(:standard_tournament) # 16 players: 2 swiss + 1 single elim = 3 total
 
     # With 0 rounds completed, progress should be 0%
     expected_progress = 0.0
@@ -182,28 +185,28 @@ class TournamentTest < ActiveSupport::TestCase
 
   test "past scope returns tournaments that have ended" do
     past_tournaments = Tournament.past
-    assert_includes past_tournaments, tournaments(:finished_tournament)
+    assert_includes past_tournaments, events(:finished_tournament)
 
     # Upcoming tournaments should not be included
-    assert_not_includes past_tournaments, tournaments(:small_tournament)
+    assert_not_includes past_tournaments, events(:small_tournament)
   end
 
   test "upcoming scope returns future tournaments" do
     upcoming_tournaments = Tournament.upcoming
-    assert_includes upcoming_tournaments, tournaments(:small_tournament)
+    assert_includes upcoming_tournaments, events(:small_tournament)
 
     # Past tournaments should not be included
-    assert_not_includes upcoming_tournaments, tournaments(:finished_tournament)
+    assert_not_includes upcoming_tournaments, events(:finished_tournament)
   end
 
   test "ongoing scope returns active tournaments" do
     ongoing_tournaments = Tournament.ongoing
-    assert_includes ongoing_tournaments, tournaments(:large_tournament)  # swiss state
-    assert_includes ongoing_tournaments, tournaments(:boundary_five_tournament)  # single_elimination state
+    assert_includes ongoing_tournaments, events(:large_tournament) # swiss state
+    assert_includes ongoing_tournaments, events(:boundary_five_tournament) # single_elimination state
 
     # Non-active states should not be included
-    assert_not_includes ongoing_tournaments, tournaments(:finished_tournament)
-    assert_not_includes ongoing_tournaments, tournaments(:small_tournament)  # draft state
+    assert_not_includes ongoing_tournaments, events(:finished_tournament)
+    assert_not_includes ongoing_tournaments, events(:small_tournament) # draft state
   end
 
   # ===== CONSTANTS TESTS =====
@@ -220,14 +223,14 @@ class TournamentTest < ActiveSupport::TestCase
 
   test "player rounds thresholds hash is properly configured" do
     assert_not_nil Tournament::PLAYERS_ROUNDS_THRESHOLDS
-    assert_not_nil Tournament::PLAYERS_ROUNDS_THRESHOLDS[4]  # Should return config for 4 players
-    assert_not_nil Tournament::PLAYERS_ROUNDS_THRESHOLDS[100]  # Should return config for 100 players
+    assert_not_nil Tournament::PLAYERS_ROUNDS_THRESHOLDS[4] # Should return config for 4 players
+    assert_not_nil Tournament::PLAYERS_ROUNDS_THRESHOLDS[100] # Should return config for 100 players
   end
 
   # ===== LOCATION TESTS =====
 
   test "latitude and longitude setters create location point" do
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
 
     tournament.latitude = 40.7128
     tournament.longitude = -74.0060

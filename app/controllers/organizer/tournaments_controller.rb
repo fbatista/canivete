@@ -9,11 +9,11 @@ module Organizer
     def show
       @tournament =
         Tournament
-        .for_organizer(current_organizer)
-        .preload(
-          rounds: :pods,
-          tournament_participants: { player: :user }
-        ).find(params[:id])
+          .for_organizer(current_organizer)
+          .preload(
+            rounds: :pods,
+            event_participants: { player: :user }
+          ).find(params[:id])
     rescue ActiveRecord::RecordNotFound
       redirect_to url_for(action: :index), alert: "Not authorized to manage the selected tournament"
     end
@@ -28,10 +28,10 @@ module Organizer
 
     def create
       @tournament = Tournament.create(
-        tournament_params.merge(tournament_organizer: current_organizer)
+        tournament_params.merge(event_organizer: current_organizer)
       )
 
-      redirect_to [ :organizer, @tournament ], notice: "Tournament created successfully"
+      redirect_to [:organizer, @tournament], notice: "Tournament created successfully"
     end
 
     def update
@@ -40,10 +40,10 @@ module Organizer
 
       if @tournament.save
         if @tournament.state_previously_changed? && @tournament.single_elimination?
-          redirect_to [ :organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round) ],
+          redirect_to [:organizer, @tournament, @tournament.rounds.max_by(&:number).becomes(Round)],
                       notice: "Tournament advanceded!"
         else
-          redirect_to [ :organizer, @tournament ], notice: "Tournament updated successfully"
+          redirect_to [:organizer, @tournament], notice: "Tournament updated successfully"
         end
       else
         render :edit, status: :unprocessable_entity
@@ -53,22 +53,22 @@ module Organizer
     private
 
     def tournament_params
-      params.expect(tournament: [
-        :name,
-        :state,
-        :description,
-        :start_time,
-        :end_time,
-        :minimum_participants,
-        :maximum_participants,
-        :prizes,
-        :address,
-        :schedule,
-        :rules,
-        :price,
-        :currency,
-        :cover
-      ])
+      params.expect(tournament: %i[
+                      name
+                      state
+                      description
+                      start_time
+                      end_time
+                      minimum_participants
+                      maximum_participants
+                      prizes
+                      address
+                      schedule
+                      rules
+                      price
+                      currency
+                      cover
+                    ])
     end
   end
 end

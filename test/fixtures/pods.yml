@@ -1,12 +1,5 @@
 # Pods fixture for testing job functionality
 
-# Pod for small tournament in swiss state
-small_tournament_swiss_pod_1:
-  round: small_tournament_swiss_round_1
-  number: 1
-  size: 2
-  extra_time: 0
-
 small_tournament_pod_1:
   round: small_tournament_round_1
   number: 1

@@ -11,7 +11,7 @@ class User < ApplicationRecord
   after_update :update_key, if: -> { email_address_previously_changed? || name_previously_changed? }
 
   has_one :player, dependent: :nullify
-  has_one :tournament_organizer, dependent: :nullify
+  has_one :event_organizer, dependent: :nullify
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -28,18 +28,18 @@ class User < ApplicationRecord
   end
 
   def initialize_organizer
-    TournamentOrganizer.create!(user: self)
+    EventOrganizer.create!(user: self)
   end
 
   def update_key
     player.update(key: compute_key)
   end
 
-  def organizer?(tournament = nil)
-    tournament_organizer.present? && (tournament.blank? || tournament_organizer.tournaments.include?(tournament))
+  def organizer?(event = nil)
+    event_organizer.present? && (event.blank? || event_organizer.events.include?(event))
   end
 
-  def player?(tournament = nil)
-    player.present? && (tournament.blank? || player.tournaments.include?(tournament))
+  def player?(event = nil)
+    player.present? && (event.blank? || player.events.include?(event))
   end
 end

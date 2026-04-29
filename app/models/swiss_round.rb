@@ -5,7 +5,7 @@ class SwissRound < Round
     :number,
     {
       presence: true,
-      uniqueness: { scope: :event_id, message: "must be unique per event" },
+      uniqueness: { scope: :event_id },
       numericality: true,
       inclusion: { in: 1.. }
     }
@@ -24,12 +24,12 @@ class SwissRound < Round
   end
 
   def last_swiss_round?
-    number == event.number_of_swiss_rounds
+    number == tournament.number_of_swiss_rounds
   end
 
   def advance_tournament!
     return if last_swiss_round?
 
-    Tournaments::StartSwissRoundJob.perform_now(event)
+    Tournaments::StartSwissRoundJob.perform_now(tournament)
   end
 end

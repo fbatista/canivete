@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Event < ApplicationRecord
+  belongs_to :circuit, optional: true
   belongs_to :event_organizer
   has_many :rounds, dependent: :destroy
   has_many :event_participants, dependent: :destroy
@@ -90,15 +91,23 @@ class Event < ApplicationRecord
     { rounds: [{ swiss_round: :standard }], top: nil }
   end
 
+  def number_of_swiss_rounds
+    rounds.where(type: "SwissRound").count
+  end
+
+  def number_of_single_elimination_rounds
+    rounds.where(type: "SingleEliminationRound").count
+  end
+
   def self.reset_counters
-    all.each do |event|
+    find_each do |event|
       event.reset_counters if event.respond_to?(:reset_counters)
     end
   end
 
   def reset_counters
     # Manually update counter caches that fixtures don't properly set
-    self.update_columns(
+    update_columns(
       rounds_count: rounds.count,
       event_participants_count: event_participants.count
     )

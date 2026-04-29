@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The tournament representation of a ghost
-class Ghost < TournamentParticipant
+class Ghost < EventParticipant
   def number_of_draws
     0
   end

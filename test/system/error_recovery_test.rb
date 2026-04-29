@@ -5,7 +5,7 @@ require "application_system_test_case"
 class ErrorRecoveryTest < ApplicationSystemTestCase
   test "handles tournament state transition errors gracefully" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:medium_tournament_registration_open)
+    tournament = events(:medium_tournament_registration_open)
     sign_in_as(organizer)
 
     # Draft state shows Open Registrations button
@@ -33,10 +33,14 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     visit organizer_tournaments_path
     click_link "Organize Tournament"
 
+    puts "loaded form"
+
     # Submit form with missing required fields
     fill_in "Start time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
     fill_in "End time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
     click_button "Create Tournament"
+
+    puts "loaded form again"
 
     # The form should still be visible with Name field (validation error)
     assert_text "Name"
@@ -45,7 +49,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
 
   test "handles unauthorized access attempts" do
     player = users(:player_one)
-    tournament = tournaments(:small_tournament)
+    tournament = events(:small_tournament)
     sign_in_as(player)
 
     # Try to access organizer area
@@ -70,7 +74,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
 
   test "handles double result submission gracefully" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:small_tournament_swiss)
+    tournament = events(:small_tournament_swiss)
     round = tournament.rounds.swiss_rounds.first
     pod = round.pods.first
     sign_in_as(organizer)
@@ -84,7 +88,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
 
     # Fill in result modal form
     select "Win", from: "Type"
-    select pod.tournament_participants.first.name, from: "Tournament participant"
+    select pod.event_participants.first.name, from: "Tournament participant"
     click_button "Create Result"
 
     assert_text "Result submitted successfully"
@@ -96,7 +100,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
 
   test "handles concurrent tournament modifications" do
     organizer = users(:organizer_user)
-    tournament = tournaments(:medium_tournament_registration_open)
+    tournament = events(:medium_tournament_registration_open)
     sign_in_as(organizer)
 
     # Simulate concurrent modification by updating tournament directly

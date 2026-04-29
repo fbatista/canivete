@@ -4,26 +4,26 @@ module Organizer
   class InfractionsController < OrganizerController
     layout "modal"
     def index
-      @tournament_participant = TournamentParticipant.find(params[:tournament_participant_id])
+      @event_participant = EventParticipant.find(params[:event_participant_id])
       @infractions = Infraction.where(
-        player_id: @tournament_participant.player_id,
-        tournament_id: @tournament_participant.tournament_id
+        player_id: @event_participant.player_id,
+        event_id: @event_participant.event_id
       )
     end
 
     def new
       player = load_player
       pod = load_pod
-      tournament = pod&.tournament || load_tournament
-      @infraction = Infraction.new(player:, pod:, tournament:)
+      event = pod&.event || load_tournament
+      @infraction = Infraction.new(player: player, pod: pod, event: event)
     end
 
     def create
-      @infraction = Infraction.new(tournament: load_tournament)
+      @infraction = Infraction.new(event: load_tournament)
       @infraction.attributes = infraction_params
 
       if @infraction.save
-        redirect_to [ :organizer, @infraction.tournament, :tournament_participants, { layout: "application" } ],
+        redirect_to [:organizer, @infraction.event, :event_participants, { layout: "application" }],
                     notice: "Infraction added successfully"
       else
         render :new, status: :unprocessable_entity
@@ -31,11 +31,11 @@ module Organizer
     end
 
     def destroy
-      tournament = load_tournament
-      tournament_participant = tournament.tournament_participants.includes(:player).find(
-        params[:tournament_participant_id]
+      event = load_tournament
+      event_participant = event.event_participants.includes(:player).find(
+        params[:event_participant_id]
       )
-      @infraction = Infraction.find_by(tournament: tournament, player: tournament_participant.player, id: params[:id])
+      @infraction = Infraction.find_by(event: event, player: event_participant.player, id: params[:id])
       message =
         if @infraction.destroy
           { notice: "Infraction removed!" }
@@ -43,13 +43,13 @@ module Organizer
           { alert: "Error removing infraction!" }
         end
 
-      redirect_to [ :organizer, @infraction.tournament, :tournament_participants, { layout: "application" } ], **message
+      redirect_to [:organizer, @infraction.event, :event_participants, { layout: "application" }], **message
     end
 
     private
 
     def infraction_params
-      params.expect(infraction: [ :player_id, :pod_id, :kind, :category, :description, :penalty ])
+      params.expect(infraction: %i[player_id pod_id kind category description penalty])
     end
 
     def load_player

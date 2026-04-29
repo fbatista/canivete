@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_26_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -44,6 +44,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "circuit_standings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "circuit_id", null: false
+    t.uuid "player_id", null: false
+    t.decimal "points", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "events_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["circuit_id", "player_id"], name: "index_circuit_standings_on_circuit_id_and_player_id", unique: true
+    t.index ["circuit_id"], name: "index_circuit_standings_on_circuit_id"
+    t.index ["player_id"], name: "index_circuit_standings_on_player_id"
+  end
+
+  create_table "circuits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.uuid "event_organizer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_organizer_id"], name: "index_circuits_on_event_organizer_id"
+  end
+
   create_table "event_organizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.datetime "created_at", null: false
@@ -62,6 +83,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
     t.boolean "paid", default: false, null: false
     t.boolean "checked_in", default: false, null: false
     t.integer "fixed_pod"
+    t.integer "final_position"
+    t.decimal "league_score", precision: 10, scale: 2, default: "1000.0"
     t.index ["event_id"], name: "index_event_participants_on_event_id"
     t.index ["player_id"], name: "index_event_participants_on_player_id"
   end
@@ -87,6 +110,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
     t.integer "currency"
     t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
     t.string "type", default: "Tournament", null: false
+    t.integer "play_mode", default: 0, null: false
+    t.uuid "circuit_id"
+    t.decimal "wager_percentage", precision: 5, scale: 2
+    t.index ["circuit_id"], name: "index_events_on_circuit_id"
     t.index ["event_organizer_id"], name: "index_events_on_event_organizer_id"
     t.index ["location"], name: "index_events_on_location", using: :gist
   end
@@ -156,6 +183,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
     t.string "type", default: "SwissRound"
     t.datetime "finished_at"
     t.boolean "published", default: false, null: false
+    t.boolean "is_play_round", default: false, null: false
+    t.boolean "is_finals_round", default: false, null: false
     t.index ["event_id"], name: "index_rounds_on_event_id"
   end
 
@@ -189,9 +218,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_182855) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "circuit_standings", "circuits"
+  add_foreign_key "circuit_standings", "players"
+  add_foreign_key "circuits", "event_organizers"
   add_foreign_key "event_organizers", "users"
   add_foreign_key "event_participants", "events"
   add_foreign_key "event_participants", "players"
+  add_foreign_key "events", "circuits"
   add_foreign_key "infractions", "events"
   add_foreign_key "infractions", "players"
   add_foreign_key "infractions", "pods"

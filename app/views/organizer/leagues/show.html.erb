@@ -1,0 +1,177 @@
+<%= content_for :sub_navigation do %>
+  <nav class="flex mb-5" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+      <li class="inline-flex items-center">
+        <%= link_to organizer_root_path, class:"inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white" do %>
+          <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 001-1v2a1 1 0 001 1h2a1 1 0 001 1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+          </svg>
+          Home
+        <% end %>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          <%= link_to organizer_leagues_path, class: 'ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white' do %>
+            Leagues
+          <% end %>
+        </div>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">
+            <%= @league.name %>
+          </span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+<% end %>
+
+<div class="col-span-full">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <div class="flex items-center gap-2">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <%= @league.name %>
+      </h1>
+      <div class="flex gap-2 items-center">
+        <% if @league.play_mode.present? %>
+          <span class="inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full <%= @league.play_mode_scheduled? ? 'text-blue-700 bg-blue-100 dark:bg-blue-900 dark:text-blue-300' : 'text-green-700 bg-green-100 dark:bg-green-900 dark:text-green-300' %>">
+            <%= @league.play_mode_scheduled? ? 'Scheduled' : 'Pick-up' %>
+          </span>
+        <% end %>
+        <% if @league.state.in?(%w[play finals]) %>
+          <span class="inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full text-green-700 bg-green-100 dark:bg-green-900 dark:text-green-300">
+            <span class="inline-block w-2 h-2 bg-green-500 rounded-full me-1 animate-pulse"></span>
+            Playing
+          </span>
+        <% elsif @league.state == 'finals' %>
+          <span class="inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full text-purple-700 bg-purple-100 dark:bg-purple-900 dark:text-purple-300">
+            Finals
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <% if @league.pickup_play_mode? && @league.state.in?(%w[play finals]) %>
+        <%= link_to create_pickup_pod_organizer_league_path(@league), data: { "turbo-method": :post }, class:"inline-flex items-center text-green-600 hover:underline" do %>
+          <%= icon('plus-circle') %>
+          Create pick-up pod
+        <% end %>
+      <% end %>
+      <%= link_to edit_organizer_league_path(@league), class:"inline-flex items-center text-blue-600 hover:underline" do %>
+        <%= icon('pencil') %>
+        Edit
+      <% end %>
+      <%= link_to "View public page", league_path(@league), target: "_blank", class:"inline-flex items-center text-blue-600 hover:underline" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 px-4 my-4 md:grid-cols-2 xl:grid-cols-6">
+    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">When</h2>
+      <p class="mb-4 text-xl text-gray-500 dark:text-gray-400">
+        <span class="font-bold">From:</span>
+        <time data-controller="date" data-date-timestamp-value="<%= @league.start_time.iso8601 %>"></time>
+      </p>
+      <p class="mb-4 text-xl text-gray-500 dark:text-gray-400">
+        <span class="font-bold">To:</span>
+        <time data-controller="date" data-date-timestamp-value="<%= @league.end_time.iso8601 %>"></time>
+      </p>
+    </div>
+
+    <% if @league.prizes.present? %>
+      <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Prizes</h2>
+        <div class="markdown text-gray-500 dark:text-gray-400">
+          <%= markdown(@league.prizes).html_safe %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @league.address.present? %>
+      <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Where</h2>
+        <h3 class="mb-2 font-medium text-gray-900 dark:text-white"><%= @league.address.titleize %></h3>
+      </div>
+    <% end %>
+
+    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Participants</h2>
+      <p class="mb-2 text-gray-500 dark:text-gray-400"><span class="font-bold">Min:</span> <%= @league.minimum_participants || "No limit" %></p>
+      <p class="mb-2 text-gray-500 dark:text-gray-400"><span class="font-bold">Max:</span> <%= @league.maximum_participants || "No limit" %></p>
+      <p class="mb-2 text-gray-500 dark:text-gray-400"><span class="font-bold">Registered:</span> <%= @league.event_participants.size %></p>
+    </div>
+
+    <% if @league.wager_percentage.present? %>
+      <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Wager</h2>
+        <p class="mb-2 text-xl text-purple-600 dark:text-purple-400 font-bold"><%= @league.wager_percentage %>%</p>
+      </div>
+    <% end %>
+
+    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Circuit</h2>
+      <% if @league.circuit %>
+        <p class="text-gray-500 dark:text-gray-400"><%= link_to @league.circuit.name, circuit_path(@league.circuit) %></p>
+      <% else %>
+        <p class="text-gray-500 dark:text-gray-400">Not assigned to a circuit</p>
+      <% end %>
+    </div>
+
+    <% if @league.description.present? %>
+      <div class="col-span-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Description</h2>
+        <div class="text-gray-500 dark:text-gray-400"><%= markdown(@league.description).html_safe %></div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @league.state.in?(%w[play finals]) || @league.finished? %>
+    <div class="col-span-full mt-4">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Quick Standings</h2>
+      <% standings = @league.event_participants.playing.order(league_score: :desc).limit(5) %>
+      <% if standings.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th class="px-6 py-3 w-16">#</th>
+                <th class="px-6 py-3">Player</th>
+                <th class="px-6 py-3 text-right">Score</th>
+                <th class="px-6 py-3 text-right">W</th>
+                <th class="px-6 py-3 text-right">D</th>
+                <th class="px-6 py-3 text-right">L</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% standings.each_with_index do |ep, idx| %>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <td class="px-6 py-4 font-medium text-gray-900 dark:text-white"><%= idx + 1 %></td>
+                  <td class="px-6 py-4"><%= link_to ep.player_name, root_path, class: 'hover:underline' %></td>
+                  <td class="px-6 py-4 text-right font-mono"><%= number_to_currency(ep.league_score, precision: 2, delimiter: '.', separator: ',') %></td>
+                  <td class="px-6 py-4 text-right text-green-600 dark:text-green-400"><%= ep.number_of_wins %></td>
+                  <td class="px-6 py-4 text-right text-yellow-600 dark:text-yellow-400"><%= ep.number_of_draws %></td>
+                  <td class="px-6 py-4 text-right text-red-600 dark:text-red-400"><%= ep.number_of_losses %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% if @league.event_participants.playing.count > 5 %>
+          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Showing top 5 of <%= @league.event_participants.playing.count %> players.
+            <%= link_to "View all standings", league_path(@league), class: 'text-blue-600 hover:underline' %>
+          </p>
+        <% end %>
+      <% else %>
+        <p class="text-gray-500 dark:text-gray-400">No standings yet.</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

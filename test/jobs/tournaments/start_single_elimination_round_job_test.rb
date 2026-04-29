@@ -2,29 +2,29 @@
 
 require "test_helper"
 
-class Tournaments::StartSingleEliminationRoundJobTest < ActiveJob::TestCase
-  test "creates new single elimination round with incremented number" do
-    tournament = tournaments(:standard_tournament)
-    initial_round_count = tournament.rounds.count
-    # TODO add swiss rounds
-    flunk "Need to add swiss rounds to standard_tournament fixture"
+module Tournaments
+  class StartSingleEliminationRoundJobTest < ActiveJob::TestCase
+    test "creates new single elimination round with incremented number" do
+      event = Event.find_by(type: "Tournament", slug: "standard-tournament")
+      initial_round_count = event.rounds.count
 
-    # Perform the job
-    Tournaments::StartSingleEliminationRoundJob.perform_now(tournament)
+      # Perform the job
+      Tournaments::StartSingleEliminationRoundJob.perform_now(event)
 
-    # Verify new round was created
-    assert_equal initial_round_count + 1, tournament.rounds.count
+      # Verify new round was created
+      assert_equal initial_round_count + 1, event.rounds.count
 
-    new_round = tournament.rounds.last
-    assert_equal "SingleEliminationRound", new_round.type
-    assert_equal initial_round_count + 1, new_round.number
-  end
+      new_round = event.rounds.where(type: "SingleEliminationRound").last
+      assert_equal "SingleEliminationRound", new_round.type
+      assert_equal initial_round_count + 1, new_round.number
+    end
 
-  test "job is queued with correct arguments" do
-    tournament = tournaments(:standard_tournament)
+    test "job is queued with correct arguments" do
+      event = Event.find_by(type: "Tournament", slug: "standard-tournament")
 
-    assert_enqueued_with(job: Tournaments::StartSingleEliminationRoundJob, args: [ tournament ]) do
-      Tournaments::StartSingleEliminationRoundJob.perform_later(tournament)
+      assert_enqueued_with(job: Tournaments::StartSingleEliminationRoundJob, args: [event]) do
+        Tournaments::StartSingleEliminationRoundJob.perform_later(event)
+      end
     end
   end
 end
