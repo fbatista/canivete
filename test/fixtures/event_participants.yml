@@ -29,7 +29,7 @@ small_event_participant_four:
   checked_in: true
   dropped: false
 
-# Medium tournament participants (6 players) - we only have 4 players defined so reuse them
+# Medium tournament participants (6 players) - reusing players
 medium_event_participant_one:
   event: medium_tournament
   player: player_one
@@ -40,6 +40,296 @@ medium_event_participant_one:
 medium_event_participant_two:
   event: medium_tournament
   player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_event_participant_three:
+  event: medium_tournament
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_event_participant_four:
+  event: medium_tournament
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_event_participant_five:
+  event: medium_tournament
+  player: player_five
+  paid: true
+  checked_in: true
+  dropped: false
+
+medium_event_participant_six:
+  event: medium_tournament
+  player: player_six
+  paid: true
+  checked_in: true
+  dropped: false
+
+# Standard tournament participants (16 players)
+standard_event_participant_one:
+  event: standard_tournament
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_two:
+  event: standard_tournament
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_three:
+  event: standard_tournament
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_four:
+  event: standard_tournament
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_five:
+  event: standard_tournament
+  player: player_five
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_six:
+  event: standard_tournament
+  player: player_six
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_seven:
+  event: standard_tournament
+  player: player_seven
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_eight:
+  event: standard_tournament
+  player: player_eight
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_nine:
+  event: standard_tournament
+  player: player_nine
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_ten:
+  event: standard_tournament
+  player: player_ten
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_eleven:
+  event: standard_tournament
+  player: player_eleven
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_twelve:
+  event: standard_tournament
+  player: player_twelve
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_thirteen:
+  event: standard_tournament
+  player: player_thirteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_fourteen:
+  event: standard_tournament
+  player: player_fourteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_fifteen:
+  event: standard_tournament
+  player: player_fifteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+standard_event_participant_sixteen:
+  event: standard_tournament
+  player: player_sixteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+# Large tournament: 17 players (triggers 3 swiss rounds + top cut of 7)
+large_event_participant_one:
+  event: large_tournament
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_two:
+  event: large_tournament
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_three:
+  event: large_tournament
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_four:
+  event: large_tournament
+  player: player_four
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_five:
+  event: large_tournament
+  player: player_five
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_six:
+  event: large_tournament
+  player: player_six
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_seven:
+  event: large_tournament
+  player: player_seven
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_eight:
+  event: large_tournament
+  player: player_eight
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_nine:
+  event: large_tournament
+  player: player_nine
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_ten:
+  event: large_tournament
+  player: player_ten
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_eleven:
+  event: large_tournament
+  player: player_eleven
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_twelve:
+  event: large_tournament
+  player: player_twelve
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_thirteen:
+  event: large_tournament
+  player: player_thirteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_fourteen:
+  event: large_tournament
+  player: player_fourteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_fifteen:
+  event: large_tournament
+  player: player_fifteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_sixteen:
+  event: large_tournament
+  player: player_sixteen
+  paid: true
+  checked_in: true
+  dropped: false
+
+large_event_participant_seventeen:
+  event: large_tournament
+  player: player_seventeen
+  paid: true
+  checked_in: true
+  dropped: false
+
+# League participants
+league_event_participant_one:
+  event: standard_league
+  player: player_one
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_two:
+  event: standard_league
+  player: player_two
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_three:
+  event: standard_league
+  player: player_three
+  paid: true
+  checked_in: true
+  dropped: false
+
+league_event_participant_four:
+  event: standard_league
+  player: player_four
   paid: true
   checked_in: true
   dropped: false

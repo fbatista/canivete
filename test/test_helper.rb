@@ -16,6 +16,11 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
+    # Reset counter caches after fixtures load (Rails fixtures don't update them)
+    setup do
+      Event.reset_counters
+    end
+
     # Add more helper methods to be used by all tests here...
   end
 end

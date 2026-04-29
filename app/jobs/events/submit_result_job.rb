@@ -5,6 +5,12 @@ module Events
     def perform(type:, event_participant:, round:, pod:)
       load_instance_variables(type: type, event_participant: event_participant, round: round, pod: pod)
       handle_result
+
+      recalculate_league_scores if @round.event.is_a?(League) && @round.event.play?
+    end
+
+    def recalculate_league_scores
+      Scoring::PointWager.new(@round.event).recalculate_all!
     end
 
     private
