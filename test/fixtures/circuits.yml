@@ -1,0 +1,5 @@
+# Circuit fixtures for testing circuit functionality
+
+standard_circuit:
+  name: "Standard Circuit"
+  event_organizer: standard_organizer

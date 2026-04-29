@@ -92,16 +92,19 @@ class TournamentTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLe
 
   test "boundary at 16-17 players changes top cut size" do
     # 16 players: top 4 (from fixture)
-    tournament_16 = events(:standard_tournament) # 16 players
+    tournament_16 = Tournament.find_by(slug: "standard-tournament") # 16 players
+    assert_equal 16, tournament_16.event_participants.size, "standard_tournament should have 16 players"
     assert_equal 4, tournament_16.rounds_info[:top][:players], "16 players should have top 4"
 
     # 17 players: top 7 (from fixture)
-    tournament_17 = events(:large_tournament) # 17 players
+    tournament_17 = Tournament.find_by(slug: "large-tournament") # 17 players
+    assert_equal 17, tournament_17.event_participants.size, "large_tournament should have 17 players"
     assert_equal 7, tournament_17.rounds_info[:top][:players], "17 players should have top 7"
   end
 
   test "17 players generates 3 swiss rounds with spread matching" do
-    tournament = events(:large_tournament) # 17 players
+    tournament = Tournament.find_by(slug: "large-tournament") # 17 players
+    assert_equal 17, tournament.event_participants.size
     rounds_info = tournament.rounds_info
 
     assert_equal 3, rounds_info[:rounds].size, "Should have 3 swiss rounds for 17 players"

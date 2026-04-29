@@ -1,0 +1,11 @@
+# League fixtures for testing league functionality
+
+standard_league:
+  name: "Standard League"
+  slug: "standard-league"
+  event_organizer: standard_organizer
+  state: 1  # registration_open
+  start_time: <%= 1.week.from_now %>
+  end_time: <%= 2.weeks.from_now %>
+  type: "League"
+  event_participants_count: 4

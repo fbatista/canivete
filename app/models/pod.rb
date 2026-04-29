@@ -14,6 +14,7 @@ class Pod < ApplicationRecord
   has_many :users, through: :players
 
   scope :publishable, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
+  scope :finished, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
 
   attr_accessor :candidates
 

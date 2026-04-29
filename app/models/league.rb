@@ -3,6 +3,15 @@
 class League < Event
   paginates_per 20
 
+  POINTS_PER_WIN = 7
+  POINTS_PER_LOSS = 0
+  POINTS_PER_DRAW = 1
+
+  enum :play_mode, { scheduled: 0, pickup: 1 }, prefix: true
+
+  validates :wager_percentage,
+            numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_blank: true }
+
   enum :state, {
     draft: 0,
     registration_open: 1,
@@ -24,6 +33,19 @@ class League < Event
   }.with_indifferent_access.freeze
 
   scope :ongoing, -> { where(state: %i[play finals]) }
+
+  def playing?
+    state.in?(%w[play finals])
+  end
+
+  alias pickup_play_mode? play_mode_pickup?
+
+  def rounds_info
+    {
+      rounds: [{ swiss_round: :standard }, { swiss_round: :standard }, { swiss_round: :standard }],
+      top: { players: 3, pods: [1] }
+    }
+  end
 
   def perform_state_based_actions
     return unless TRANSITIONS[state_previously_was.to_sym].include?(state.to_sym)

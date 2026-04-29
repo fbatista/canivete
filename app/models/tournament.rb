@@ -3,8 +3,6 @@
 class Tournament < Event # rubocop:disable Metrics/ClassLength
   paginates_per 20
 
-  belongs_to :circuit, optional: true
-
   scope :ongoing, -> { where(state: %i[swiss single_elimination]) }
 
   POINTS_PER_WIN = 7
@@ -63,7 +61,7 @@ class Tournament < Event # rubocop:disable Metrics/ClassLength
   }.tap do |thresholds|
     thresholds.default_proc =
       proc do |hash, key|
-        return nil unless key.is_a?(Integer)
+        next nil unless key.is_a?(Integer)
 
         range_key = hash.keys.find { |r| r.include?(key) }
 
@@ -113,10 +111,6 @@ class Tournament < Event # rubocop:disable Metrics/ClassLength
 
   def ongoing?
     %w[swiss single_elimination].include?(state)
-  end
-
-  def populate_slug
-    self.slug = name.downcase.gsub(/[^a-z0-9]/, "-")
   end
 
   def perform_state_based_actions
