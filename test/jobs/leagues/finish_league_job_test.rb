@@ -25,7 +25,7 @@ module Leagues
 
       standing = circuits(:standard_circuit).circuit_standings.find_by(player: @league.event_participants.first.player)
       assert_not_nil standing
-      assert_equal 4.0, standing.points  # 4 participants, position 1 = 4 points
+      assert_equal 4.0, standing.points # 4 participants, position 1 = 4 points
     end
 
     test "does not trigger circuit update when league has no circuit" do

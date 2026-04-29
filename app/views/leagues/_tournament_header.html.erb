@@ -1,0 +1,49 @@
+<div
+  class="
+    col-span-full py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16
+    lg:px-12
+  "
+>
+  <h1
+    class="
+      mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900
+      md:text-5xl lg:text-6xl dark:text-white
+    "
+  >
+    <%= @league.name %>
+    <% if @league.state == 'play' || @league.state == 'finals' %>
+      <%= badge(color: "green") do %>
+        In progress
+      <% end %>
+    <% elsif @league.state == 'finished' %>
+      <%= badge(color: "blue") do %>
+        Finished
+      <% end %>
+    <% elsif @league.state == 'canceled' %>
+      <%= badge(color: "red") do %>
+        Cancelled
+      <% end %>
+    <% end %>
+  </h1>
+
+  <p
+    class="
+      mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48
+      dark:text-gray-400
+    "
+  >
+    <% if @league.end_time.past? %>
+      Occurred
+      <%= time_ago_in_words @league.end_time %>
+      ago
+    <% else %>
+      Coming up in
+      <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @league.start_time %></span>
+    <% end %>
+    <% if @league.address.present? %>
+      at
+      <%= icon('map-pin') %>
+      <%= @league.address.titleize %>
+    <% end %>
+  </p>
+</div>

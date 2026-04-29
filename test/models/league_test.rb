@@ -2,6 +2,7 @@
 
 require "test_helper"
 
+# rubocop:disable Metrics/ClassLength
 class LeagueTest < ActiveSupport::TestCase
   test "league has correct state enum" do
     assert_includes League.states, "draft"

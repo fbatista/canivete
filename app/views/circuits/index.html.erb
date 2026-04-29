@@ -42,9 +42,12 @@
             </p>
           <% end %>
 
-          <% if circuit.tournaments.any? %>
+          <% if circuit.events.any? %>
             <p class="text-sm text-gray-500 dark:text-gray-400">
-              <%= number_to_currency(circuit.tournaments.count) %> event(s)
+              <%= number_to_currency(circuit.events.count) %> event(s)
+              <% if circuit.leagues.any? %>
+                (<%= circuit.leagues.count %> leagues)
+              <% end %>
             </p>
           <% end %>
         </div>

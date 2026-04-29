@@ -4,10 +4,10 @@ module Organizer
   class LeaguesController < OrganizerController
     def index
       @leagues = League
-                   .with_attached_cover
-                   .where.not(state: :canceled)
-                   .for_organizer(current_organizer)
-                   .preload(:rounds)
+        .with_attached_cover
+        .where.not(state: :canceled)
+        .for_organizer(current_organizer)
+        .preload(:rounds)
     end
 
     def show
@@ -65,25 +65,27 @@ module Organizer
     private
 
     def league_params
-      params.expect(league: %i[
-                      name
-                      state
-                      description
-                      start_time
-                      end_time
-                      minimum_participants
-                      maximum_participants
-                      prizes
-                      address
-                      schedule
-                      rules
-                      price
-                      currency
-                      wager_percentage
-                      play_mode
-                      circuit_id
-                      cover
-                    ])
+      params.expect(
+        league: %i[
+          name
+          state
+          description
+          start_time
+          end_time
+          minimum_participants
+          maximum_participants
+          prizes
+          address
+          schedule
+          rules
+          price
+          currency
+          wager_percentage
+          play_mode
+          circuit_id
+          cover
+        ]
+      )
     end
   end
 end

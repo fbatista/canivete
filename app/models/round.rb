@@ -32,6 +32,11 @@ class Round < ApplicationRecord
     # No-op default. Override in subclasses (SwissRound, SingleEliminationRound).
   end
 
+  def publish!
+    update!(published: true)
+  end
+  alias published! publish!
+
   def byes
     results
       .where(type: "Advance")

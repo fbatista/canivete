@@ -92,22 +92,22 @@ class Event < ApplicationRecord
   end
 
   def number_of_swiss_rounds
-    rounds.where(type: 'SwissRound').count
+    rounds.where(type: "SwissRound").count
   end
 
   def number_of_single_elimination_rounds
-    rounds.where(type: 'SingleEliminationRound').count
+    rounds.where(type: "SingleEliminationRound").count
   end
 
   def self.reset_counters
-    all.each do |event|
+    find_each do |event|
       event.reset_counters if event.respond_to?(:reset_counters)
     end
   end
 
   def reset_counters
     # Manually update counter caches that fixtures don't properly set
-    self.update_columns(
+    update_columns(
       rounds_count: rounds.count,
       event_participants_count: event_participants.count
     )

@@ -1,0 +1,13 @@
+<%= link_to [:organizer, league], class: "block" do %>
+  <div class="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white"><%= league.name %></h3>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= case league.state; when 'play', 'finals' then 'text-green-700 bg-green-100 dark:bg-green-900 dark:text-green-300'; when 'finished' then 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300'; else 'text-blue-700 bg-blue-100 dark:bg-blue-900 dark:text-blue-300'; end %>">
+        <%= league.state.titleize %>
+      </span>
+    </div>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      <%= time_tag league.start_time %> — <%= number_to_currency(league.event_participants.size) %> participants
+    </p>
+  </div>
+<% end %>

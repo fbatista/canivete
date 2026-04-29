@@ -19,7 +19,7 @@ module Scoring
 
       compute_scores!(league)
 
-      winner = pod.event_participants.find { |ep| ep.results.any? { |r| r.is_a?(Win) } }
+      winner = pod.event_participants.find { |ep| ep.results.any?(Win) }
       losers = pod.event_participants.reject { |ep| ep == winner }
 
       # Winner should have more than starting points
@@ -42,7 +42,7 @@ module Scoring
       end
 
       # All participants should end up with same score after all-draw
-      initial_scores = pod.event_participants.map { |ep| 1000.0 }
+      initial_scores = pod.event_participants.map { |_ep| 1000.0 }
       pot = initial_scores.sum { |s| (s * 10 / 100).round(2) }
       per_person = pot.fdiv(pod.event_participants.size)
 
@@ -55,10 +55,10 @@ module Scoring
       league = create_league(wager_percentage: 5)
 
       # Round 1: Player A wins, Player B loses
-      pod1 = create_finished_pod_with_one_winner(league, winner_index: 0)
+      create_finished_pod_with_one_winner(league, winner_index: 0)
 
       # Round 2: Player B wins, Player A loses
-      pod2 = create_finished_pod_with_one_winner(league, winner_index: 1)
+      create_finished_pod_with_one_winner(league, winner_index: 1)
 
       compute_scores!(league)
 
@@ -102,7 +102,7 @@ module Scoring
 
       compute_scores!(league)
 
-      winner = pod.event_participants.find { |ep| ep.results.any? { |r| r.is_a?(Win) } }
+      winner = pod.event_participants.find { |ep| ep.results.any?(Win) }
       assert scores_for(league, winner.id) > 1000, "3-player pod winner should gain points"
     end
 
@@ -112,13 +112,13 @@ module Scoring
 
       compute_scores!(league)
 
-      winner = pod.event_participants.find { |ep| ep.results.any? { |r| r.is_a?(Win) } }
+      winner = pod.event_participants.find { |ep| ep.results.any?(Win) }
       assert scores_for(league, winner.id) > 1000, "5-player pod winner should gain points"
     end
 
     test "recalculate_all! persists scores to event_participants" do
       league = create_league(wager_percentage: 5)
-      pod = create_finished_pod_with_one_winner(league)
+      create_finished_pod_with_one_winner(league)
 
       Scoring::PointWager.new(league).recalculate_all!
 
@@ -130,6 +130,7 @@ module Scoring
     private
 
     def create_league(wager_percentage: 5.0, pod_size: 4)
+      # pod_size accepted for API compatibility but not used in league creation
       organizer = event_organizers(:standard_organizer)
       slug = "test-league-scoring-#{SecureRandom.hex(8)}"
       league = League.create!(
@@ -176,11 +177,12 @@ module Scoring
       round = create_round(league)
 
       excluded_ids = exclude.map(&:id)
-      eps = if excluded_ids.empty?
-              league.event_participants.playing.order(id: :asc).first(size)
-            else
-              league.event_participants.playing.where.not(id: excluded_ids).order(id: :asc).first(size)
-            end
+      eps =
+        if excluded_ids.empty?
+          league.event_participants.playing.order(id: :asc).first(size)
+        else
+          league.event_participants.playing.where.not(id: excluded_ids).order(id: :asc).first(size)
+        end
       pod = Pod.create!(round: round, number: round.pods.maximum(:number).to_i + 1, size: size)
 
       eps.each_with_index do |ep, i|
