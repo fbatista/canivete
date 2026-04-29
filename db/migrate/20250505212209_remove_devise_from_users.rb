@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveDeviseFromUsers < ActiveRecord::Migration[8.0]
   def self.up
     change_table :users do |t|

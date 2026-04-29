@@ -2,7 +2,7 @@
 
 class AddPaidToTournamentParticipants < ActiveRecord::Migration[7.2]
   def change
-    change_table :tournament_participants, bulk: true do |t|
+    change_table :event_participants, bulk: true do |t|
       t.boolean :paid, default: false, null: false
       t.boolean :checked_in, default: false, null: false
       t.integer :fixed_pod
