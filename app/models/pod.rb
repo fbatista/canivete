@@ -2,15 +2,15 @@
 
 class Pod < ApplicationRecord
   belongs_to :round
-  has_one :tournament, through: :round
+  has_one :event, through: :round
 
   has_many :seatings, -> { order(order: :asc) }, dependent: :destroy, inverse_of: :pod
-  has_many :tournament_participants, through: :seatings
+  has_many :event_participants, through: :seatings
   has_many :results, lambda { |pod|
     unscope(where: { rounds: :finished_at }).where(results: { round_id: pod.round_id })
-  }, through: :tournament_participants
+  }, through: :event_participants
 
-  has_many :players, through: :tournament_participants
+  has_many :players, through: :event_participants
   has_many :users, through: :players
 
   scope :publishable, -> { joins(:round).where.not(rounds: { finished_at: nil }) }
@@ -30,7 +30,7 @@ class Pod < ApplicationRecord
   after_initialize -> { @candidates = [] }
 
   def finished?
-    results.size == tournament_participants.size
+    results.size == event_participants.size
   end
 
   def receive_candidate(candidate)
@@ -56,8 +56,8 @@ class Pod < ApplicationRecord
 
   def swap_suitable_by_rank_for?(candidate)
     full? && candidates_average_rank.between?(
-      (candidate.match_win_percentage * 1.0 - tournament.class::PAIR_DOWN_DEVIATION_PERCENT),
-      (candidate.match_win_percentage * 1.0 + tournament.class::PAIR_DOWN_DEVIATION_PERCENT)
+      (candidate.match_win_percentage * 1.0) - event.class::PAIR_DOWN_DEVIATION_PERCENT,
+      (candidate.match_win_percentage * 1.0) + event.class::PAIR_DOWN_DEVIATION_PERCENT
     )
   end
 
@@ -91,24 +91,25 @@ class Pod < ApplicationRecord
   end
 
   def ranked_seatings
-    candidates.sort_by.with_index { |p, i| [ -p.rank_score, i ] }.each.with_index do |participant, i|
-      seatings.build(tournament_participant: participant, order: i + 1)
+    candidates.sort_by.with_index { |p, i| [-p.rank_score, i] }.each.with_index do |participant, i|
+      seatings.build(event_participant: participant, order: i + 1)
     end
   end
 
   def weighted_seatings
-    ordered_candidates = candidates.shuffle.sort_by.with_index do |participant, i|
-      (1..size).to_a.map do |position|
-        participant.times_going_at(position)
-      end + [ -participant.rank_score, i ]
-    end
+    ordered_candidates =
+      candidates.shuffle.sort_by.with_index do |participant, i|
+        (1..size).to_a.map do |position|
+          participant.times_going_at(position)
+        end + [-participant.rank_score, i]
+      end
 
     build_seatings(ordered_candidates)
   end
 
   def build_seatings(ordered_candidates)
     ordered_candidates.each.with_index do |participant, i|
-      seatings.build(tournament_participant: participant, order: i + 1)
+      seatings.build(event_participant: participant, order: i + 1)
     end
   end
 end

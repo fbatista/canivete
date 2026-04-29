@@ -2,7 +2,7 @@
 
 class SingleEliminationRound < Round
   def display_name
-    tournament.single_elimination_round_name(number)
+    event.single_elimination_round_name(number)
   end
 
   def create_pods
@@ -11,7 +11,7 @@ class SingleEliminationRound < Round
 
   def last_single_elimination_round?
     number == (
-      tournament.number_of_swiss_rounds + tournament.number_of_single_elimination_rounds
+      event.number_of_swiss_rounds + event.number_of_single_elimination_rounds
     )
   end
 
@@ -22,6 +22,6 @@ class SingleEliminationRound < Round
   def advance_tournament!
     return if last_single_elimination_round?
 
-    Tournaments::StartSingleEliminationRoundJob.perform_now(tournament)
+    Tournaments::StartSingleEliminationRoundJob.perform_now(event)
   end
 end
