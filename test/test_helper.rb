@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'simplecov'
+require "simplecov"
 
-SimpleCov.start 'rails' do
+SimpleCov.start "rails" do
   # Use a unique name for each parallel worker
-  command_name "Job #{ENV['TEST_ENV_NUMBER']}" if ENV['TEST_ENV_NUMBER']
-  
+  command_name "Job #{ENV['TEST_ENV_NUMBER']}" if ENV["TEST_ENV_NUMBER"]
+
   # Optional: filter out specific directories
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/test/'
+  add_filter "/bin/"
+  add_filter "/db/"
+  add_filter "/test/"
 end
 
 ENV["RAILS_ENV"] ||= "test"
@@ -30,7 +30,7 @@ module ActiveSupport
       SimpleCov.command_name "#{SimpleCov.command_name}-worker-#{worker}"
     end
 
-    parallelize_teardown do |worker|
+    parallelize_teardown do |_worker|
       SimpleCov.result
     end
 
@@ -38,7 +38,7 @@ module ActiveSupport
     fixtures :all
 
     setup do
-      # Note: Ensure Event is loaded; sometimes resetting counters 
+      # NOTE: Ensure Event is loaded; sometimes resetting counters
       # on a model here can trigger early loading.
       Event.reset_counters if defined?(Event)
     end

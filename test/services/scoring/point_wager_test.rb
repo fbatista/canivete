@@ -85,8 +85,10 @@ module Scoring
       assert_includes pod1.event_participants.map(&:id), eps[0].id
 
       # Round 2: Different pod with Player 2 winning (excludes player 0)
-      pod2 = create_finished_pod_with_one_winner(league, winner_index: 0, size: 2, exclude: [eps[0], eps[1]])
-      assert_equal Set.new([eps[2].id, eps[3].id]), Set.new(pod2.event_participants.map(&:id))
+      pod2 = create_finished_pod_with_one_winner(league, winner_index: 0, size: 4, exclude: [eps[0], eps[1]])
+      assert_equal 4, pod2.event_participants.size
+      assert_includes pod2.event_participants.map(&:id), eps[2].id
+      assert_equal Set.new(eps[2..5].map(&:id)), Set.new(pod2.event_participants.map(&:id))
 
       compute_scores!(league)
 

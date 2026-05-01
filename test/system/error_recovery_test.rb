@@ -16,10 +16,10 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     assert_no_button "Open Registrations"
 
     # Cancel requires a confirm dialog
-    cancel_btn = find('button', text: 'Cancel', wait: 5)
+    cancel_btn = find("button", text: "Cancel", wait: 5)
     cancel_btn.click
     accept_confirm
-    assert_text 'Tournament updated successfully'
+    assert_text "Tournament updated successfully"
 
     tournament.reload
     assert_equal "canceled", tournament.state
@@ -34,8 +34,8 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     click_link "Organize Tournament"
 
     # Submit form with missing required fields
-    fill_in "Start time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
-    fill_in "End time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Start time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "End time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
     click_button "Create Tournament"
 
     # The form should still be visible with Name field (validation error)

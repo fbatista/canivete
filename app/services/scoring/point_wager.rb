@@ -33,7 +33,7 @@ module Scoring
       event.event_participants.playing.each { |ep| scores[ep.id] = STARTING_POINTS }
 
       results.each do |round|
-        round.pods.finished.each { |pod| apply_pod_result(pod, scores) }
+        round.pods.select(&:finished?).each { |pod| apply_pod_result(pod, scores) }
       end
 
       scores

@@ -2,7 +2,7 @@
 
 require "application_system_test_case"
 
-class TournamentManagementTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+class TournamentManagementTest < ApplicationSystemTestCase
   test "organizer can create tournament with all fields" do
     organizer = users(:organizer_user)
     sign_in_as(organizer)
@@ -14,8 +14,8 @@ class TournamentManagementTest < ApplicationSystemTestCase # rubocop:disable Met
     fill_in "Description", with: "The biggest tournament of the year"
     fill_in "Maximum participants", with: "32"
     fill_in "Address", with: "Lisboa, Portugal"
-    fill_in "Start time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
-    fill_in "End time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Start time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "End time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
 
     click_button "Create Tournament"
 

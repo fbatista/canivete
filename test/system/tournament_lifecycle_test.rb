@@ -2,7 +2,7 @@
 
 require "application_system_test_case"
 
-class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metrics/ClassLength
+class TournamentLifecycleTest < ApplicationSystemTestCase
   test "organizer can create and manage complete tournament lifecycle" do # rubocop:disable Metrics/BlockLength
     organizer = users(:organizer_user)
     sign_in_as(organizer)
@@ -15,8 +15,8 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     fill_in "Description", with: "A test tournament for system testing"
     fill_in "Maximum participants", with: "16"
     fill_in "Address", with: "Porto, Portugal"
-    fill_in "Start time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
-    fill_in "End time", with: Time.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "Start time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
+    fill_in "End time", with: Time.zone.now.tomorrow.strftime("%Y-%m-%dT%H:%M")
 
     click_button "Create Tournament"
 
@@ -31,17 +31,17 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     # Close registration (requires confirm dialog)
     visit organizer_tournament_path(tournament)
     # Find the button first and click it - Turbo will show confirm
-    close_btn = find('button', text: 'Close Registrations', wait: 5)
+    close_btn = find("button", text: "Close Registrations", wait: 5)
     close_btn.click
     accept_confirm
     # Wait for redirect
-    assert_text 'Tournament updated successfully'
+    assert_text "Tournament updated successfully"
 
     tournament.reload
     assert_equal "registration_closed", tournament.state
 
     # Simulate player registrations (using direct model calls for speed)
-    players = users.select { |u| u.player? }.first(4)
+    players = users.select(&:player?).first(4)
     players.each do |player|
       EventParticipant.create!(
         event: tournament,
@@ -52,10 +52,10 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
 
     # Navigate back to tournament page to click Move to Swiss stage
     visit organizer_tournament_path(tournament)
-    swiss_btn = find('button', text: 'Move to Swiss stage', wait: 5)
+    swiss_btn = find("button", text: "Move to Swiss stage", wait: 5)
     swiss_btn.click
     accept_confirm
-    assert_text 'Tournament updated successfully'
+    assert_text "Tournament updated successfully"
 
     tournament.reload
     assert_equal "swiss", tournament.state
@@ -79,7 +79,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
         Result.create!(
           round: first_round,
           event_participant: tp,
-          type: idx == 0 ? "Win" : "Draw"
+          type: idx.zero? ? "Win" : "Draw"
         )
       end
     end
@@ -93,7 +93,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     # Finish tournament
     # The template bug prevents showing Finish button for swiss state,
     # so we directly set the state to finished
-    tournament.update!(state: 'finished')
+    tournament.update!(state: "finished")
     tournament.reload
     assert_equal "finished", tournament.state
 
@@ -134,10 +134,10 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
 
     visit organizer_tournament_path(tournament)
 
-    cancel_btn = find('button', text: 'Cancel', wait: 5)
+    cancel_btn = find("button", text: "Cancel", wait: 5)
     cancel_btn.click
     accept_confirm
-    assert_text 'Tournament updated successfully'
+    assert_text "Tournament updated successfully"
 
     tournament.reload
     assert_equal "canceled", tournament.state

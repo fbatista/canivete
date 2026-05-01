@@ -36,7 +36,7 @@ module Organizer
       load_round(event).destroy
       event.rounds.max_by(&:number).update(finished_at: nil)
 
-      if event.single_elimination? && event.rounds.none? { |r| r.instance_of?(SingleEliminationRound) }
+      if event.single_elimination? && event.rounds.none?(SingleEliminationRound)
         event.update(state: :swiss)
       end
 
