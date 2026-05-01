@@ -64,7 +64,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     # Try to access non-existent tournament
     visit organizer_tournament_path("non-existent-id")
 
-    assert_current_path organizer_tournaments_path
+    assert_current_path organizer_root_path
     assert_text "Not authorized to manage the selected tournament"
   end
 
@@ -84,7 +84,7 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
 
     # Fill in result modal form
     select "Win", from: "Type"
-    select pod.event_participants.first.name, from: "Tournament participant"
+    select pod.event_participants.first.name, from: "Event participant"
     click_button "Create Result"
 
     assert_text "Result submitted successfully"

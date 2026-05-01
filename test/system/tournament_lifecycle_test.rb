@@ -44,7 +44,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     players = users.select { |u| u.player? }.first(4)
     players.each do |player|
       EventParticipant.create!(
-        tournament: tournament,
+        event: tournament,
         player: player.player,
         accepted_terms: true
       )
@@ -117,8 +117,8 @@ class TournamentLifecycleTest < ApplicationSystemTestCase # rubocop:disable Metr
     find('input[name="event_participant[accepted_terms]"]').set(true)
     click_button "Confirm Sign up"
 
-    assert TournamentParticipant.exists?(
-      tournament: tournament,
+    assert EventParticipant.exists?(
+      event: tournament,
       player: player_user.player
     )
 

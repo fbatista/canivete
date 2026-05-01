@@ -55,7 +55,7 @@
   <% if @layout_mode == "application" %>
     <td scope="col" class="px-5 py-3">
       <% if event_participant.number_of_infractions > 0 %>
-        <%= link_to [:organizer, event_participant.tournament, event_participant, :infractions], data: { turbo_frame: "modal" }, class: "inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+        <%= link_to [:organizer, event_participant.event, event_participant, :infractions], data: { turbo_frame: "modal" }, class: "inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
           View
           <span
             class="

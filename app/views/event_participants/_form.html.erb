@@ -1,7 +1,7 @@
-<%= modal_form_for [@event_participant.tournament, @event_participant] do |f| %>
+<%= modal_form_for [@event_participant.event, @event_participant] do |f| %>
   <% content_for :title do %>
     Are you sure you want to Sign up for
-    <%= @event_participant.tournament.name %>
+    <%= @event_participant.event.name %>
   <% end %>
 
   <% if @event_participant.errors.present? %>
@@ -13,7 +13,7 @@
 
   <% content_for :footer do %>
     <%= f.submit "Confirm Sign up" %>
-    <%= link_to @event_participant.tournament, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+    <%= link_to @event_participant.event, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
       Cancel
     <% end %>
   <% end %>

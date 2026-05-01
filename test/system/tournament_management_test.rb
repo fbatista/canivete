@@ -55,14 +55,14 @@ class TournamentManagementTest < ApplicationSystemTestCase # rubocop:disable Met
     # Add participant manually via modal form
     click_link "Add player"
 
-    fill_in "Player email", with: "player_one@example.com"
+    fill_in "Player email", with: "player1@example.com"
     fill_in "Player name", with: users(:player_one).name
     fill_in "Decklist", with: "https://moxfield.com/test"
     check "Player has read and accepted event rules"
-    click_button "Create Tournament participant"
+    click_button "Create Event participant"
 
-    assert TournamentParticipant.exists?(
-      tournament: tournament,
+    assert EventParticipant.exists?(
+      event: tournament,
       player: users(:player_one).player
     )
   end

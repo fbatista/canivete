@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+
+SimpleCov.start 'rails' do
+  # Use a unique name for each parallel worker
+  command_name "Job #{ENV['TEST_ENV_NUMBER']}" if ENV['TEST_ENV_NUMBER']
+  
+  # Optional: filter out specific directories
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/test/'
+end
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
@@ -13,14 +25,22 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
-
-    # Reset counter caches after fixtures load (Rails fixtures don't update them)
-    setup do
-      Event.reset_counters
+    # SimpleCov Parallel Setup
+    parallelize_setup do |worker|
+      SimpleCov.command_name "#{SimpleCov.command_name}-worker-#{worker}"
     end
 
-    # Add more helper methods to be used by all tests here...
+    parallelize_teardown do |worker|
+      SimpleCov.result
+    end
+
+    # Setup all fixtures in test/fixtures/*.yml
+    fixtures :all
+
+    setup do
+      # Note: Ensure Event is loaded; sometimes resetting counters 
+      # on a model here can trigger early loading.
+      Event.reset_counters if defined?(Event)
+    end
   end
 end

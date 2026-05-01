@@ -86,6 +86,7 @@ module Organizer
                       player_email
                       player_name
                       decklist
+                      accepted_terms
                     ])
     end
   end

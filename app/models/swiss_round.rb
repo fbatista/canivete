@@ -24,12 +24,12 @@ class SwissRound < Round
   end
 
   def last_swiss_round?
-    number == tournament.number_of_swiss_rounds
+    number == event.number_of_swiss_rounds
   end
 
   def advance_tournament!
     return if last_swiss_round?
 
-    Tournaments::StartSwissRoundJob.perform_now(tournament)
+    Tournaments::StartSwissRoundJob.perform_now(event)
   end
 end
