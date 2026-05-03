@@ -71,17 +71,13 @@
           <%= @league.address.titleize %>
         </h3>
 
-        <iframe
-          title="Tournament Location"
-          class="rounded-md"
-          width="100%"
-          height="400"
-          frameborder="0"
-          scrolling="no"
-          marginheight="0"
-          marginwidth="0"
-          src="<%= map_embed_url(@league) %>"
-        ></iframe>
+        <div
+          data-controller="map"
+          data-map-latitude-value="<%= @league.latitude %>"
+          data-map-longitude-value="<%= @league.longitude %>"
+          data-map-address-value="<%= @league.address %>"
+          class="rounded-md w-full h-[400px] z-0"
+        ></div>
       </div>
     <% end %>
 

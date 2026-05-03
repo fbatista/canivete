@@ -10,6 +10,9 @@
 # Ignore claude plans
 /.claude/plans
 
+# Ignore opencode skills (agent instructions only)
+/.opencode/skills
+
 # Ignore all environment files.
 /.env*
 
