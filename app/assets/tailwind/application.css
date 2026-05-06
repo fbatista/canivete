@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@plugin "flowbite/plugin";
+
+@source "../views/**/*.{erb,html,htm,slim,haml}";
+
+@source "../helpers/**/*.rb";
+
+@source "../javascript/**/*.js";
+
 .markdown {
   @apply py-3;
 
