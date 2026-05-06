@@ -89,7 +89,7 @@
       <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Prizes</h2>
         <div class="markdown text-gray-500 dark:text-gray-400">
-          <%= markdown(@league.prizes).html_safe %>
+          <%= marksmithed(@league.prizes) %>
         </div>
       </div>
     <% end %>
@@ -117,17 +117,19 @@
 
     <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Circuit</h2>
-      <% if @league.circuit %>
-        <p class="text-gray-500 dark:text-gray-400"><%= link_to @league.circuit.name, circuit_path(@league.circuit) %></p>
-      <% else %>
-        <p class="text-gray-500 dark:text-gray-400">Not assigned to a circuit</p>
-      <% end %>
+      <p class="text-gray-500 dark:text-gray-400">
+        <% if @league.circuit %>
+          <%= link_to @league.circuit.name, circuit_path(@league.circuit) %>
+        <% else %>
+          Not assigned to a circuit
+        <% end %>
+      </p>
     </div>
 
     <% if @league.description.present? %>
       <div class="col-span-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">Description</h2>
-        <div class="text-gray-500 dark:text-gray-400"><%= markdown(@league.description).html_safe %></div>
+        <div class="text-gray-500 dark:text-gray-400"><%= marksmithed(@league.description) %></div>
       </div>
     <% end %>
   </div>

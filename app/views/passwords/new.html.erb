@@ -1,25 +1,24 @@
-<div class="mx-auto md:w-2/3 w-full">
+<%= modal_form_for :password_reset, url: passwords_path, html: { id: "password-reset-form" } do |f| %>
+  <% content_for :title do %>
+    Forgot your password?
+  <% end %>
+
+  <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+    Enter your email address and we'll send you a link to reset your password.
+  </p>
+
   <% if alert = flash[:alert] %>
-    <p
-      class="
-        py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg
-        inline-block
-      "
-      id="alert"
-    >
+    <div class="mb-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
       <%= alert %>
-    </p>
-  <% end %>
-
-  <h1 class="font-bold text-4xl">Forgot your password?</h1>
-
-  <%= form_with url: passwords_path, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "block shadow rounded-md border border-gray-400 outline-none focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="inline">
-      <%= form.submit "Email reset instructions", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
     </div>
   <% end %>
-</div>
+
+  <%= f.email_field_with_label :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %>
+
+  <% content_for :footer do %>
+    <%= f.submit "Email reset instructions", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+    <%= link_to new_session_path, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Cancel
+    <% end %>
+  <% end %>
+<% end %>

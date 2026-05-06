@@ -24,7 +24,7 @@ class EventParticipantsController < ApplicationController
     @event_participant.attributes = event_participant_params
 
     if @event_participant.save
-      redirect_to @event_participant.event, notice: "Registration successful!"
+      redirect_to @event_participant.event, notice: t("flash.notice.registration_successful")
     else
       render :new, status: :unprocessable_entity, layout: "modal"
     end
@@ -35,7 +35,7 @@ class EventParticipantsController < ApplicationController
     @event_participant = load_participant(@event)
     @event_participant.update(event_participant_params)
 
-    redirect_to @event_participant.event, notice: "Update successful!"
+    redirect_to @event_participant.event, notice: t("flash.notice.update_successful")
   end
 
   def destroy
@@ -48,7 +48,7 @@ class EventParticipantsController < ApplicationController
     @destroyed_participant.destroy
     @event_participant = EventParticipant.new
 
-    redirect_to @event, notice: "Registration canceled!"
+    redirect_to @event, notice: t("flash.notice.registration_canceled")
   end
 
   private

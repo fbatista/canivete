@@ -1,5 +1,5 @@
 <div class="col-span-full">
-  <%= image_tag @league.cover, class: "w-full object-cover aspect-[16/9]" if @league.cover.attached? %>
+  <%= image_tag league.cover, alt: "Cover image for #{league.name}", class: "w-full object-cover aspect-[16/9]" if league.cover.attached? %>
 </div>
 
 <div
@@ -9,7 +9,7 @@
   "
 >
   <div class="grid grid-cols-1 gap-4 px-4 my-4 md:grid-cols-2 xl:grid-cols-6">
-    <div class="<%= @league.start_time.month != @league.end_time.month ? 'col-span-4' : 'col-span-2 col-start-2' %> p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <div class="<%= league.start_time.month != league.end_time.month ? 'col-span-4' : 'col-span-2 col-start-2' %> p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
         When
       </h2>
@@ -18,7 +18,7 @@
         <span class="font-bold">From:</span>
         <time
           data-controller="date"
-          data-date-timestamp-value="<%= @league.start_time.iso8601 %>"
+          data-date-timestamp-value="<%= league.start_time.iso8601 %>"
         ></time>
       </p>
 
@@ -26,19 +26,19 @@
         <span class="font-bold">To:</span>
         <time
           data-controller="date"
-          data-date-timestamp-value="<%= @league.end_time.iso8601 %>"
+          data-date-timestamp-value="<%= league.end_time.iso8601 %>"
         ></time>
       </p>
 
       <div
         id="datepicker-inline"
         data-controller="date-calendar"
-        data-date-calendar-start-time-value="<%= @league.start_time.iso8601 %>"
-        data-date-calendar-end-time-value="<%= @league.end_time.iso8601 %>"
+        data-date-calendar-start-time-value="<%= league.start_time.iso8601 %>"
+        data-date-calendar-end-time-value="<%= league.end_time.iso8601 %>"
       ></div>
     </div>
 
-    <% if @league.prizes.present? %>
+    <% if league.prizes.present? %>
       <div
         class="
           col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow
@@ -50,12 +50,12 @@
           Prizes
         </h2>
         <div class="markdown text-gray-500 dark:text-gray-400 text-left">
-          <%= markdown(@league.prizes).html_safe %>
+          <%= marksmithed(league.prizes) %>
         </div>
       </div>
     <% end %>
 
-    <% if @league.address.present? %>
+    <% if league.address.present? %>
       <div
         class="
           col-start-2 col-span-4 p-6 bg-white border border-gray-200
@@ -68,20 +68,20 @@
         </h2>
 
         <h3 class="mb-2 font-medium text-gray-900 dark:text-white">
-          <%= @league.address.titleize %>
+          <%= league.address.titleize %>
         </h3>
 
         <div
           data-controller="map"
-          data-map-latitude-value="<%= @league.latitude %>"
-          data-map-longitude-value="<%= @league.longitude %>"
-          data-map-address-value="<%= @league.address %>"
+          data-map-latitude-value="<%= league.latitude %>"
+          data-map-longitude-value="<%= league.longitude %>"
+          data-map-address-value="<%= league.address %>"
           class="rounded-md w-full h-[400px] z-0"
         ></div>
       </div>
     <% end %>
 
-    <% if @league.schedule.present? %>
+    <% if league.schedule.present? %>
       <div
         class="
           col-start-1 col-span-2 p-6 bg-white border border-gray-200
@@ -93,7 +93,7 @@
           Schedule
         </h2>
         <div class="markdown mb-4 text-gray-500 dark:text-gray-400">
-          <%= markdown(@league.schedule).html_safe %>
+          <%= marksmithed(league.schedule) %>
         </div>
       </div>
     <% end %>
@@ -105,7 +105,7 @@
         dark:hover:bg-gray-700
       "
     >
-      <% if (@league.price.presence || 0).zero? %>
+      <% if (league.price.presence || 0).zero? %>
         <h2 class="mb-2 text-3xl font-medium text-gray-900 dark:text-white">
           Free Entry
         </h2>
@@ -114,7 +114,7 @@
           Price
         </h2>
         <p class="mb-4 text-3xl text-gray-500 dark:text-gray-400">
-          <%= number_to_currency(@league.price, number_to_currency_options(@league.currency)) %>
+          <%= number_to_currency(league.price, number_to_currency_options(league.currency)) %>
         </p>
       <% end %>
     </div>
@@ -132,21 +132,21 @@
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Minimum:</span>
-        <%= @league.participants_range&.min %>
+        <%= league.participants_range&.min %>
       </p>
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Maximum:</span>
-        <%= (@league.participants_range&.last == Float::INFINITY) ? 'No limit' : @league.participants_range&.max %>
+        <%= (league.participants_range&.last == Float::INFINITY) ? 'No limit' : league.participants_range&.max %>
       </p>
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Currently registered:</span>
-        <%= @league.event_participants_count %>
+        <%= league.event_participants_count %>
       </p>
     </div>
 
-    <% if @league.rules.present? %>
+    <% if league.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
         <h3
           class="
@@ -162,12 +162,12 @@
             whitespace-pre-line
           "
         >
-          <%= @league.rules %>
+          <%= league.rules %>
         </p>
       </div>
     <% end %>
 
-    <% if @league.rules.present? %>
+    <% if league.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
         <h3
           class="
@@ -183,7 +183,7 @@
             whitespace-pre-line
           "
         >
-          <%= @league.description %>
+          <%= league.description %>
         </p>
       </div>
     <% end %>

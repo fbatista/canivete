@@ -16,7 +16,7 @@ module Organizer
         event_participants: { player: :user }
       ).find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to [:organizer, :leagues], alert: "Not authorized to manage the selected league"
+      redirect_to [:organizer, :leagues], alert: t("flash.alert.not_authorized_league")
     end
 
     def new
@@ -32,7 +32,7 @@ module Organizer
         league_params.merge(event_organizer: current_organizer)
       )
 
-      redirect_to [:organizer, @league], notice: "League created successfully"
+      redirect_to [:organizer, @league], notice: t("flash.notice.league_created")
     rescue ActiveRecord::RecordInvalid => e
       @league = League.new(league_params.merge(event_organizer: current_organizer))
       @league.errors.add(:base, e.message)
@@ -48,7 +48,7 @@ module Organizer
           @league.perform_state_based_actions
         end
 
-        redirect_to [:organizer, @league], notice: "League updated successfully"
+        redirect_to [:organizer, @league], notice: t("flash.notice.league_updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -57,9 +57,9 @@ module Organizer
     def create_pickup_pod
       @league = League.for_organizer(current_organizer).find(params[:id])
       Leagues::CreatePickupPodJob.perform_now(@league)
-      redirect_to [:organizer, @league], notice: "Pick-up pod created successfully"
+      redirect_to [:organizer, @league], notice: t("flash.notice.pickup_pod_created")
     rescue ActiveRecord::RecordNotFound
-      redirect_to [:organizer, :leagues], alert: "Not authorized to manage the selected league"
+      redirect_to [:organizer, :leagues], alert: t("flash.alert.not_authorized_league")
     end
 
     private

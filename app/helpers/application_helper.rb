@@ -72,16 +72,6 @@ module ApplicationHelper
     form_for(record, options, &block)
   end
 
-  def markdown(text)
-    sanitized_text = sanitize(text, tags: %w[strong em a code pre], attributes: %w[href])
-
-    Commonmarker.to_html(
-      sanitized_text || "", options: {
-        parse: { smart: true }
-      }
-    )
-  end
-
   def current_player?(player)
     current_user&.player == player
   end

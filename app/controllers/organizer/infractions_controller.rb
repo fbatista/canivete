@@ -24,7 +24,7 @@ module Organizer
 
       if @infraction.save
         redirect_to [:organizer, @infraction.event, :event_participants, { layout: "application" }],
-                    notice: "Infraction added successfully"
+                    notice: t("flash.notice.infraction_added")
       else
         render :new, status: :unprocessable_entity
       end

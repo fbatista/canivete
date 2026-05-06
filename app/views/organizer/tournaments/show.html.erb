@@ -61,6 +61,6 @@
   </nav>
 <% end %>
 
-<%= render "tournaments/tournament_header" %>
+<%= render "tournaments/tournament_header", tournament: @tournament %>
 
-<%= render "tournaments/tournament_detailed_info" %>
+<%= render "tournaments/tournament_detailed_info", tournament: @tournament %>

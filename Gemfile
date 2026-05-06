@@ -16,7 +16,7 @@ gem "propshaft"
 gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
-gem "tailwindcss-rails", "~> 4.3"
+gem "tailwindcss-rails", "~> 4.4"
 gem "commonmarker"
 gem "reactionview", "~> 0.1.2"
 gem "herb", force_ruby_platform: RUBY_PLATFORM.include?("darwin")

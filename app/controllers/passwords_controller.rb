@@ -13,14 +13,14 @@ class PasswordsController < ApplicationController
       PasswordsMailer.reset(user).deliver_later
     end
 
-    redirect_to new_session_path, notice: "Password a reset instructions sent (if user with that email address exists)."
+    redirect_to new_session_path, notice: t("flash.notice.password_reset_sent")
   end
 
   def update
     if @user.update(params.permit(:password, :password_confirmation))
-      redirect_to new_session_path, notice: "Password has been reset."
+      redirect_to new_session_path, notice: t("flash.notice.password_reset")
     else
-      redirect_to edit_password_path(params[:token]), alert: "Passwords did not match."
+      redirect_to edit_password_path(params[:token]), alert: t("flash.alert.passwords_no_match")
     end
   end
 
@@ -29,6 +29,6 @@ class PasswordsController < ApplicationController
   def set_user_by_token
     @user = User.find_by!(password_reset_token: params[:token])
   rescue ActiveSupport::MessageVerifier::InvalidSignature
-    redirect_to new_password_path, alert: "Password reset link is invalid or has expired."
+    redirect_to new_password_path, alert: t("flash.alert.password_reset_link_invalid")
   end
 end

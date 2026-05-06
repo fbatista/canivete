@@ -3,7 +3,7 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access
   rate_limit to: 10, within: 3.minutes, only: :create, with: lambda {
-    redirect_to new_registration_url, alert: "Try again later."
+    redirect_to new_registration_url, alert: t("flash.alert.try_again_later")
   }
 
   def new
@@ -15,7 +15,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       start_new_session_for @user
-      redirect_to after_authentication_url, notice: "Welcome! You have signed up successfully."
+      redirect_to after_authentication_url, notice: t("flash.notice.welcome_signed_up")
     else
       render :new, status: :unprocessable_entity
     end

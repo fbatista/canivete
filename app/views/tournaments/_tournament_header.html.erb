@@ -10,8 +10,8 @@
       md:text-5xl lg:text-6xl dark:text-white
     "
   >
-    <%= @tournament.name %>
-    <% if @tournament.finished? %>
+    <%= tournament.name %>
+    <% if tournament.finished? %>
       <%= badge(color: "blue") do %>
         Finished
       <% end %>
@@ -24,18 +24,18 @@
       dark:text-gray-400
     "
   >
-    <% if @tournament.start_time.past? %>
+    <% if tournament.start_time.past? %>
       Occurred
-      <%= time_ago_in_words @tournament.end_time %>
+      <%= time_ago_in_words tournament.end_time %>
       ago
     <% else %>
       Coming up in
-      <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @tournament.start_time %></span>
+      <span class="font-extrabold"><%= distance_of_time_in_words Time.now, tournament.start_time %></span>
     <% end %>
-    <% if @tournament.address.present? %>
+    <% if tournament.address.present? %>
       at
       <%= icon('map-pin') %>
-      <%= @tournament.address.titleize %>
+      <%= tournament.address.titleize %>
     <% end %>
   </p>
 
@@ -45,6 +45,6 @@
       sm:justify-center sm:space-y-0 sm:space-x-4
     "
   >
-    <%= render "tournament_actions", tournament: @tournament %>
+    <%= render "tournament_actions", tournament: tournament %>
   </div>
 </div>

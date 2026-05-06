@@ -24,10 +24,10 @@ class RoundsController < ApplicationController
     case round_params[:action]
     when "start"
       @round.update(started_at: Time.zone.now)
-      redirect_to [@round.event, @round.becomes(Round)], notice: "Round Started!"
+      redirect_to [@round.event, @round.becomes(Round)], notice: t("flash.notice.round_started")
     when "finish"
       @round.update(finished_at: Time.zone.now)
-      redirect_to event, notice: "Round Finished!"
+      redirect_to event, notice: t("flash.notice.round_finished")
     end
   end
 

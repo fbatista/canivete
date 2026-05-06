@@ -4,7 +4,7 @@ export default class extends Controller {
   static values = {timestamp: String}
 
   connect() {
-    this.renderDate()
+    this.renderDate();
   }
 
   renderDate() {
@@ -14,7 +14,7 @@ export default class extends Controller {
     const options = {
       year: 'numeric', month: 'short', day: 'numeric',
       hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
-    }
-    this.element.textContent = timestamp.toLocaleString(undefined, options)
+    };
+    this.element.textContent = timestamp.toLocaleString(undefined, options);
   }
 }

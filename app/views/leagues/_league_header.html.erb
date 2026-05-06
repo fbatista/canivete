@@ -10,16 +10,16 @@
       md:text-5xl lg:text-6xl dark:text-white
     "
   >
-    <%= @league.name %>
-    <% if @league.state == 'play' || @league.state == 'finals' %>
+    <%= league.name %>
+    <% if league.state == 'play' || league.state == 'finals' %>
       <%= badge(color: "green") do %>
         In progress
       <% end %>
-    <% elsif @league.state == 'finished' %>
+    <% elsif league.state == 'finished' %>
       <%= badge(color: "blue") do %>
         Finished
       <% end %>
-    <% elsif @league.state == 'canceled' %>
+    <% elsif league.state == 'canceled' %>
       <%= badge(color: "red") do %>
         Cancelled
       <% end %>
@@ -32,18 +32,18 @@
       dark:text-gray-400
     "
   >
-    <% if @league.end_time.past? %>
+    <% if league.end_time.past? %>
       Occurred
-      <%= time_ago_in_words @league.end_time %>
+      <%= time_ago_in_words league.end_time %>
       ago
     <% else %>
       Coming up in
-      <span class="font-extrabold"><%= distance_of_time_in_words Time.now, @league.start_time %></span>
+      <span class="font-extrabold"><%= distance_of_time_in_words Time.now, league.start_time %></span>
     <% end %>
-    <% if @league.address.present? %>
+    <% if league.address.present? %>
       at
       <%= icon('map-pin') %>
-      <%= @league.address.titleize %>
+      <%= league.address.titleize %>
     <% end %>
   </p>
 </div>

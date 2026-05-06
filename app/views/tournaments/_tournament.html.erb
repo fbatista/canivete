@@ -5,7 +5,7 @@
   "
 >
   <% if tournament.cover.attached? %>
-    <%= render partial: "tournament_image", layout: "link_layout", locals: { tournament: tournament } %>
+    <%= render partial: "tournaments/tournament_image", layout: "tournaments/link_layout", locals: { tournament: tournament } %>
   <% else %>
     <div
       class="
@@ -31,7 +31,7 @@
   <% end %>
 
   <div class="p-5 grow">
-    <%= render "tournament_small_header", tournament: tournament %>
+    <%= render "tournaments/tournament_small_header", tournament: tournament %>
     <% if tournament.ongoing? %>
       <div class="mb-1 text-base font-medium text-green-700 dark:text-green-500">
         In progress
@@ -45,7 +45,7 @@
     <% end %>
 
     <div class="markdown mb-3 font-normal text-gray-700 dark:text-gray-400">
-      <%= markdown(tournament.prizes).html_safe %>
+      <%= marksmithed(tournament.prizes) %>
     </div>
 
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
@@ -64,6 +64,6 @@
   </div>
 
   <div class="p-5 gap-2 flex items-center justify-start">
-    <%= render "tournament_actions_list", tournament: tournament %>
+    <%= render "tournaments/tournament_actions_list", tournament: tournament %>
   </div>
 </div>

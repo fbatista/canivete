@@ -5,7 +5,7 @@
     dark:hover:bg-gray-700
   "
 >
-  <%= image_tag @tournament.cover, class: "object-cover aspect-[16/9]" if @tournament.cover.attached? %>
+  <%= image_tag tournament.cover, alt: "Cover image for #{tournament.name}", class: "object-cover aspect-[16/9]" if tournament.cover.attached? %>
 </div>
 
 <div
@@ -20,14 +20,14 @@
   </h2>
 
   <h3 class="mb-2 text-md font-medium text-gray-900 dark:text-white">
-    <%= @tournament.address %>
+    <%= tournament.address %>
   </h3>
 
   <div
     data-controller="map"
-    data-map-latitude-value="<%= @tournament.latitude %>"
-    data-map-longitude-value="<%= @tournament.longitude %>"
-    data-map-address-value="<%= @tournament.address %>"
+    data-map-latitude-value="<%= tournament.latitude %>"
+    data-map-longitude-value="<%= tournament.longitude %>"
+    data-map-address-value="<%= tournament.address %>"
     class="rounded-md w-full h-[400px] z-0"
   ></div>
 </div>
@@ -39,7 +39,7 @@
   "
 >
   <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Prizes</h2>
-  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= @tournament.prizes %></p>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= tournament.prizes %></p>
 </div>
 
 <div
@@ -50,7 +50,7 @@
 >
   <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Price</h2>
   <p class="mb-4 text-gray-500 dark:text-gray-400">
-    <%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %>
+    <%= number_to_currency(tournament.price, number_to_currency_options(tournament.currency)) %>
   </p>
 </div>
 
@@ -64,7 +64,7 @@
     Schedule
   </h2>
   <p class="mb-4 text-gray-500 dark:text-gray-400">
-    <%= @tournament.schedule %>
+    <%= tournament.schedule %>
   </p>
 </div>
 
@@ -75,7 +75,7 @@
   "
 >
   <h2 class="mb-2 text-lg font-medium text-gray-900 dark:text-white">Rules</h2>
-  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= @tournament.rules %></p>
+  <p class="mb-4 text-gray-500 dark:text-gray-400"><%= tournament.rules %></p>
 </div>
 
 <div
@@ -90,16 +90,16 @@
 
   <p class="mb-4 text-gray-500 dark:text-gray-400">
     <span class="font-bold">Minimum:</span>
-    <%= @tournament.participants_range&.min %>
+    <%= tournament.participants_range&.min %>
   </p>
 
   <p class="mb-4 text-gray-500 dark:text-gray-400">
     <span class="font-bold">Maximum:</span>
-    <%= (@tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : @tournament.participants_range&.max %>
+    <%= (tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : tournament.participants_range&.max %>
   </p>
 
   <p class="mb-4 text-gray-500 dark:text-gray-400">
     <span class="font-bold">Currently registered</span>
-    <%= @tournament.event_participants_count %>
+    <%= tournament.event_participants_count %>
   </p>
 </div>

@@ -20,14 +20,14 @@ module Organizer
       case round_params[:action]
       when "publish"
         @round.update(published: true)
-        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: "Round Published!"
+        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: t("flash.notice.round_published")
       when "start"
         @round.update(started_at: Time.zone.now)
-        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: "Round Started!"
+        redirect_to [:organizer, @round.event, @round.becomes(Round)], notice: t("flash.notice.round_started")
       when "finish"
         @round.update(finished_at: Time.zone.now)
         redirect_to [:organizer, event, event.rounds.max_by(&:number).becomes(Round)],
-                    notice: "Round Finished!"
+                    notice: t("flash.notice.round_finished")
       end
     end
 
@@ -41,7 +41,7 @@ module Organizer
       end
 
       redirect_to [:organizer, event, event.rounds.max_by(&:number).becomes(Round)],
-                  notice: "Ongoing round destroyed, rolled back previous round to unfinished!"
+                  notice: t("flash.notice.round_rollback")
     end
 
     private

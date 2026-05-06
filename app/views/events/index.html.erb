@@ -33,11 +33,13 @@
       <%= @title %>
     </h1>
     <div class="flex gap-2">
-      <%= link_to events_url, class: "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border <%= params[:filter].nil? ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700' %>" do %>
+      <% upcoming_class = "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border#{params[:filter].nil? ? ' bg-blue-600 text-white border-blue-600' : ' bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'}" %>
+      <%= link_to events_url, class: upcoming_class do %>
         <%= icon('calendar') %>
         Upcoming
       <% end %>
-      <%= link_to events_url(filter: 'past'), class: "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border <%= params[:filter] == 'past' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700' %>" do %>
+      <% past_class = "inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg border#{params[:filter] == 'past' ? ' bg-blue-600 text-white border-blue-600' : ' bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'}" %>
+      <%= link_to events_url(filter: 'past'), class: past_class do %>
         <%= icon('clock') %>
         Past
       <% end %>
@@ -69,6 +71,8 @@
     <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
       <%= render @leagues %>
     </div>
+
+    <%= paginate @leagues %>
   <% end %>
 
   <% if @tournaments.any? %>
@@ -79,16 +83,13 @@
     <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
       <%= render @tournaments %>
     </div>
+
+    <%= paginate @tournaments %>
   <% end %>
 
   <% if @leagues.none? && @tournaments.none? %>
     <p class="text-gray-500 dark:text-gray-400 text-center py-12">
       No events found. Check back later for new tournaments and leagues!
     </p>
-  <% end %>
-
-  <% if @leagues.any? || @tournaments.any? %>
-    <%= paginate @leagues, theme: 'twitter-bootstrap-5' %>
-    <%= paginate @tournaments, theme: 'twitter-bootstrap-5' %>
   <% end %>
 </div>

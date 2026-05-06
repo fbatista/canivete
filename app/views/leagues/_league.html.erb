@@ -5,7 +5,7 @@
   "
 >
   <% if league.cover.attached? %>
-    <%= render partial: "tournament_image", layout: "link_layout", locals: { tournament: league } %>
+    <%= render partial: "leagues/league_image", layout: "leagues/link_layout", locals: { league: league } %>
   <% else %>
     <div
       class="
@@ -31,7 +31,7 @@
   <% end %>
 
   <div class="p-5 grow">
-    <%= render "tournament_small_header", tournament: league %>
+    <%= render "leagues/league_small_header", league: league %>
     <% if league.playing? %>
       <div class="mb-1 text-base font-medium text-green-700 dark:text-green-500">
         In progress
@@ -60,7 +60,7 @@
     <% end %>
 
     <div class="markdown mb-3 font-normal text-gray-700 dark:text-gray-400">
-      <%= markdown(league.prizes).html_safe %>
+      <%= marksmithed(league.prizes) %>
     </div>
 
     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">

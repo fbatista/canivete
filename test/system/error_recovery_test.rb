@@ -111,6 +111,44 @@ class ErrorRecoveryTest < ApplicationSystemTestCase
     assert_no_button "Close Registrations"
   end
 
+  test "logged out user can visit root path" do
+    visit root_path
+
+    assert_current_path root_path
+    assert_text "Canivete"
+    assert_text "Log in"
+    assert_no_text "Logout"
+  end
+
+  test "logged out user sees tournaments on root path" do
+    visit root_path
+
+    assert_current_path root_path
+    assert_text "Upcoming events"
+    assert_text "Medium Tournament"
+    assert_text "Free entry"
+    assert_text "View details"
+  end
+
+  test "logged out user sees cover images on root path" do
+    events(:medium_tournament).cover.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/cover1.jpg")),
+      filename: "cover1.jpg",
+      content_type: "image/jpeg"
+    )
+
+    leagues(:standard_league).cover.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/cover2.jpg")),
+      filename: "cover2.jpg",
+      content_type: "image/jpeg"
+    )
+
+    visit root_path
+
+    assert_selector "img[alt='Cover image for Medium Tournament']"
+    assert_selector "img[alt='Cover image for Standard League']"
+  end
+
   private
 
   def sign_in_as(user)

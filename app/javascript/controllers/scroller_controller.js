@@ -10,7 +10,7 @@ export default class extends Controller {
       targetElement.classList.add("transition-all", "ring-8", "ring-purple-700");
       setTimeout(() => {
         targetElement.classList.remove("ring-8", "ring-purple-700");
-      }, 500)
+      }, 500);
       
     });
   }

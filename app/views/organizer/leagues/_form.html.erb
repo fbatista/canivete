@@ -1,14 +1,14 @@
-<%= modal_form_for [:organizer, @league] do |f| %>
+<%= modal_form_for [:organizer, league] do |f| %>
   <% content_for :title do %>
-    <% if @league.persisted? %>
-      Edit <%= @league.name %>
+    <% if league.persisted? %>
+      Edit <%= league.name %>
     <% else %>
       New League
     <% end %>
   <% end %>
 
-  <% if @league.errors.present? %>
-    <%= safe_join(@league.errors.full_messages, raw("<br>")) %>
+  <% if league.errors.present? %>
+    <%= safe_join(league.errors.full_messages, tag.br) %>
   <% end %>
 
   <%= f.text_field_with_label :name, placeholder: "A catchy league name", required: true %>
@@ -28,7 +28,7 @@
 
   <div class="flex gap-2">
     <%= f.number_field_with_label :price, placeholder: "Fee per player", min: 0, step: 0.01 %>
-    <%= f.select_with_label :currency, currency_options, selected: @league.currency %>
+    <%= f.select_with_label :currency, currency_options, selected: league.currency %>
   </div>
 
   <%= f.number_field_with_label :wager_percentage, placeholder: "Wager % (e.g. 10)", min: 0, max: 100 %>
@@ -41,7 +41,7 @@
 
   <% content_for :footer do %>
     <%= f.submit %>
-    <%= link_to [:organizer, @league], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+    <%= link_to [:organizer, league], class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
       Cancel
     <% end %>
   <% end %>

@@ -1,5 +1,5 @@
 <div class="col-span-full">
-  <%= image_tag @tournament.cover, class: "w-full object-cover aspect-[16/9]" if @tournament.cover.attached? %>
+  <%= image_tag tournament.cover, class: "w-full object-cover aspect-[16/9]" if tournament.cover.attached? %>
 </div>
 
 <div
@@ -9,7 +9,7 @@
   "
 >
   <div class="grid grid-cols-1 gap-4 px-4 my-4 md:grid-cols-2 xl:grid-cols-6">
-    <div class="<%= @tournament.start_time.month != @tournament.end_time.month ? 'col-span-4' : 'col-span-2 col-start-2' %> p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <div class="<%= tournament.start_time.month != tournament.end_time.month ? 'col-span-4' : 'col-span-2 col-start-2' %> p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h2 class="mb-2 text-xl font-medium text-gray-900 dark:text-white">
         When
       </h2>
@@ -18,7 +18,7 @@
         <span class="font-bold">From:</span>
         <time
           data-controller="date"
-          data-date-timestamp-value="<%= @tournament.start_time.iso8601 %>"
+          data-date-timestamp-value="<%= tournament.start_time.iso8601 %>"
         ></time>
       </p>
 
@@ -26,19 +26,19 @@
         <span class="font-bold">To:</span>
         <time
           data-controller="date"
-          data-date-timestamp-value="<%= @tournament.end_time.iso8601 %>"
+          data-date-timestamp-value="<%= tournament.end_time.iso8601 %>"
         ></time>
       </p>
 
       <div
         id="datepicker-inline"
         data-controller="date-calendar"
-        data-date-calendar-start-time-value="<%= @tournament.start_time.iso8601 %>"
-        data-date-calendar-end-time-value="<%= @tournament.end_time.iso8601 %>"
+        data-date-calendar-start-time-value="<%= tournament.start_time.iso8601 %>"
+        data-date-calendar-end-time-value="<%= tournament.end_time.iso8601 %>"
       ></div>
     </div>
 
-    <% if @tournament.prizes.present? %>
+    <% if tournament.prizes.present? %>
       <div
         class="
           col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow
@@ -50,12 +50,12 @@
           Prizes
         </h2>
         <div class="markdown text-gray-500 dark:text-gray-400 text-left">
-          <%= markdown(@tournament.prizes).html_safe %>
+          <%= marksmithed(tournament.prizes) %>
         </div>
       </div>
     <% end %>
 
-    <% if @tournament.address.present? %>
+    <% if tournament.address.present? %>
       <div
         class="
           col-start-2 col-span-4 p-6 bg-white border border-gray-200
@@ -68,20 +68,20 @@
         </h2>
 
         <h3 class="mb-2 font-medium text-gray-900 dark:text-white">
-          <%= @tournament.address.titleize %>
+          <%= tournament.address.titleize %>
         </h3>
 
         <div
           data-controller="map"
-          data-map-latitude-value="<%= @tournament.latitude %>"
-          data-map-longitude-value="<%= @tournament.longitude %>"
-          data-map-address-value="<%= @tournament.address %>"
+          data-map-latitude-value="<%= tournament.latitude %>"
+          data-map-longitude-value="<%= tournament.longitude %>"
+          data-map-address-value="<%= tournament.address %>"
           class="rounded-md w-full h-[400px] z-0"
         ></div>
       </div>
     <% end %>
 
-    <% if @tournament.schedule.present? %>
+    <% if tournament.schedule.present? %>
       <div
         class="
           col-start-1 col-span-2 p-6 bg-white border border-gray-200
@@ -93,7 +93,7 @@
           Schedule
         </h2>
         <div class="markdown mb-4 text-gray-500 dark:text-gray-400">
-          <%= markdown(@tournament.schedule).html_safe %>
+          <%= marksmithed(tournament.schedule) %>
         </div>
       </div>
     <% end %>
@@ -105,7 +105,7 @@
         dark:hover:bg-gray-700
       "
     >
-      <% if (@tournament.price.presence || 0).zero? %>
+      <% if (tournament.price.presence || 0).zero? %>
         <h2 class="mb-2 text-3xl font-medium text-gray-900 dark:text-white">
           Free Entry
         </h2>
@@ -114,7 +114,7 @@
           Price
         </h2>
         <p class="mb-4 text-3xl text-gray-500 dark:text-gray-400">
-          <%= number_to_currency(@tournament.price, number_to_currency_options(@tournament.currency)) %>
+          <%= number_to_currency(tournament.price, number_to_currency_options(tournament.currency)) %>
         </p>
       <% end %>
     </div>
@@ -132,21 +132,21 @@
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Minimum:</span>
-        <%= @tournament.participants_range&.min %>
+        <%= tournament.participants_range&.min %>
       </p>
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Maximum:</span>
-        <%= (@tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : @tournament.participants_range&.max %>
+        <%= (tournament.participants_range&.last == Float::INFINITY) ? 'No limit' : tournament.participants_range&.max %>
       </p>
 
       <p class="mb-4 text-gray-500 dark:text-gray-400">
         <span class="font-bold">Currently registered:</span>
-        <%= @tournament.event_participants_count %>
+        <%= tournament.event_participants_count %>
       </p>
     </div>
 
-    <% if @tournament.rules.present? %>
+    <% if tournament.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
         <h3
           class="
@@ -162,12 +162,12 @@
             whitespace-pre-line
           "
         >
-          <%= @tournament.rules %>
+          <%= tournament.rules %>
         </p>
       </div>
     <% end %>
 
-    <% if @tournament.rules.present? %>
+    <% if tournament.rules.present? %>
       <div class="p-6 col-start-2 col-span-4">
         <h3
           class="
@@ -183,7 +183,7 @@
             whitespace-pre-line
           "
         >
-          <%= @tournament.description %>
+          <%= tournament.description %>
         </p>
       </div>
     <% end %>

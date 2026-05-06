@@ -13,7 +13,7 @@ module Organizer
         circuit_standings: :player
       ).find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to [:organizer, :circuits], alert: "Not authorized to manage the selected circuit"
+      redirect_to [:organizer, :circuits], alert: t("flash.alert.not_authorized_circuit")
     end
 
     def new
@@ -29,7 +29,7 @@ module Organizer
         circuit_params.merge(event_organizer: current_organizer)
       )
 
-      redirect_to [:organizer, @circuit], notice: "Circuit created successfully"
+      redirect_to [:organizer, @circuit], notice: t("flash.notice.circuit_created")
     rescue ActiveRecord::RecordInvalid => e
       @circuit = Circuit.new(circuit_params.merge(event_organizer: current_organizer))
       @circuit.errors.add(:base, e.message)
@@ -41,7 +41,7 @@ module Organizer
       @circuit.attributes = circuit_params
 
       if @circuit.save
-        redirect_to [:organizer, @circuit], notice: "Circuit updated successfully"
+        redirect_to [:organizer, @circuit], notice: t("flash.notice.circuit_updated")
       else
         render :edit, status: :unprocessable_entity
       end
