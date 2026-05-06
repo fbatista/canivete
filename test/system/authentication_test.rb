@@ -136,9 +136,72 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_link "Forgot password?"
   end
 
+  test "forgot password modal cancel button stays inline" do
+    visit root_path
+
+    find("nav a", text: "Log in").click
+    assert_selector "turbo-frame#modal"
+
+    click_on "Forgot password?"
+    assert_text "Forgot your password?"
+
+    click_on "Cancel"
+
+    assert_text "Sign in"
+    assert_field "session_email_address"
+    assert_selector "a", text: "Log in"
+  end
+
+  test "sign in modal cancel button closes the modal" do
+    visit root_path
+
+    assert_selector "a", text: "Log in"
+    find("nav a", text: "Log in").click
+
+    assert_selector "turbo-frame#modal"
+    assert_text "Sign in"
+    assert_field "session_email_address"
+
+    click_on "Cancel"
+
+    assert_no_field "session_email_address"
+    assert_no_text "Sign in"
+    assert_no_text "Forgot password?"
+  end
+
+  test "successful sign in closes modal and refreshes page" do
+    visit root_path
+
+    find("nav a", text: "Log in").click
+    fill_in "session_email_address", with: users(:player_one).email_address
+    fill_in "session_password", with: "password123"
+    click_button "Sign in"
+
+    assert_no_text "Log in"
+    assert_text "Logout"
+  end
+
+  test "successful sign up logs in user and refreshes page" do
+    visit root_path
+
+    find("nav a", text: "Log in").click
+    click_on "Sign up"
+
+    fill_in "user_name", with: "New Test User"
+    fill_in "user_email_address", with: "newuser@example.com"
+    fill_in "user_password", with: "password123"
+    fill_in "user_password_confirmation", with: "password123"
+    click_button "Sign up"
+
+    assert_text "Welcome! You have signed up successfully."
+    assert_no_text "Log in"
+    assert_text "Logout"
+  end
+
   private
 
   def sign_in_as(user)
+    visit root_path
     visit new_session_path
     fill_in "session_email_address", with: user.email_address
     fill_in "session_password", with: "password123"

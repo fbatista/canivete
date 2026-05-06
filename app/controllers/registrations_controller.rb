@@ -15,7 +15,13 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       start_new_session_for @user
-      redirect_to after_authentication_url, notice: t("flash.notice.welcome_signed_up")
+      redirect_to root_path, notice: t("flash.notice.welcome_signed_up")
+    elsif request.headers["Turbo-Frame"] == "modal"
+      render turbo_stream: turbo_stream.replace(
+        "modal",
+        partial: "registrations/modal",
+        locals: { user: @user, email_address: params[:email_address] }
+      ), status: :unprocessable_entity
     else
       render :new, status: :unprocessable_entity
     end

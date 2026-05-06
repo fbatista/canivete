@@ -30,6 +30,7 @@ en:
       password_reset_sent: "Password a reset instructions sent (if user with that email address exists)."
       password_reset: "Password has been reset."
       welcome_signed_up: "Welcome! You have signed up successfully."
+      signed_in: "You have been signed in."
       signed_out: "You have been signed out."
     alert:
       not_authorized_circuit: "Not authorized to manage the selected circuit"

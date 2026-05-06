@@ -1,4 +1,4 @@
-<%= modal_form_for @user, url: registrations_path do |f| %>
+<%= modal_form_for @user, url: registrations_path, html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Sign up
   <% end %>

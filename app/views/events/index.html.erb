@@ -63,29 +63,33 @@
     </div>
   <% end %>
 
-  <% if @leagues.any? %>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-      <%= icon('trophy', class: 'inline me-2 w-6 h-6') %>
-      Leagues
-    </h2>
-    <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
-      <%= render @leagues %>
-    </div>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <% if @leagues.any? %>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <%= icon('trophy', class: 'inline me-2 w-6 h-6') %>
+          Leagues
+        </h2>
+        <div class="grid grid-cols-1 gap-6 mb-8">
+          <%= render @leagues %>
+        </div>
+        <%= paginate @leagues %>
+      </div>
+    <% end %>
 
-    <%= paginate @leagues %>
-  <% end %>
-
-  <% if @tournaments.any? %>
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-      <%= icon('medal', class: 'inline me-2 w-6 h-6') %>
-      Tournaments
-    </h2>
-    <div class="col-span-full grid grid-cols-1 gap-6 mb-8">
-      <%= render @tournaments %>
-    </div>
-
-    <%= paginate @tournaments %>
-  <% end %>
+    <% if @tournaments.any? %>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <%= icon('medal', class: 'inline me-2 w-6 h-6') %>
+          Tournaments
+        </h2>
+        <div class="grid grid-cols-1 gap-6 mb-8">
+          <%= render @tournaments %>
+        </div>
+        <%= paginate @tournaments %>
+      </div>
+    <% end %>
+  </div>
 
   <% if @leagues.none? && @tournaments.none? %>
     <p class="text-gray-500 dark:text-gray-400 text-center py-12">

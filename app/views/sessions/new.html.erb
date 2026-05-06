@@ -1,17 +1,28 @@
-<%= modal_form_for :session, url: session_url, html: { id: "login-form" } do |f| %>
+<%= modal_form_for :session, url: session_url, html: { id: "login-form", data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Sign in
+  <% end %>
+
+  <% if alert %>
+    <div class="mb-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <% if notice %>
+    <div class="mb-4 p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+      <%= notice %>
+    </div>
   <% end %>
 
   <%= f.email_field_with_label :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %>
   <%= f.password_field_with_label :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %>
 
-  <%= link_to new_password_path, data: { turbo_frame: "modal" }, class: "text-gray-700 underline text-sm" do %>
-    Forgot password?
-  <% end %>
-
   <% content_for :footer do %>
     <%= f.submit "Sign in" %>
+    <%= link_to new_password_path, data: { turbo_frame: "modal" }, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
+      Forgot password?
+    <% end %>
     <%= link_to new_registration_path, data: { turbo_frame: "modal" }, class:"py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" do %>
       Sign up
     <% end %>

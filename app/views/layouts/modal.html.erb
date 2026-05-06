@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "modal", target: "_top" do %>
+<%= turbo_frame_tag "modal" do %>
   <div
     tabindex="-1"
     aria-hidden="true"
@@ -8,7 +8,7 @@
       max-h-full
     "
   >
-    <div class="relative p-4 max-w-full max-h-full">
+    <div class="relative p-4 min-w-[min(33vw,40rem)] max-h-full">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <!-- Modal header -->

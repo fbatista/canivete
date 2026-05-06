@@ -13,7 +13,15 @@ class PasswordsController < ApplicationController
       PasswordsMailer.reset(user).deliver_later
     end
 
-    redirect_to new_session_path, notice: t("flash.notice.password_reset_sent")
+    if request.headers["Turbo-Frame"] == "modal"
+      render turbo_stream: turbo_stream.replace(
+        "modal",
+        partial: "sessions/new",
+        locals: { alert: nil, notice: t("flash.notice.password_reset_sent") }
+      ), status: :ok
+    else
+      redirect_to new_session_path, notice: t("flash.notice.password_reset_sent")
+    end
   end
 
   def update

@@ -146,6 +146,7 @@ class TournamentLifecycleTest < ApplicationSystemTestCase
   private
 
   def sign_in_as(user)
+    visit root_path
     visit new_session_path
     fill_in "session_email_address", with: user.email_address
     fill_in "session_password", with: "password123"
