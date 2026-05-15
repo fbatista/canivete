@@ -1,14 +1,14 @@
 <%= content_for :sub_navigation do %>
   <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
     My tournaments
-    <%= link_to [:new, :organizer, :tournament], data: {turbo_frame: "modal"}, class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+    <%= link_to [:new, :organizer, :tournament], class: "float-right text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800", data: {turbo_frame: "modal"} do %>
       Organize Tournament
     <% end %>
   </h1>
 <% end %>
 
 <% if @tournaments.present? %>
-  <%= render collection: @tournaments, partial: "tournaments/tournament" %>
+  <%= render collection: @tournaments, partial: "tournament" %>
 <% else %>
   <p class="text-gray-500 dark:text-gray-400 col-span-full">
     You haven't organized any tournaments yet.

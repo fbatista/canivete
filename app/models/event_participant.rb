@@ -50,9 +50,9 @@ class EventParticipant < ApplicationRecord
   before_validation on: :create do
     if player_email.present? && player.blank?
       user =
-        User.find_or_initialize_by(email_address: player_email) do |u|
+        User.find_or_create_by(email_address: player_email) do |u|
           u.name = player_name
-          u.initialize_player
+          u.password = SecureRandom.hex(8)
         end
 
       self.player = user.player

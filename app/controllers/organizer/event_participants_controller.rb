@@ -50,10 +50,12 @@ module Organizer
       @event_participant = EventParticipant.new(event: load_tournament)
       @event_participant.attributes = event_participant_params
 
-      @event_participant.save
-
-      redirect_to [:organizer, @event_participant.event, :event_participants, { layout: "application" }],
-                  notice: "#{@event_participant.name} added!"
+      if @event_participant.save
+        redirect_to [:organizer, @event_participant.event, :event_participants, { layout: "application" }],
+                    notice: "#{@event_participant.name} added!"
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
 
     def update

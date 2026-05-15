@@ -1,4 +1,4 @@
-<%= modal_form_for [:organizer, @infraction.event, @infraction] do |f| %>
+<%= modal_form_for [:organizer, @infraction.event, @infraction], html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Record Infraction for
     <%= @infraction.player.name %>

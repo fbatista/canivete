@@ -1,4 +1,4 @@
-<%= modal_form_for [:organizer, @result.event, @result.round.becomes(Round), @pod, @result] do |f| %>
+<%= modal_form_for [:organizer, @result.event, @result.round.becomes(Round), @pod, @result], html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Submit results for Pod
     <%= @pod.number %>

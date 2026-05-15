@@ -1,5 +1,5 @@
 <div class="col-span-full">
-  <%= image_tag tournament.cover, class: "w-full object-cover aspect-[16/9]" if tournament.cover.attached? %>
+  <%= image_tag tournament.cover, alt: "Tournament Cover #{tournament.name}", class: "w-full object-cover aspect-[16/9]" if tournament.cover.attached? %>
 </div>
 
 <div

@@ -1,4 +1,4 @@
-<%= modal_form_for :password, url: password_path(params[:token]), html: { id: "password-reset-form", method: "put" } do |f| %>
+<%= modal_form_for :password, url: password_path(params[:token]), html: { id: "password-reset-form", method: "put", data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Update your password
   <% end %>

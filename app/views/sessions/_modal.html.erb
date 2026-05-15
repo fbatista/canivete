@@ -26,7 +26,7 @@
 
         <!-- Modal body -->
         <div class="p-4 md:p-5">
-          <%= form_with url: session_url, html: { id: "login-form", class: "contents" } do |f| %>
+          <%= form_with url: session_url, html: { id: "login-form", data: { turbo: false }, class: "contents" } do |f| %>
             <% if alert %>
               <div
                 class="mb-4 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"

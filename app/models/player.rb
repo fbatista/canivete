@@ -8,7 +8,10 @@ class Player < ApplicationRecord
   has_many :infractions, dependent: :destroy
 
   validates :key, presence: true
-  delegate :name, to: :user
+
+  def name
+    user&.name || "Anonymous ##{key&.first(4)}"
+  end
 
   def participant?(event)
     event_participations.any? { |ep| ep.event_id == event.id }

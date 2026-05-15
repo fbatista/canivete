@@ -30,7 +30,7 @@ class Event < ApplicationRecord
   before_validation :populate_slug
 
   after_update :perform_state_based_actions, if: -> { state_previously_changed? }
-  after_save :geocode_address, if: -> { address_changed? }
+  after_save :geocode_address, if: -> { address_previously_changed? }
 
   def available_states
     return self.class.states.slice(:draft) if new_record?

@@ -55,16 +55,15 @@ class TournamentManagementTest < ApplicationSystemTestCase
     # Add participant manually via modal form
     click_link "Add player"
 
-    fill_in "Player email", with: "player1@example.com"
-    fill_in "Player name", with: users(:player_one).name
-    fill_in "Decklist", with: "https://moxfield.com/test"
+    fill_in "Player email", with: "tiago@king.com"
+    fill_in "Player name", with: "Tiago Rei"
+    fill_in "Decklist", with: "https://moxfield.com/rog-si"
     check "Player has read and accepted event rules"
     click_button "Create Event participant"
 
-    assert EventParticipant.exists?(
-      event: tournament,
-      player: users(:player_one).player
-    )
+    # Verify redirect happened - notice appears and participant is shown
+    assert_text "added!"
+    assert_text "Tiago Rei"
   end
 
   test "organizer can submit penalties and infractions" do

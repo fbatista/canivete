@@ -1,4 +1,4 @@
-<%= modal_form_for :password_reset, url: passwords_path, html: { id: "password-reset-form" } do |f| %>
+<%= modal_form_for :password_reset, url: passwords_path, html: { id: "password-reset-form", data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Forgot your password?
   <% end %>

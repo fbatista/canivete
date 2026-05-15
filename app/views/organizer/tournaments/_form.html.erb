@@ -1,4 +1,4 @@
-<%= modal_form_for [:organizer, tournament] do |f| %>
+<%= modal_form_for [:organizer, tournament], html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     <% if tournament.persisted? %>
       Edit

@@ -1,4 +1,4 @@
-<%= modal_form_for [@event_participant.event, @event_participant] do |f| %>
+<%= modal_form_for [@event_participant.event, @event_participant], html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     Are you sure you want to Sign up for
     <%= @event_participant.event.name %>

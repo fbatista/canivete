@@ -1,4 +1,4 @@
-<%= modal_form_for [:organizer, league] do |f| %>
+<%= modal_form_for [:organizer, league], html: { data: { turbo: false } } do |f| %>
   <% content_for :title do %>
     <% if league.persisted? %>
       Edit <%= league.name %>
