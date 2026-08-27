@@ -40,7 +40,7 @@ users = User.create(
 
 users.each(&:initialize_player)
 
-# Create an initial tournament organizer
+# Create an initial event organizer
 to = EventOrganizer.create!(
   user: User.create({ name: "Kakah", email_address: "kakah@canivete.com", password: "123qwe" })
 )
@@ -49,8 +49,8 @@ other_to = EventOrganizer.create!(
   user: User.create({ name: "Virgilio", email_address: "virgilio@canivete.com", password: "123qwe" })
 )
 
-# Create a couple of example tournaments
-tournaments = Tournament.create!(
+# Create a couple of example events
+events = Tournament.create!(
   [
     {
       name: "Uneven Pods Tournament",
@@ -127,14 +127,14 @@ tournaments = Tournament.create!(
   ]
 )
 
-# Add players to the tournaments
+# Add players to the events
 
 users.map(&:player)[0...21].each do |p|
   next if p.blank?
 
   EventParticipant.create(
     {
-      tournament: tournaments.first,
+      event: events.first,
       player: p,
       decklist: "https://moxfield.com/decklist/#{p.user.email_address.split('@').first}",
       accepted_terms: true
@@ -142,13 +142,13 @@ users.map(&:player)[0...21].each do |p|
   )
 end
 
-tournaments[1..].each do |tournament|
+events[1..].each do |event|
   users.map(&:player).each do |p|
     next if p.blank?
 
     EventParticipant.create(
       {
-        tournament: tournament,
+        event: event,
         player: p,
         decklist: "https://moxfield.com/decklist/#{p.user.email_address.split('@').first}",
         accepted_terms: true
@@ -157,5 +157,5 @@ tournaments[1..].each do |tournament|
   end
 end
 
-tournaments[1].update(state: :registration_closed)
-tournaments[1].update(state: :swiss)
+events[1].update(state: :registration_closed)
+events[1].update(state: :swiss)

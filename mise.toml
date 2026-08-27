@@ -3,4 +3,4 @@ TMPDIR = "{{config_root}}/tmp"
 
 [tools]
 node = "25.9.0"
-ruby = "4.0.3"
+ruby = "4.0.6"

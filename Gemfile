@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 # Backend
-gem "rails", "~> 8.0.3"
+gem "rails", "~> 8.1.3.1"
 gem "bootsnap", require: false
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[windows jruby]
@@ -16,16 +16,16 @@ gem "propshaft"
 gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
-gem "tailwindcss-rails", "~> 4.4"
+gem "tailwindcss-rails", "~> 4.6"
 gem "commonmarker"
-gem "reactionview", "~> 0.1.2"
+gem "reactionview", "~> 0.4.0"
 gem "herb", force_ruby_platform: RUBY_PLATFORM.include?("darwin")
 
 # Databases
-gem "activerecord-postgis-adapter"
+gem "activerecord-postgis-adapter", "~> 11.1.1"
 gem "bcrypt"
 gem "pg"
-gem "puma", ">= 5.0"
+gem "puma", ">= 7.2.1"
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
@@ -33,6 +33,7 @@ gem "prosopite"
 gem "pg_query"
 
 group :development, :test do
+  gem "dotenv"
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "brakeman", require: false
   gem "rubocop", require: false
